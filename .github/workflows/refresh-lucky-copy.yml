@@ -1,0 +1,55 @@
+name: Refresh lucky draw copy
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refresh-lucky-copy.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update immersive draw copy
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text()
+
+          replacements = {
+            '点击宝箱 · 卡片逐格揭晓': '点击宝箱 · 看看今天的好运',
+            "好运正在汇聚…<small>奖池高速跳动中</small>": "好运正在靠近…<small>今天会开出什么惊喜</small>",
+            "正在减速…<small>马上进入最后几格</small>": "大奖会不会就在下一格…<small>好运还在继续</small>",
+            "最后几格…<small>越来越慢 · 马上锁定</small>": "这一格，很有感觉…<small>大奖也许就在眼前</small>",
+            "逐格减速中…<small>速度正在持续下降</small>": "好运还在继续…<small>下一格会是什么</small>",
+            "最后几格…<small>一格一格揭晓</small>": "这一格，很有感觉…<small>大奖也许就在眼前</small>",
+            "逐格减速中…<small>每一格都有可能</small>": "好运还在继续…<small>下一格会是什么</small>",
+            "好运正在汇聚…<small>奖池开始跳动</small>": "好运启动…<small>今天的幸运正在靠近</small>",
+            "已锁定 ¥'+reward+'<small>宝箱即将开启</small>": "好运落定 ¥'+reward+'<small>你的惊喜来了</small>",
+          }
+          for old, new in replacements.items():
+            s = s.replace(old, new)
+
+          # 保证结尾仍然是明显的非线性减速，越接近结果停留越久。
+          s = re.sub(r"const delay=\d+\+Math\.pow\(p,[0-9.]+\)\*\d+;", "const delay=220+Math.pow(p,3.2)*850;", s, count=1)
+          s = s.replace('await wait(650);\n  return target;', 'await wait(850);\n  return target;', 1)
+
+          p.write_text(s)
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "rsj-lucky-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git commit -m "Use more immersive lucky draw copy"
+          git push
