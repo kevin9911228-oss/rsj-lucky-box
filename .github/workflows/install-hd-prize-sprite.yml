@@ -1,0 +1,68 @@
+name: Install HD Prize Sprite
+
+on:
+  push:
+    branches: [hd-assets-upload]
+    paths:
+      - '.hd-sprite/complete'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout upload branch
+        uses: actions/checkout@v4
+        with:
+          ref: hd-assets-upload
+          fetch-depth: 0
+
+      - name: Rebuild HD sprite
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .hd-sprite/part-* > /tmp/cards-sprite.b64
+          base64 -d /tmp/cards-sprite.b64 > /tmp/cards-sprite.webp
+          test -s /tmp/cards-sprite.webp
+          file /tmp/cards-sprite.webp
+          python3 - <<'PY'
+          from PIL import Image
+          im=Image.open('/tmp/cards-sprite.webp')
+          print('sprite size:', im.size)
+          assert im.size == (2160,1440), im.size
+          PY
+
+      - name: Install sprite and patch frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git switch main
+          git pull --ff-only origin main
+          mkdir -p assets/prizes
+          cp /tmp/cards-sprite.webp assets/prizes/cards-sprite.webp
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          amounts=['20','40','60','100','120','160','200','888']
+          for a in amounts:
+              pat=rf'<img class="prizeArt" src="/assets/prizes/{a}\.webp"[^>]*>'
+              rep=f'<div class="prizeArt spriteCard s{a}" role="img" aria-label="{a}元奖项"></div>'
+              s,n=re.subn(pat,rep,s,count=1)
+              if n!=1 and f'spriteCard s{a}' not in s:
+                  raise SystemExit(f'failed to patch {a}')
+          marker='/* HD_PRIZE_SPRITE_V1 */'
+          css='''\n/* HD_PRIZE_SPRITE_V1 */\n.spriteCard{background-image:url('/assets/prizes/cards-sprite.webp?v=hd20260808');background-repeat:no-repeat;background-size:400% 200%;background-color:#080a0d}\n.s20{background-position:0% 0%}.s40{background-position:33.333333% 0%}.s60{background-position:66.666667% 0%}.s100{background-position:100% 0%}\n.s120{background-position:0% 100%}.s160{background-position:33.333333% 100%}.s200{background-position:66.666667% 100%}.s888{background-position:100% 100%}\n'''
+          if marker not in s:
+              s=s.replace('</style>',css+'\n</style>',1)
+          p.write_text(s)
+          PY
+          printf 'hd-prize-sprite-%s\n' "$(date -u +%Y%m%d%H%M%S)" > .vercel-trigger
+          git add index.html assets/prizes/cards-sprite.webp .vercel-trigger
+          git commit -m 'Install HD prize card sprite' || true
+          git push origin main
