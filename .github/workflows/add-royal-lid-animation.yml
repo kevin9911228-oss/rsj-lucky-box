@@ -1,0 +1,27 @@
+name: Add Royal Lid Animation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.royal-lid-trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Add real lid opening effect
+        run: python3 scripts/add_royal_lid_animation.py
+      - name: Commit website update
+        run: |
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Add royal chest lid opening effect' || true
+          git push origin main
