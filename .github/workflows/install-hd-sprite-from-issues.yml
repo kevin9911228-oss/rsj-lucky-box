@@ -1,0 +1,66 @@
+name: Install HD Sprite From Issues
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.hd-upload/run-sprite-issue-install.txt'
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild sprite from upload issues
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh issue list --repo "$GITHUB_REPOSITORY" --state all --search 'HDSPRITE- in:title' --limit 50 --json title,body > /tmp/parts.json
+          python3 - <<'PY'
+          import json,base64
+          rows=json.load(open('/tmp/parts.json'))
+          rows=[r for r in rows if r['title'].startswith('HDSPRITE-')]
+          rows.sort(key=lambda r:r['title'])
+          print('parts:', [r['title'] for r in rows])
+          if len(rows)!=15: raise SystemExit(f'expected 15 parts, got {len(rows)}')
+          data=''.join((r.get('body') or '').strip() for r in rows)
+          raw=base64.b64decode(data,validate=True)
+          open('/tmp/cards-sprite.webp','wb').write(raw)
+          print('sprite bytes:',len(raw))
+          if len(raw)<600000: raise SystemExit('sprite unexpectedly small')
+          PY
+          file /tmp/cards-sprite.webp | grep -qi 'Web/P'
+      - name: Install sprite and patch frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/prizes
+          cp /tmp/cards-sprite.webp assets/prizes/cards-sprite.webp
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html'); s=p.read_text()
+          for a in ['20','40','60','100','120','160','200','888']:
+              pat=rf'<img class="prizeArt" src="/assets/prizes/{a}\.webp"[^>]*>'
+              rep=f'<div class="prizeArt spriteCard s{a}" role="img" aria-label="{a}元奖项"></div>'
+              s,n=re.subn(pat,rep,s,count=1)
+              if n!=1 and f'spriteCard s{a}' not in s: raise SystemExit(f'failed to patch {a}')
+          marker='/* HD_PRIZE_SPRITE_V2 */'
+          css='''\n/* HD_PRIZE_SPRITE_V2 */\n.spriteCard{background-image:url('/assets/prizes/cards-sprite.webp?v=hd20260808v2');background-repeat:no-repeat;background-size:400% 200%;background-color:#080a0d}\n.s20{background-position:0% 0%}.s40{background-position:33.333333% 0%}.s60{background-position:66.666667% 0%}.s100{background-position:100% 0%}\n.s120{background-position:0% 100%}.s160{background-position:33.333333% 100%}.s200{background-position:66.666667% 100%}.s888{background-position:100% 100%}\n'''
+          if marker not in s:s=s.replace('</style>',css+'\n</style>',1)
+          p.write_text(s)
+          PY
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          printf 'hd-sprite-v2-%s\n' "$(date -u +%Y%m%d%H%M%S)" > .vercel-trigger
+          git add index.html assets/prizes/cards-sprite.webp .vercel-trigger
+          git commit -m 'Install HD prize card artwork'
+          git push origin main
