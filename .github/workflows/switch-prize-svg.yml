@@ -1,0 +1,50 @@
+name: Switch Prize Cards to HD SVG
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.hd-upload/switch-prize-svg.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  switch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Switch prize artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          amounts=['20','40','60','100','120','160','200','888']
+          for a in amounts:
+              old=f'/assets/prizes/{a}.webp'
+              new=f'/assets/prizes/{a}.svg?v=hd-svg-20260808'
+              s=s.replace(old,new)
+          p.write_text(s)
+          PY
+          node - <<'NODE'
+          const fs=require('fs');const s=fs.readFileSync('index.html','utf8');const m=s.match(/<script>([\s\S]*?)<\/script>/);if(!m)throw new Error('script missing');new Function(m[1]);console.log('js ok');
+          NODE
+      - name: Commit final switch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          printf 'hd-svg-final-%s\n' "$(date -u +%Y%m%d%H%M%S)" > .vercel-trigger
+          git add index.html .vercel-trigger
+          if git diff --cached --quiet; then
+            echo 'Already switched'
+          else
+            git commit -m 'Use final HD SVG prize cards'
+            git push origin main
+          fi
