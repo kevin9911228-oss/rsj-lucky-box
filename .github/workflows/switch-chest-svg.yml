@@ -1,0 +1,28 @@
+name: Switch Royal Chest To SVG
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/switch_chest_to_svg.py'
+      - '.trigger-chest-svg'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply SVG chest fix
+        run: python3 scripts/switch_chest_to_svg.py
+      - name: Commit
+        run: |
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Use valid SVG royal chest artwork'
+          git push
