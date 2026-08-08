@@ -1,1 +1,1 @@
-staging branch marker
+hd-assets-upload synced for sprite install
