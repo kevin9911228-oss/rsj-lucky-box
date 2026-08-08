@@ -151,6 +151,26 @@
 @keyframes royalLockRelease{0%{transform:rotate(45deg) scale(1);opacity:1;filter:brightness(1)}36%{transform:rotate(45deg) scale(1.38);opacity:1;filter:brightness(1.8)}100%{transform:translateY(15px) rotate(78deg) scale(.72);opacity:0;filter:brightness(2)}}
 @media(prefers-reduced-motion:reduce){.stage.explode .chest:before,.stage.explode .chest:after,.stage.explode .band,.stage.explode .lock{animation:none!important}}
 
+
+/* ROYAL_CHEST_VISIBILITY_HOTFIX_V2 */
+.chest{
+  background:url('/assets/royal-chest.webp?v=royal-visible-v5') center/contain no-repeat!important;
+  overflow:visible!important;
+}
+.chest:before,.chest:after{
+  opacity:0!important;
+  visibility:hidden!important;
+}
+.stage.explode .chest{
+  background:none!important;
+}
+.stage.explode .chest:before,.stage.explode .chest:after{
+  opacity:1!important;
+  visibility:visible!important;
+}
+.stage:not(.explode) .band{opacity:.16!important}
+.stage:not(.explode) .lock{opacity:1!important}
+
 </style>
 </head>
 <body>
