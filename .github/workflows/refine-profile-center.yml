@@ -1,0 +1,96 @@
+name: Refine personal center
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refine-profile-center.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update personal center experience
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+
+          def must_replace(old,new,label):
+              global s
+              if old not in s:
+                  raise SystemExit(f'Missing expected section: {label}')
+              s=s.replace(old,new,1)
+
+          # 首页宝箱更突出，但不改变抽奖动画逻辑
+          s=s.replace('.stage{height:176px;', '.stage{height:194px;', 1)
+          s=s.replace('.halo{position:absolute;width:145px;height:145px;', '.halo{position:absolute;width:162px;height:162px;', 1)
+          s=s.replace('.chest{width:116px;height:96px;', '.chest{width:116px;height:96px;scale:1.15;', 1)
+          s=s.replace('.stage{height:220px}.halo{width:190px;height:190px}.chest{transform:scale(1.25)}', '.stage{height:238px}.halo{width:205px;height:205px}.chest{scale:1.32}', 1)
+          s=s.replace('.stage{height:166px}.halo{width:136px;height:136px}.chest{transform:scale(.9)}', '.stage{height:178px}.halo{width:145px;height:145px}.chest{scale:1.02}', 1)
+
+          # 个人中心新增统计卡和菜单样式
+          must_replace('.profileLogin{width:100%;margin-top:13px}.subTitle{',
+          '.profileLogin{width:100%;margin-top:13px}.statsGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}.statCard{padding:14px 12px;border:1px solid #5f4922;border-radius:15px;background:radial-gradient(circle at 80% 10%,#b57b2135,transparent 42%),linear-gradient(145deg,#18140d,#0b1016);box-shadow:0 8px 24px #0005}.statLabel{font-size:10px;color:#a99570}.statValue{margin-top:5px;font-size:25px;font-weight:1000;color:#ffe07d;line-height:1}.statValue small{font-size:12px;color:#bea874}.menuCard{width:100%;display:flex;align-items:center;gap:11px;padding:13px 14px;margin-bottom:10px;border:1px solid #3d4d5a;border-radius:16px;background:linear-gradient(145deg,#121820,#0a0e14);color:#f5e6c5;text-align:left}.menuIcon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#1d2a36;font-size:20px}.menuText{flex:1}.menuTitle{font-size:14px;font-weight:950}.menuSub{margin-top:2px;font-size:9px;color:#8397a7}.menuArrow{font-size:18px;color:#8b9bab}.historyModal .modalCard{width:min(94vw,520px);max-height:82vh;display:flex;flex-direction:column}.historyModalBody{overflow:auto;overscroll-behavior:contain;padding-right:2px}.historyModalHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding-right:34px}.historyModalHead .modalTitle{text-align:left}.subTitle{', 'profile styles')
+
+          # 页面上的记录列表改成统计 + 浮窗入口
+          old_record='''    <div class="sectionCard card"><div class="recordHead"><div class="subTitle" style="margin:0">📜 我的抽奖记录</div><button id="refreshHistoryBtn" class="refresh" onclick="loadHistory()">刷新</button></div><div id="historyList" class="recordList"><div class="empty">正在等待查询</div></div></div>'''
+          new_record='''    <div class="statsGrid"><div class="statCard"><div class="statLabel">累计中奖金额</div><div class="statValue">¥<span id="summaryReward">0</span></div></div><div class="statCard"><div class="statLabel">累计中奖次数</div><div class="statValue"><span id="summaryCount">0</span><small> 次</small></div></div></div>
+    <button class="menuCard" onclick="openHistoryModal()"><span class="menuIcon">📜</span><span class="menuText"><span class="menuTitle">抽奖记录</span><span class="menuSub">查看惊喜盲盒与幸运码中奖明细</span></span><span class="menuArrow">›</span></button>'''
+          must_replace(old_record,new_record,'inline history card')
+
+          s=s.replace('📝 自助注册新账号','📝 自助注册',1)
+          s=s.replace('<i>👤</i>我的</button>','<i>👤</i>个人中心</button>',1)
+          s=s.replace('onclick="switchTab(\'my\')">我的</button>','onclick="switchTab(\'my\')">个人中心</button>',1)
+
+          # 新增记录浮窗
+          marker='<div id="resultModal" class="modal resultModal"'
+          history_modal='''<div id="historyModal" class="modal historyModal" onclick="if(event.target===this)closeHistoryModal()"><div class="modalCard"><button class="closeX" onclick="closeHistoryModal()">×</button><div class="historyModalHead"><div><div class="modalTitle">📜 抽奖记录</div><div class="modalHint" style="text-align:left;margin-bottom:0">最近 50 条中奖明细</div></div><button id="refreshHistoryBtn" class="refresh" onclick="loadHistory()">刷新</button></div><div class="historyModalBody"><div id="historyList" class="recordList"><div class="empty">点击后加载记录</div></div></div></div></div>\n\n'''
+          if marker not in s: raise SystemExit('Missing result modal marker')
+          s=s.replace(marker,history_modal+marker,1)
+
+          # 切换个人中心时只加载累计统计，不再展开记录
+          s=s.replace("if(t==='my'&&session)loadHistory();", "if(t==='my'&&session)loadSummary();", 1)
+
+          # 退出时清理统计和记录
+          s=s.replace("$('historyList').innerHTML='<div class=\"empty\">登录后可查看自己的抽奖记录</div>';renderSession();switchTab('home')",
+                      "$('historyList').innerHTML='<div class=\"empty\">登录后可查看自己的抽奖记录</div>';$('summaryReward').textContent='0';$('summaryCount').textContent='0';renderSession();switchTab('home')",1)
+
+          # 在 loadHistory 前插入累计统计与记录浮窗控制
+          needle='async function loadHistory(){'
+          addition='''async function loadSummary(){if(!session)return;const d=await rpc('member_draw_summary',{p_member_code:session.code,p_pin:session.pin});if(!d.ok){if(String(d.message||'').includes('登录状态'))logoutMember();return}$('summaryReward').textContent=Number(d.total_reward||0).toLocaleString('zh-CN');$('summaryCount').textContent=Number(d.draw_count||0).toLocaleString('zh-CN');if(Number.isFinite(+d.draw_credits))updateCredits(+d.draw_credits)}
+function openHistoryModal(){if(!session){openLoginModal('my');return}$('historyModal').classList.add('show');document.body.style.overflow='hidden';loadHistory()}
+function closeHistoryModal(){$('historyModal').classList.remove('show');document.body.style.overflow=''}
+'''
+          if needle not in s: raise SystemExit('Missing loadHistory function')
+          s=s.replace(needle,addition+needle,1)
+
+          # 修改昵称后同步刷新个人统计；抽奖完成后，下次进入个人中心会取新统计
+          s=s.replace("msg.className='inlineMsg ok';renderSession()", "msg.className='inlineMsg ok';renderSession();loadSummary()",1)
+
+          p.write_text(s)
+          PY
+      - name: Validate JavaScript
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const s=fs.readFileSync('index.html','utf8');
+          const m=s.match(/<script>([\s\S]*?)<\/script>/);
+          if(!m) throw new Error('script block not found');
+          new Function(m[1]);
+          for (const marker of ['个人中心','summaryReward','summaryCount','historyModal','member_draw_summary','📝 自助注册']) {
+            if (!s.includes(marker)) throw new Error('missing marker: '+marker);
+          }
+          console.log('Personal center validation OK');
+          NODE
+      - name: Commit update
+        run: |
+          git config user.name "rsj-lucky-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add profile stats and floating draw history"
+          git push
