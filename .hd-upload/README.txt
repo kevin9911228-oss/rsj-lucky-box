@@ -1,1 +1,1 @@
-Temporary transport branch for HD prize assets.
+HD upload staging. Sprite installer is ready on main.
