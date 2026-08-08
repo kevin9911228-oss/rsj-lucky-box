@@ -14,6 +14,79 @@
 .modal{position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;padding:16px;background:#020408d8;backdrop-filter:blur(9px)}.modal.show{display:flex}.modalCard{position:relative;width:min(92vw,420px);padding:22px 18px;border:1px solid #8c6a2a;border-radius:22px;background:radial-gradient(circle at 50% 0,#8e641f32,transparent 35%),linear-gradient(160deg,#1c160b,#0b0f15 70%);box-shadow:0 28px 80px #000c}.modalTitle{text-align:center;font-size:22px;font-weight:1000;color:#ffe19a}.modalHint{text-align:center;margin:5px 0 14px;font-size:11px;color:#a99879}.closeX{position:absolute;right:10px;top:9px;width:32px;height:32px;border:1px solid #ffffff28;border-radius:50%;background:#0007;color:#e7d6af}.historyModal .modalCard{width:min(94vw,520px);max-height:82vh;display:flex;flex-direction:column}.historyModalHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding-right:34px}.historyModalHead .modalTitle{text-align:left}.historyModalHead .modalHint{text-align:left;margin:2px 0 0}.historyModalBody{overflow:auto;overscroll-behavior:contain;padding-right:2px}.noticeModal{z-index:10040}.noticeModal .modalCard{text-align:center}.noticeIcon{font-size:42px;margin-bottom:5px}.noticeText{margin:9px 0 16px;color:#d8c7a3;font-size:13px;line-height:1.7;white-space:pre-line}.noticeBtn{width:100%}.resultModal{z-index:10010}.resultCard{position:relative;width:min(92vw,420px);padding:26px 18px 19px;border:2px solid #dfb45b;border-radius:24px;text-align:center;background:radial-gradient(circle at 50% 8%,#c8912d45,transparent 34%),linear-gradient(160deg,#302006,#0b0e14 68%);box-shadow:0 0 50px #f0b43655,0 25px 70px #000c;overflow:hidden;animation:pop .42s cubic-bezier(.18,.9,.25,1.12)}.resultCard:before{content:"";position:absolute;inset:-45%;background:repeating-conic-gradient(#ffe36d18 0 7deg,transparent 7deg 17deg);animation:ambient 14s linear infinite}.resultInner{position:relative;z-index:2}.resultIcon{font-size:58px}.congrats{font-size:15px;color:#ffeabd;font-weight:900}.money{margin:7px 0;font-size:62px;font-weight:1000;line-height:1;background:linear-gradient(#fffde7,#ffe178,#c77e13);-webkit-background-clip:text;color:transparent}.rewardName{font-size:16px;color:#ffe4a0;font-weight:950}.meta{margin:12px 0 0;padding:9px;border-radius:10px;background:#0005;color:#d8c8a4;font-size:10px;line-height:1.65}.againRow{display:flex;gap:8px;margin-top:14px}.again,.secondary{flex:1;height:43px;border-radius:999px;font-weight:1000}.again{border:0;background:linear-gradient(90deg,#ffbd27,#fff0a0,#dfa216);color:#362000}.again:disabled{opacity:.5}.secondary{border:1px solid #68532b;background:#171b22;color:#d9caa5}.resultCard.jackpotWin{border-color:#fff2a8;box-shadow:0 0 90px #ffc12fbd,0 25px 80px #000}.resultCard.jackpotWin .resultIcon{font-size:72px;animation:trophyFloat 1.2s ease-in-out infinite}.resultCard.jackpotWin .money{font-size:76px}.fx{display:none;position:fixed;inset:0;z-index:10005;pointer-events:none;background:radial-gradient(circle at 50% 45%,#fff1a56b,transparent 20%,transparent 45%)}.fx.show{display:block;animation:flash 1s ease both}.particleLayer{position:fixed;inset:0;z-index:10011;pointer-events:none;overflow:hidden}.coin{position:absolute;left:50%;top:50%;font-size:22px;animation:coin 1.2s cubic-bezier(.1,.65,.2,1) forwards}.conf{position:absolute;top:-30px;width:8px;height:15px;background:var(--c);left:var(--l);animation:fall var(--d) linear forwards}
 @keyframes ambient{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.07);box-shadow:0 0 42px #e7ad3148,inset 0 0 35px #e7ad312b}}@keyframes float{50%{transform:translateY(-5px)}}@keyframes chestTension{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-1.5deg)}75%{transform:translateX(4px) rotate(1.5deg)}}@keyframes chestBurst{0%{transform:scale(1)}45%{transform:scale(1.25)}100%{transform:scale(1.05)}}@keyframes burstLight{0%{transform:scale(.2);opacity:0}30%{opacity:1}100%{transform:scale(1.35);opacity:0}}@keyframes beamRise{0%{transform:scaleY(.05);opacity:0}30%{opacity:1}100%{transform:scaleY(1);opacity:0}}@keyframes shine{0%,40%{left:-140%}78%,100%{left:150%}}@keyframes activePulse{from{opacity:.45}to{opacity:1}}@keyframes flash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}@keyframes coin{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}15%{opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) rotate(var(--r));opacity:0}}@keyframes pop{from{transform:scale(.64);opacity:0}to{transform:scale(1);opacity:1}}@keyframes fall{to{transform:translateY(115vh) rotate(900deg);opacity:.2}}@keyframes jackPulse{50%{transform:translateY(-2px);box-shadow:0 0 0 1px #fff1a163 inset,0 0 28px #ffc12f9e,0 7px 17px #0009}}@keyframes jackSweep{0%,25%{left:-95%}78%,100%{left:145%}}@keyframes trophyFloat{50%{transform:translateY(-4px) scale(1.06)}}
 @media(min-width:600px){.app{padding-top:22px}.hero h1{font-size:44px}.pool{padding:17px}.stage{height:238px}.halo{width:205px;height:205px}.chest{scale:1.32}.grid{gap:10px}.prize{height:125px;padding-top:12px}.icon{font-size:40px}.prize b{font-size:24px}.prize span{font-size:11px}.badge{font-size:9px}.resultCard{padding:32px 24px 25px}.money{font-size:80px}}@media(max-width:350px){.app{padding-left:7px;padding-right:7px}.hero h1{font-size:30px}.pool{padding:8px}.grid{gap:4px}.prize{height:85px;border-radius:10px}.icon{font-size:24px}.prize b{font-size:16px}.prize span{font-size:7px}.stage{height:178px}.halo{width:145px;height:145px}.chest{scale:1.02}}
+
+/* PREMIUM_PRIZE_CARDS_V1 */
+.grid{gap:6px}
+.prize{
+  position:relative!important;isolation:isolate;min-width:0;
+  height:auto!important;aspect-ratio:3/4;padding:0!important;
+  border:1px solid var(--edge,#9b7840)!important;border-radius:11px;
+  background:#080a0d!important;overflow:hidden;
+  box-shadow:0 5px 14px #0009,0 0 12px var(--shadow,#d5ad4f22)!important;
+  transform:translateZ(0);will-change:transform,filter,box-shadow;
+  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,border-color .16s ease;
+  animation:premiumCardBreath 3.4s ease-in-out infinite!important;
+}
+.prize:nth-child(2n){animation-delay:-.8s!important}.prize:nth-child(3n){animation-delay:-1.6s!important}
+.prizeArt{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.015);filter:saturate(1.05) brightness(.98);transition:transform .18s ease,filter .18s ease}
+.prize:before{
+  content:""!important;position:absolute!important;z-index:4!important;pointer-events:none;
+  top:-45%!important;left:-80%!important;width:34%!important;height:190%!important;
+  transform:rotate(18deg)!important;
+  background:linear-gradient(90deg,transparent,#fff6c925,#fffce89e,#fff6c925,transparent)!important;
+  animation:premiumCardSweep 5.2s ease-in-out infinite!important;
+}
+.prize:after{
+  content:""!important;position:absolute!important;inset:0!important;z-index:3!important;
+  width:auto!important;height:auto!important;right:0!important;bottom:0!important;
+  border-radius:inherit!important;border:1px solid #fff4bd24!important;
+  background:transparent!important;color:transparent!important;
+  box-shadow:inset 0 0 14px var(--inner,#ffd77222)!important;
+  opacity:.72;pointer-events:none;animation:premiumEdgeGlow 2.7s ease-in-out infinite!important;
+}
+.prize.active{
+  transform:scale(1.10)!important;z-index:8!important;filter:none!important;
+  border-color:#fff5be!important;
+  box-shadow:0 0 0 2px #fff2a3 inset,0 0 18px #ffd34f,0 0 38px var(--active,#ffe08e)!important;
+  animation:premiumActivePulse .34s ease-in-out infinite alternate!important;
+}
+.prize.active .prizeArt{transform:scale(1.06);filter:brightness(1.30) saturate(1.22)}
+.prize.active:before{animation:premiumActiveSweep .38s ease-out both!important}
+.prize.locked{
+  transform:scale(1.13)!important;z-index:10!important;filter:none!important;
+  border-color:#fffbe0!important;
+  box-shadow:0 0 0 2px #fff9dc inset,0 0 30px #ffd64e,0 0 62px var(--active,#ffd64e)!important;
+  animation:premiumLockedPulse .62s ease-in-out infinite alternate!important;
+}
+.prize.locked .prizeArt{transform:scale(1.075);filter:brightness(1.38) saturate(1.26)}
+.prize.locked:after{content:""!important;opacity:1!important;box-shadow:inset 0 0 22px #fff6b870,0 0 18px #ffd853!important}
+.p20{--edge:#27819f;--shadow:#16bed744;--active:#52dfff;--inner:#5fe7ff}
+.p40{--edge:#397ded;--shadow:#397dff55;--active:#72a7ff;--inner:#4d8fff}
+.p60{--edge:#a24eff;--shadow:#9f4cff55;--active:#d29aff;--inner:#bc66ff}
+.p100{--edge:#e14b37;--shadow:#ff5d3f55;--active:#ff9571;--inner:#ff6848}
+.p120{--edge:#ef9b28;--shadow:#ffb32f66;--active:#ffd36a;--inner:#ffbb42}
+.p160{--edge:#4cd9f2;--shadow:#5ee9ff66;--active:#a1f7ff;--inner:#80efff}
+.p200{--edge:#ffb229;--shadow:#ff5a2777;--active:#fff08a;--inner:#ffbd3e}
+.p888{--edge:#ffe489;--shadow:#ffc12fc0;--active:#fff4b9;--inner:#ffe471}
+.p888:not(.active):not(.locked){animation:premiumJackpotBreath 1.65s ease-in-out infinite!important}
+.p888:before{background:linear-gradient(90deg,transparent,#fff0a228,#fffbe6c9,#fff0a228,transparent)!important;animation-duration:3.1s!important}
+@keyframes premiumCardBreath{
+  0%,100%{transform:translateY(0);box-shadow:0 5px 14px #0009,0 0 10px var(--shadow)}
+  50%{transform:translateY(-1.5px);box-shadow:0 8px 18px #0009,0 0 19px var(--shadow)}
+}
+@keyframes premiumCardSweep{0%,52%{left:-80%;opacity:0}60%{opacity:.7}82%{left:145%;opacity:.4}100%{left:145%;opacity:0}}
+@keyframes premiumEdgeGlow{0%,100%{opacity:.48}50%{opacity:1}}
+@keyframes premiumActiveSweep{from{left:-80%;opacity:0}35%{opacity:1}to{left:145%;opacity:0}}
+@keyframes premiumActivePulse{from{transform:scale(1.075)}to{transform:scale(1.105)}}
+@keyframes premiumLockedPulse{from{transform:scale(1.105)}to{transform:scale(1.14)}}
+@keyframes premiumJackpotBreath{
+  0%,100%{transform:translateY(0);box-shadow:0 6px 18px #000a,0 0 18px #ffc23577}
+  50%{transform:translateY(-2px) scale(1.018);box-shadow:0 8px 24px #000a,0 0 35px #ffd34dbc}
+}
+@media(min-width:600px){.prize{height:auto!important;padding:0!important}.grid{gap:10px}}
+@media(max-width:350px){.prize{height:auto!important;padding:0!important;border-radius:9px}.grid{gap:4px}}
+@media(prefers-reduced-motion:reduce){.prize,.prize:before,.prize:after{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -22,7 +95,16 @@
 <section id="homePanel" class="panel">
   <div id="guestBar" class="statusbar"><div class="statusText"><div class="statusTop">游客预览</div><div class="statusMain">惊喜盲盒已为你开启</div><div class="statusSub">登录后即可点击宝箱抽奖</div></div><button class="miniBtn" onclick="openLoginModal('home')">登录</button></div>
   <div id="memberBar" class="statusbar hide"><div class="statusText"><div class="statusTop">欢迎回来</div><div id="homeUserName" class="statusMain">--</div><div class="statusSub">剩余抽奖：<b id="creditNum">0</b> 次</div></div><div class="statusActions"><button id="soundBtn" class="miniBtn soundToggle" onclick="toggleSound()">🔊</button><button class="miniBtn" onclick="switchTab('my')">个人中心</button></div></div>
-  <section class="pool"><div class="poolHead"><h2>👑 惊喜奖池</h2><div class="poolSub">点击宝箱 · 看看今天的好运</div></div><div id="stage" class="stage" onclick="drawFromChest()"><div class="halo"></div><div class="chest"><div class="lid"></div><div class="base"></div><div class="band"></div><div class="lock"></div></div><div id="stageText" class="stageText">点击宝箱开启<small>登录后即可参与抽奖</small></div></div><div class="grid" id="prizeGrid"><div class="prize b1" data-reward="20"><div class="icon">🪙</div><b>20元</b><span>好运金币</span></div><div class="prize b2" data-reward="40"><div class="icon">💰</div><b>40元</b><span>幸运钱袋</span></div><div class="prize b3" data-reward="60"><div class="icon">🎟️</div><b>60元</b><span>惊喜礼券</span></div><div class="prize red" data-reward="100"><div class="icon">🧰</div><b>100元</b><span>宝箱奖励</span></div><div class="prize g1" data-reward="120"><div class="icon">🪙</div><b>120元</b><span>元宝好礼</span></div><div class="prize g2" data-reward="160"><div class="icon">💎</div><b>160元</b><span>钻石大奖</span></div><div class="prize goldPrize" data-reward="200"><div class="icon">👑</div><b>200元</b><span>皇冠豪礼</span></div><div class="prize jackpot" data-reward="888"><div class="badge">至尊·1%</div><div class="icon">🏆</div><b>888元</b><span>隐藏大奖</span></div></div></section>
+  <section class="pool"><div class="poolHead"><h2>👑 惊喜奖池</h2><div class="poolSub">点击宝箱 · 看看今天的好运</div></div><div id="stage" class="stage" onclick="drawFromChest()"><div class="halo"></div><div class="chest"><div class="lid"></div><div class="base"></div><div class="band"></div><div class="lock"></div></div><div id="stageText" class="stageText">点击宝箱开启<small>登录后即可参与抽奖</small></div></div><div class="grid" id="prizeGrid">
+<div class="prize p20" data-reward="20"><img class="prizeArt" src="/assets/prizes/20.webp" alt="20元 好运金币" decoding="async"></div>
+<div class="prize p40" data-reward="40"><img class="prizeArt" src="/assets/prizes/40.webp" alt="40元 幸运钱袋" decoding="async"></div>
+<div class="prize p60" data-reward="60"><img class="prizeArt" src="/assets/prizes/60.webp" alt="60元 惊喜礼券" decoding="async"></div>
+<div class="prize p100" data-reward="100"><img class="prizeArt" src="/assets/prizes/100.webp" alt="100元 宝箱奖励" decoding="async"></div>
+<div class="prize p120" data-reward="120"><img class="prizeArt" src="/assets/prizes/120.webp" alt="120元 元宝好礼" decoding="async"></div>
+<div class="prize p160" data-reward="160"><img class="prizeArt" src="/assets/prizes/160.webp" alt="160元 钻石大奖" decoding="async"></div>
+<div class="prize p200" data-reward="200"><img class="prizeArt" src="/assets/prizes/200.webp" alt="200元 皇冠豪礼" decoding="async"></div>
+<div class="prize p888" data-reward="888"><img class="prizeArt" src="/assets/prizes/888.webp" alt="888元 隐藏大奖 1%" decoding="async"></div>
+</div></section>
 </section>
 <section id="luckyPanel" class="panel tempPanel hide"><div class="sectionCard card"><div class="title">🎟️ 幸运码专享</div><div class="hint">幸运码不消耗普通盲盒次数，登录后输入幸运码即可参与。</div><div id="luckyGuest"><button class="btn btnPurple" style="width:100%" onclick="openLoginModal('lucky')">登录后使用幸运码</button></div><div id="luckyMember" class="hide"><div id="luckyIdentity" class="identity">当前账号：<b>--</b></div><div class="form"><input id="luckyCode" placeholder="输入幸运码，例如 RSJ888" onkeydown="if(event.key==='Enter')tempDraw()"><button id="tempDrawBtn" class="btn btnPurple" onclick="tempDraw()">使用幸运码抽奖</button></div></div></div></section>
 <section id="myPanel" class="panel myPanel hide">
