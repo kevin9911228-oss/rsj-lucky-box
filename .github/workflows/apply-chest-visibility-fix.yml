@@ -1,0 +1,23 @@
+name: Apply Chest Visibility Fix
+
+on: [push]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply fix
+        run: python3 scripts/fix_chest_visibility.py
+      - name: Commit fix
+        run: |
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Restore royal chest artwork'
+          git push
