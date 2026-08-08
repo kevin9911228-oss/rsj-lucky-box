@@ -1,0 +1,31 @@
+name: Safe draw recovery core
+on:
+  push:
+    paths: ['.github/workflows/safe-draw-core.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text()
+          def r(a,b):
+            global s
+            if a not in s: raise SystemExit('missing '+a[:40])
+            s=s.replace(a,b,1)
+          r("const $=id=>document.getElementById(id);const SESSION_KEY='rsj_member_session';let session=null,drawing=false,lastCardIndex=-1,loginReturn='home';", "const $=id=>document.getElementById(id);const SESSION_KEY='rsj_member_session',PENDING_KEY='rsj_pending_draw';let session=null,drawing=false,lastCardIndex=-1,loginReturn='home';")
+          r("async function rpc(n,b){try{const r=await fetch(BASE+'/rest/v1/rpc/'+n,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify(b)}),t=await r.text();if(!r.ok)throw Error(t);return JSON.parse(t)}catch(e){return{ok:false,message:'网络连接失败，请稍后重试'}}}", "async function rpc(n,b){try{const r=await fetch(BASE+'/rest/v1/rpc/'+n,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify(b)}),t=await r.text();if(!r.ok){let msg='服务暂时繁忙，请稍后重试';try{const j=JSON.parse(t);msg=j.message||j.hint||msg}catch(e){}return{ok:false,message:msg,network_error:true,status:r.status}}return JSON.parse(t)}catch(e){return{ok:false,message:'网络连接有些波动，请稍后重试',network_error:true}}}")
+          r("function esc(s){return String(s??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[m]))}function wait(ms){return new Promise(r=>setTimeout(r,ms))}", "function esc(s){return String(s??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[m]))}function wait(ms){return new Promise(r=>setTimeout(r,ms))}function showNotice(message,title='温馨提示',icon='✨'){$('noticeTitle').textContent=title;$('noticeText').textContent=message;$('noticeIcon').textContent=icon;$('noticeModal').classList.add('show');document.body.style.overflow='hidden'}function closeNotice(){$('noticeModal').classList.remove('show');if(!$('resultModal').classList.contains('show')&&!$('historyModal').classList.contains('show'))document.body.style.overflow=''}function newRequestId(){return(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'rsj-'+Date.now()+'-'+Math.random().toString(36).slice(2)}function savePending(kind,requestId,luckyCode=''){localStorage.setItem(PENDING_KEY,JSON.stringify({kind,requestId,luckyCode,memberCode:session.code,createdAt:Date.now()}))}function clearPending(){localStorage.removeItem(PENDING_KEY)}function getPending(){try{return JSON.parse(localStorage.getItem(PENDING_KEY)||'null')}catch(e){clearPending();return null}}")
+          r("async function restoreSession(){const token=localStorage.getItem(SESSION_KEY);if(!token)return;const d=await rpc('member_session_status',{p_token:token});if(!d.ok){localStorage.removeItem(SESSION_KEY);return}session={token,code:d.member_code,name:d.display_name,credits:+d.draw_credits||0};renderSession()}", "async function restoreSession(){const token=localStorage.getItem(SESSION_KEY);if(!token)return;const d=await rpc('member_session_status',{p_token:token});if(!d.ok){localStorage.removeItem(SESSION_KEY);return}session={token,code:d.member_code,name:d.display_name,credits:+d.draw_credits||0};renderSession();await recoverPendingDraw(true,2)}")
+          r("$('summaryReward').textContent='0';$('summaryCount').textContent='0';renderSession();switchTab('home');if(token)await rpc('member_session_logout',{p_token:token})", "$('summaryReward').textContent='0';$('summaryCount').textContent='0';$('summaryMax').textContent='0';clearPending();renderSession();switchTab('home');if(token)await rpc('member_session_logout',{p_token:token})")
+          r("$('summaryReward').textContent=Number(d.total_reward||0).toLocaleString('zh-CN');$('summaryCount').textContent=Number(d.draw_count||0).toLocaleString('zh-CN');if(Number.isFinite(+d.draw_credits))updateCredits(+d.draw_credits)", "$('summaryReward').textContent=Number(d.total_reward||0).toLocaleString('zh-CN');$('summaryCount').textContent=Number(d.draw_count||0).toLocaleString('zh-CN');$('summaryMax').textContent=Number(d.max_reward||0).toLocaleString('zh-CN');if(Number.isFinite(+d.draw_credits))updateCredits(+d.draw_credits)")
+          p.write_text(s)
+          PY
+          node -e "const s=require('fs').readFileSync('index.html','utf8');new Function(s.match(/<script>([\\s\\S]*?)<\\/script>/)[1]);['PENDING_KEY','showNotice','summaryMax'].forEach(x=>{if(!s.includes(x))process.exit(1)})"
+          git config user.name rsj-lucky-bot
+          git config user.email actions@users.noreply.github.com
+          git add index.html && git commit -m 'Add safe draw recovery core' && git push
