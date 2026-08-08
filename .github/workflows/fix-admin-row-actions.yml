@@ -1,0 +1,43 @@
+name: Fix admin row actions
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-admin-row-actions.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix dynamic row action buttons
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('admin.html')
+          s=p.read_text()
+          old="""function renderMembers(){const q=$('memberSearch').value.trim().toLowerCase(),rows=members.filter(x=>!q||String(x.member_code).toLowerCase().includes(q)||String(x.display_name).toLowerCase().includes(q));$('memberRows').innerHTML=rows.length?rows.map(x=>'<tr><td><b>'+esc(x.member_code)+'</b></td><td>'+esc(x.display_name)+'</td><td class=\"amount\">'+n(x.draw_credits)+'</td><td>'+n(x.draw_count)+'</td><td class=\"amount\">¥'+n(x.reward_total)+'</td><td class=\"'+(x.active?'ok':'off')+'\">'+(x.active?'正常':'停用')+'</td><td><div class=\"actions\"><button class=\"smallBtn\" onclick=\"openAdjust('+JSON.stringify(String(x.member_code))+','+JSON.stringify(String(x.display_name))+')\">增减次数</button><button class=\"smallBtn\" onclick=\"openReset('+JSON.stringify(String(x.member_code))+')\">重置密码</button></div></td></tr>').join(''):'<tr><td colspan=\"7\" class=\"loader\">暂无成员</td></tr>'}"""
+          new="""function renderMembers(){const q=$('memberSearch').value.trim().toLowerCase(),rows=members.filter(x=>!q||String(x.member_code).toLowerCase().includes(q)||String(x.display_name).toLowerCase().includes(q));$('memberRows').innerHTML=rows.length?rows.map(x=>'<tr data-code=\"'+esc(x.member_code)+'\" data-name=\"'+esc(x.display_name)+'\"><td><b>'+esc(x.member_code)+'</b></td><td>'+esc(x.display_name)+'</td><td class=\"amount\">'+n(x.draw_credits)+'</td><td>'+n(x.draw_count)+'</td><td class=\"amount\">¥'+n(x.reward_total)+'</td><td class=\"'+(x.active?'ok':'off')+'\">'+(x.active?'正常':'停用')+'</td><td><div class=\"actions\"><button class=\"smallBtn\" onclick=\"openAdjust(this.closest(\\'tr\\').dataset.code,this.closest(\\'tr\\').dataset.name)\">增减次数</button><button class=\"smallBtn\" onclick=\"openReset(this.closest(\\'tr\\').dataset.code)\">重置密码</button></div></td></tr>').join(''):'<tr><td colspan=\"7\" class=\"loader\">暂无成员</td></tr>'}"""
+          if old not in s: raise SystemExit('member renderer not found')
+          s=s.replace(old,new,1)
+          old2="""function renderLucky(){$('luckyRows').innerHTML=codes.length?codes.map(x=>'<tr><td><b>'+esc(x.code)+'</b></td><td>'+n(x.used_count)+' / '+n(x.max_uses)+'</td><td>'+n(x.remaining_count)+'</td><td class=\"'+(x.active?'ok':'off')+'\">'+(x.active?'启用':'停用')+'</td><td>'+esc(x.note||'--')+'</td><td><button class=\"smallBtn\" onclick=\"setLucky('+JSON.stringify(String(x.code))+','+(!x.active)+')\">'+(x.active?'停用':'启用')+'</button></td></tr>').join(''):'<tr><td colspan=\"6\" class=\"loader\">暂无幸运码</td></tr>'}"""
+          new2="""function renderLucky(){$('luckyRows').innerHTML=codes.length?codes.map(x=>'<tr data-code=\"'+esc(x.code)+'\"><td><b>'+esc(x.code)+'</b></td><td>'+n(x.used_count)+' / '+n(x.max_uses)+'</td><td>'+n(x.remaining_count)+'</td><td class=\"'+(x.active?'ok':'off')+'\">'+(x.active?'启用':'停用')+'</td><td>'+esc(x.note||'--')+'</td><td><button class=\"smallBtn\" onclick=\"setLucky(this.closest(\\'tr\\').dataset.code,'+(!x.active)+')\">'+(x.active?'停用':'启用')+'</button></td></tr>').join(''):'<tr><td colspan=\"6\" class=\"loader\">暂无幸运码</td></tr>'}"""
+          if old2 not in s: raise SystemExit('lucky renderer not found')
+          s=s.replace(old2,new2,1)
+          p.write_text(s)
+          PY
+      - name: Validate JavaScript
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');const s=fs.readFileSync('admin.html','utf8');const m=s.match(/<script>([\s\S]*?)<\/script>/);if(!m) throw new Error('script missing');new Function(m[1]);console.log('admin JS syntax OK');
+          NODE
+      - name: Commit fix
+        run: |
+          git config user.name "rsj-lucky-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add admin.html
+          git commit -m "Fix admin member action buttons"
+          git push
