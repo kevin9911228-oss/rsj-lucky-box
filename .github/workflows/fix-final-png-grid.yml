@@ -1,0 +1,36 @@
+name: Fix Final PNG Grid
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.fix-final-png-grid-trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove duplicate old 888 SVG card
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='<div class="prize p888" data-reward="888"><img class="prizeArt" src="/assets/prizes/888.svg?v=hd-svg-20260808" alt="888元 隐藏大奖 1%" decoding="async"></div>\n'
+          if old in s:
+              s=s.replace(old,'',1)
+          p.write_text(s)
+          assert s.count('data-reward="888"') == 1
+          assert '/assets/prizes/888.png?v=final-hd-20260808' in s
+          PY
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Remove duplicate old 888 card' || true
+          git push origin main
