@@ -1,0 +1,43 @@
+name: Hide register after login
+on:
+  push:
+    paths:
+      - '.github/workflows/hide-register-after-login.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hide registration for logged-in members
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old="$('myMember').classList.toggle('hide',!logged);if(logged){"
+          new="$('myMember').classList.toggle('hide',!logged);$('registerDetails').classList.toggle('hide',logged);if(logged){"
+          if old not in s:
+              raise SystemExit('renderSession marker not found')
+          s=s.replace(old,new,1)
+          p.write_text(s)
+          PY
+      - name: Validate JavaScript
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const s=fs.readFileSync('index.html','utf8');
+          const m=s.match(/<script>([\s\S]*?)<\/script>/);
+          if(!m) throw new Error('script not found');
+          new Function(m[1]);
+          if(!s.includes("$('registerDetails').classList.toggle('hide',logged)")) throw new Error('register hide logic missing');
+          console.log('OK');
+          NODE
+      - name: Commit
+        run: |
+          git config user.name "rsj-lucky-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Hide self registration for logged-in members"
+          git push
