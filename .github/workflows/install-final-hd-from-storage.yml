@@ -1,0 +1,69 @@
+name: Install Final HD Prize Cards
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.hd-upload/run-final-hd-storage.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download and verify final HD artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/prizes
+          curl -fL --retry 4 --retry-delay 2 'https://iovzxyzjekaikvnkrenz.supabase.co/storage/v1/object/public/prize-assets/cards-sprite.webp' -o assets/prizes/cards-sprite.webp
+          test "$(wc -c < assets/prizes/cards-sprite.webp)" -eq 254556
+          file assets/prizes/cards-sprite.webp | grep -qi 'Web/P'
+      - name: Patch prize cards and keep existing animations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          for a in ['20','40','60','100','120','160','200','888']:
+              pat=rf'<img class="prizeArt" src="/assets/prizes/{a}\.webp"[^>]*>'
+              rep=f'<div class="prizeArt spriteCard s{a}" role="img" aria-label="{a}元奖项"></div>'
+              s,n=re.subn(pat,rep,s,count=1)
+              if n != 1 and f'spriteCard s{a}' not in s:
+                  raise SystemExit(f'failed to patch prize {a}')
+          marker='/* HD_PRIZE_SPRITE_FINAL */'
+          css='''
+          /* HD_PRIZE_SPRITE_FINAL */
+          .spriteCard{display:block;width:100%;height:100%;background-image:url('/assets/prizes/cards-sprite.webp?v=hd-final-20260808');background-repeat:no-repeat;background-size:400% 200%;background-color:#080a0d;transform:scale(1.015);filter:saturate(1.05) brightness(.98);transition:transform .18s ease,filter .18s ease}
+          .s20{background-position:0% 0%}.s40{background-position:33.333333% 0%}.s60{background-position:66.666667% 0%}.s100{background-position:100% 0%}
+          .s120{background-position:0% 100%}.s160{background-position:33.333333% 100%}.s200{background-position:66.666667% 100%}.s888{background-position:100% 100%}
+          '''
+          if marker not in s:
+              s=s.replace('</style>',css+'\n</style>',1)
+          p.write_text(s)
+          PY
+          node - <<'NODE'
+          const fs=require('fs');const s=fs.readFileSync('index.html','utf8');const m=s.match(/<script>([\s\S]*?)<\/script>/);if(!m)throw new Error('script missing');new Function(m[1]);console.log('js ok');
+          NODE
+      - name: Commit to production branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          printf 'hd-final-storage-%s\n' "$(date -u +%Y%m%d%H%M%S)" > .vercel-trigger
+          git add index.html assets/prizes/cards-sprite.webp .vercel-trigger
+          if git diff --cached --quiet; then
+            echo 'Already installed'
+          else
+            git commit -m 'Install final HD prize card artwork'
+            git push origin main
+          fi
