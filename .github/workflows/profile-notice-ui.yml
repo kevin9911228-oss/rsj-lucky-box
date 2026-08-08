@@ -1,0 +1,37 @@
+name: Profile and notice UI
+on:
+  push:
+    paths: ['.github/workflows/profile-notice-ui.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html'); s=p.read_text()
+          def r(a,b):
+            global s
+            if a not in s: raise SystemExit('missing: '+a[:50])
+            s=s.replace(a,b,1)
+          r('.statsGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}', '.statsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}')
+          r('.record .serial{font-size:8px;color:#647f95;overflow-wrap:anywhere}', '.record .serial{font-size:8px;color:#647f95;overflow-wrap:anywhere}.record.tier-blue{border-color:#244b79}.record.tier-red{border-color:#7b392e;background:#1b0f0d}.record.tier-green{border-color:#24694d;background:#0b1b15}.record.tier-gold{border-color:#9a6d1d;background:#201807}.record.tier-jackpot{border-color:#ffe28a;background:radial-gradient(circle at 85% 15%,#ffc53f55,transparent 46%),#211704;box-shadow:0 0 20px #ffc43d2d}.record.tier-red .amt{color:#ff9a7d}.record.tier-green .amt{color:#78e7ad}.record.tier-gold .amt{color:#ffd25b}.record.tier-jackpot .amt{color:#fff0a3;text-shadow:0 0 12px #ffc633}.recordBadge{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:999px;background:#ffd75d;color:#3b2500;font-size:7px;font-weight:1000}')
+          r('.historyModalBody{overflow:auto;overscroll-behavior:contain;padding-right:2px}', '.historyModalBody{overflow:auto;overscroll-behavior:contain;padding-right:2px}.noticeModal{z-index:10040}.noticeModal .modalCard{text-align:center}.noticeIcon{font-size:42px;margin-bottom:5px}.noticeText{margin:9px 0 16px;color:#d8c7a3;font-size:13px;line-height:1.7;white-space:pre-line}.noticeBtn{width:100%}')
+          old='<div class="statsGrid"><div class="statCard"><div class="statLabel">累计中奖金额</div><div class="statValue">¥<span id="summaryReward">0</span></div></div><div class="statCard"><div class="statLabel">累计中奖次数</div><div class="statValue"><span id="summaryCount">0</span><small> 次</small></div></div></div>'
+          new='<div class="statsGrid"><div class="statCard"><div class="statLabel">累计中奖金额</div><div class="statValue">¥<span id="summaryReward">0</span></div></div><div class="statCard"><div class="statLabel">中奖次数</div><div class="statValue"><span id="summaryCount">0</span><small> 次</small></div></div><div class="statCard"><div class="statLabel">最高单次好运</div><div class="statValue">¥<span id="summaryMax">0</span></div></div></div>'
+          r(old,new)
+          marker='<div id="resultModal" class="modal resultModal"'
+          notice='<div id="noticeModal" class="modal noticeModal" onclick="if(event.target===this)closeNotice()"><div class="modalCard"><button class="closeX" onclick="closeNotice()">×</button><div id="noticeIcon" class="noticeIcon">✨</div><div id="noticeTitle" class="modalTitle">温馨提示</div><div id="noticeText" class="noticeText"></div><button class="btn btnGold noticeBtn" onclick="closeNotice()">我知道了</button></div></div>\n'
+          if marker not in s: raise SystemExit('missing result modal')
+          s=s.replace(marker,notice+marker,1)
+          p.write_text(s)
+          PY
+          node -e "const s=require('fs').readFileSync('index.html','utf8');new Function(s.match(/<script>([\\s\\S]*?)<\\/script>/)[1]);if(!s.includes('summaryMax')||!s.includes('noticeModal'))process.exit(1)"
+          git config user.name rsj-lucky-bot
+          git config user.email actions@users.noreply.github.com
+          git add index.html
+          git commit -m 'Add highest win and black-gold notice UI'
+          git push
