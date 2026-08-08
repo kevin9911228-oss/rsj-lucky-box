@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070b">
+<title>燃生纪幸运盲盒</title>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/fx.css">
+</head>
+<body>
+<div class="app">
+<header class="hero"><div class="brand">燃 生 纪</div><h1>幸运盲盒</h1><div class="slogan">开出好运 · 开出惊喜 · 开出收获</div></header>
+
+<section id="normalPanel" class="panel">
+  <div id="loginArea">
+    <div class="title">🎁 我的盲盒</div><div class="hint">登录后直接点宝箱开启，中奖结果会以弹窗显示。</div>
+    <div class="form"><input id="memberCode" placeholder="全球联动账号" autocomplete="username"><input id="memberPin" type="password" placeholder="抽奖密码" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginMember()"><button id="loginBtn" class="btn btnGold" onclick="loginMember()">登录进入我的盲盒</button></div><div id="loginMsg" class="msg hide"></div>
+  </div>
+  <div id="gameArea" class="hide">
+    <div class="userbar"><div class="usertext"><div class="welcome">欢迎回来</div><div id="userName" class="who">--</div><div class="credits">剩余抽奖：<b id="creditNum">0</b> 次</div></div><button class="logout" onclick="logoutMember()">退出</button></div>
+    <section class="pool"><div class="poolHead"><h2>👑 惊喜奖池</h2><div class="poolSub">点击宝箱 · 开启好运</div></div>
+      <div id="stage" class="stage" onclick="drawFromChest()"><div class="halo"></div><div class="chest"><div class="lid"></div><div class="base"></div><div class="band"></div><div class="lock"></div></div><div id="stageText" class="stageText">点击宝箱开启<small>每次消耗 1 次抽奖机会</small></div></div>
+      <div class="grid">
+        <div class="prize b1" data-reward="20"><div class="icon">🪙</div><b>20元</b><span>好运金币</span></div>
+        <div class="prize b2" data-reward="40"><div class="icon">💰</div><b>40元</b><span>幸运钱袋</span></div>
+        <div class="prize b3" data-reward="60"><div class="icon">🎟️</div><b>60元</b><span>惊喜礼券</span></div>
+        <div class="prize red" data-reward="100"><div class="icon">🧰</div><b>100元</b><span>宝箱奖励</span></div>
+        <div class="prize g1" data-reward="120"><div class="icon">🪙</div><b>120元</b><span>元宝好礼</span></div>
+        <div class="prize g2" data-reward="160"><div class="icon">💎</div><b>160元</b><span>钻石大奖</span></div>
+        <div class="prize goldPrize" data-reward="200"><div class="icon">👑</div><b>200元</b><span>皇冠豪礼</span></div>
+        <div class="prize jackpot" data-reward="888"><div class="badge">至尊·1%</div><div class="icon">🏆</div><b>888元</b><span>隐藏大奖</span></div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<section id="tempPanel" class="panel tempPanel hide"><div class="title">🎟️ 幸运码专享</div><div class="hint">登录后只输入幸运码即可抽奖，不消耗普通盲盒次数。</div><div id="tempIdentity" class="identity">当前账号：<b>--</b></div><div class="form"><input id="luckyCode" placeholder="输入幸运码，例如 RSJ888" onkeydown="if(event.key==='Enter')tempDraw()"><button id="tempDrawBtn" class="btn btnPurple" onclick="tempDraw()">使用幸运码抽奖</button></div></section>
+
+<section id="historyPanel" class="panel historyPanel hide"><div class="title">📜 抽奖记录</div><div class="hint">显示当前账号最近 50 条普通盲盒与幸运码记录。</div><div id="historyIdentity" class="identity">当前账号：<b>--</b></div><div class="recordHead"><small>时间 / 类型 / 流水号</small><button id="refreshHistoryBtn" class="refresh" onclick="loadHistory()">刷新</button></div><div id="historyList" class="recordList"><div class="empty">登录后可查看记录</div></div></section>
+
+<section id="regPanel" class="panel registerPanel hide"><div class="title">📝 自助注册</div><div class="hint">创建全球联动账号并设置抽奖密码。</div><div class="form"><input id="regCode" placeholder="全球联动账号（4-30位字母/数字）"><input id="regName" placeholder="云助理昵称"><input id="regPin" type="password" placeholder="设置抽奖密码（至少6位）"><input id="regPin2" type="password" placeholder="再次输入抽奖密码"><button id="regBtn" class="btn btnGreen" onclick="registerMember()">立即注册</button></div><div id="regMsg" class="msg">注册成功后默认为 <b>0次</b> 抽奖机会。</div></section>
+</div>
+
+<nav class="bottomNav"><button id="tabNormal" class="navBtn active" onclick="switchTab('normal')"><i>🎁</i>我的盲盒</button><button id="tabTemp" class="navBtn" onclick="switchTab('temp')"><i>🎟️</i>幸运码</button><button id="tabHistory" class="navBtn" onclick="switchTab('history')"><i>📜</i>抽奖记录</button><button id="tabReg" class="navBtn" onclick="switchTab('reg')"><i>📝</i>注册</button></nav>
+
+<div id="drawCinema" class="drawCinema">
+  <div class="cinemaRays"></div><div class="cinemaBeam"></div>
+  <div class="cinemaCore">
+    <div id="cinemaRing" class="cinemaRing"></div><div id="cinemaRing2" class="cinemaRing2"></div><div class="cinemaStars"></div>
+    <div class="cinemaChest"><div class="cinemaLid"></div><div class="cinemaBase"></div><div class="cinemaBand"></div><div class="cinemaLock"></div></div>
+    <div id="cinemaTitle" class="cinemaTitle">好运汇聚中</div><div id="cinemaAmount" class="cinemaAmount">???</div><div id="cinemaHint" class="cinemaHint">第一阶段 · 高速汇聚</div>
+    <div id="cinemaSlots" class="cinemaSlots"><div class="cinemaSlot" data-cinema-reward="20">20元</div><div class="cinemaSlot" data-cinema-reward="40">40元</div><div class="cinemaSlot" data-cinema-reward="60">60元</div><div class="cinemaSlot" data-cinema-reward="100">100元</div><div class="cinemaSlot" data-cinema-reward="120">120元</div><div class="cinemaSlot" data-cinema-reward="160">160元</div><div class="cinemaSlot" data-cinema-reward="200">200元</div><div class="cinemaSlot" data-cinema-reward="888">888元</div></div>
+  </div>
+</div>
+
+<div id="resultModal" class="resultModal" onclick="if(event.target===this)closeResult()"><div id="resultCard" class="resultCard"><button class="closeX" onclick="closeResult()">×</button><div id="resultInner" class="resultInner"></div></div></div>
+<div id="fx" class="fx"></div><div id="particles" class="particleLayer"></div>
+<script src="/app.js"></script>
+</body>
+</html>
