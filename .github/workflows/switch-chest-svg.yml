@@ -19,10 +19,12 @@ jobs:
           fetch-depth: 0
       - name: Apply SVG chest fix
         run: python3 scripts/switch_chest_to_svg.py
-      - name: Commit
+      - name: Commit and rebase
         run: |
           git config user.name 'rsj-lucky-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add index.html
           git diff --cached --quiet || git commit -m 'Use valid SVG royal chest artwork'
-          git push
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && exit 1)
+          git push origin main
