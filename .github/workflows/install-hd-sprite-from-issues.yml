@@ -23,14 +23,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh issue list --repo "$GITHUB_REPOSITORY" --state all --search 'HDSPRITE- in:title' --limit 50 --json title,body > /tmp/parts.json
+          gh issue list --repo "$GITHUB_REPOSITORY" --state all --search 'HDSPRITE- in:title' --limit 100 --json title,body > /tmp/parts.json
           python3 - <<'PY'
           import json,base64
           rows=json.load(open('/tmp/parts.json'))
           rows=[r for r in rows if r['title'].startswith('HDSPRITE-')]
           rows.sort(key=lambda r:r['title'])
           print('parts:', [r['title'] for r in rows])
-          if len(rows)!=15: raise SystemExit(f'expected 15 parts, got {len(rows)}')
+          if len(rows)!=57: raise SystemExit(f'expected 57 parts, got {len(rows)}')
           data=''.join((r.get('body') or '').strip() for r in rows)
           raw=base64.b64decode(data,validate=True)
           open('/tmp/cards-sprite.webp','wb').write(raw)
