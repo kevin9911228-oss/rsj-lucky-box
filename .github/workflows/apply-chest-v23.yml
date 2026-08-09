@@ -4,7 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'assets/effect-keyframes-v23.b64'
+      - 'assets/effect-keyframes-v23.part1'
+      - 'assets/effect-keyframes-v23.part2'
+      - 'assets/effect-keyframes-v23.part3'
+      - 'assets/effect-keyframes-v23.part4'
+      - 'assets/effect-keyframes-v23.part5'
       - 'assets/chest-v23.css'
       - 'assets/chest-v23.js'
       - 'scripts/build_chest_v23.py'
@@ -27,6 +31,7 @@ jobs:
         run: python scripts/build_chest_v23.py
       - name: Validate V23
         run: |
+          test -s assets/effect-keyframes-v23.jpg
           test -s assets/chest-effect-closed-v23.webp
           test -s assets/chest-effect-opening-v23.webp
           test -s assets/chest-effect-open-v23.webp
