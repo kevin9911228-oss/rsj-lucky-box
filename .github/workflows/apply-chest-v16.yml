@@ -1,0 +1,60 @@
+name: Apply chest V16
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/chest-v16.css'
+      - '.github/workflows/apply-chest-v16.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Replace legacy chest layers with isolated V16 markup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          new_chest='''<div class="chest"><img class="rsjChestClosed" src="/assets/chest-user-closed-v13.webp?v=20260809-v16" alt="皇家红金宝箱" decoding="async"><img class="rsjChestBase" src="/assets/chest-user-closed-v13.webp?v=20260809-v16" alt="" aria-hidden="true" decoding="async"><div class="rsjChestCavity" aria-hidden="true"></div><div class="rsjChestGlow" aria-hidden="true"></div><img class="rsjChestLid" src="/assets/chest-user-closed-v13.webp?v=20260809-v16" alt="" aria-hidden="true" decoding="async"></div>'''
+
+          pattern=r'<div class="chest">.*?</div><div id="stageText"'
+          repl=new_chest+'<div id="stageText"'
+          s2,n=re.subn(pattern,repl,s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit(f'Chest markup replacement count was {n}, expected 1')
+          s=s2
+
+          link='<link rel="stylesheet" href="/assets/chest-v16.css?v=20260809-v16">'
+          if link not in s:
+              s=s.replace('</head>',link+'\n</head>',1)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate V16 markup
+        run: |
+          grep -q 'rsjChestClosed' index.html
+          grep -q 'rsjChestLid' index.html
+          grep -q 'chest-v16.css?v=20260809-v16' index.html
+      - name: Commit live page update
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Apply isolated real-lid chest V16 to live page'
+          git push
