@@ -1,20 +1,25 @@
 from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
 from pathlib import Path
-import math, base64
+import base64
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'assets'
 INDEX=ROOT/'index.html'
 SPRITE=ASSETS/'effect-keyframes-v23.jpg'
-SPRITE_B64=ASSETS/'effect-keyframes-v23.b64'
+PARTS=[ASSETS/f'effect-keyframes-v23.part{i}' for i in range(1,6)]
 
-if not SPRITE.exists():
-    if not SPRITE_B64.exists():
-        raise SystemExit('effect-keyframes-v23 source missing')
-    s=SPRITE_B64.read_text(encoding='utf-8').strip()
-    s += '=' * (-len(s) % 4)
-    SPRITE.write_bytes(base64.b64decode(s))
+# Reconstruct the approved mockup keyframe strip from small text chunks.
+# We intentionally overwrite any stale/corrupt sprite left by an older attempt.
+if not all(p.exists() for p in PARTS):
+    missing=[p.name for p in PARTS if not p.exists()]
+    raise SystemExit('missing V23 sprite parts: '+', '.join(missing))
+s=''.join(p.read_text(encoding='utf-8').strip() for p in PARTS)
+s += '=' * (-len(s) % 4)
+SPRITE.write_bytes(base64.b64decode(s))
 
+# Fail early if the reconstructed source is not a real image.
+with Image.open(SPRITE) as check:
+    check.verify()
 src=Image.open(SPRITE).convert('RGB')
 pw=src.width//5
 if pw < 120:
@@ -39,14 +44,14 @@ def grade(im,bright=1.0,contrast=1.0,sharp=1.0):
     x=ImageEnhance.Sharpness(x).enhance(sharp)
     return x
 
-closed=grade(raw[0],1.0,1.05,1.16)
-shake=grade(raw[1],1.02,1.04,1.05)
-partial=grade(raw[2],1.03,1.05,1.12)
-burst=grade(raw[3],1.02,1.04,1.06)
-opened=grade(raw[4],1.02,1.05,1.15)
+closed=grade(raw[0],1.0,1.06,1.22)
+shake=grade(raw[1],1.02,1.05,1.10)
+partial=grade(raw[2],1.03,1.06,1.17)
+burst=grade(raw[3],1.02,1.05,1.10)
+opened=grade(raw[4],1.02,1.06,1.18)
 
-closed.save(ASSETS/'chest-effect-closed-v23.webp','WEBP',quality=92,method=6)
-opened.save(ASSETS/'chest-effect-open-v23.webp','WEBP',quality=92,method=6)
+closed.save(ASSETS/'chest-effect-closed-v23.webp','WEBP',quality=93,method=6)
+opened.save(ASSETS/'chest-effect-open-v23.webp','WEBP',quality=93,method=6)
 
 def zoom_shift(im,scale=1.0,dx=0,dy=0,angle=0):
     w,h=im.size
@@ -63,33 +68,35 @@ def flash(im,strength=1.0):
     ov=Image.new('RGBA',base.size,(0,0,0,0))
     d=ImageDraw.Draw(ov)
     cx,cy=W//2,round(H*.55)
-    for r,a in [(165,18),(120,34),(80,58),(45,95),(24,135)]:
+    for r,a in [(175,20),(128,38),(86,64),(48,104),(25,145)]:
         aa=min(255,round(a*strength))
-        d.ellipse((cx-r,cy-r//3,cx+r,cy+r//3),fill=(255,215,91,aa))
+        d.ellipse((cx-r,cy-r//3,cx+r,cy+r//3),fill=(255,218,96,aa))
     ov=ov.filter(ImageFilter.GaussianBlur(12))
     return Image.alpha_composite(base,ov).convert('RGB')
 
-frames=[]
-durations=[]
-frames.extend([closed,closed]); durations.extend([180,120])
-for dx,dy,ang in [(-3,1,-.3),(3,0,.25),(-4,-1,-.35),(4,1,.3),(-2,0,-.15),(2,0,.15)]:
-    frames.append(zoom_shift(closed,1.018,dx,dy,ang)); durations.append(72)
+frames=[]; durations=[]
+# Closed / tension stage: full-frame artwork only.
+frames.extend([closed,closed]); durations.extend([190,130])
+for dx,dy,ang in [(-3,1,-.25),(3,0,.22),(-4,-1,-.30),(4,1,.28),(-2,0,-.12),(2,0,.12)]:
+    frames.append(zoom_shift(closed,1.016,dx,dy,ang)); durations.append(75)
+# Use the approved mockup's glow/shake artwork.
 for b in (.98,1.02,1.06):
-    frames.append(ImageEnhance.Brightness(shake).enhance(b)); durations.append(85)
-frames.append(flash(shake,.9)); durations.append(90)
-frames.append(flash(shake,1.5)); durations.append(90)
-frames.append(flash(partial,.9)); durations.append(130)
-frames.append(partial); durations.append(170)
-frames.append(ImageEnhance.Brightness(partial).enhance(1.07)); durations.append(160)
-frames.append(flash(burst,.9)); durations.append(120)
-frames.append(burst); durations.append(200)
-frames.append(ImageEnhance.Brightness(burst).enhance(1.06)); durations.append(180)
-frames.append(flash(opened,.65)); durations.append(130)
-frames.append(opened); durations.append(280)
-frames.append(opened); durations.append(420)
+    frames.append(ImageEnhance.Brightness(shake).enhance(b)); durations.append(90)
+frames.append(flash(shake,.85)); durations.append(95)
+frames.append(flash(shake,1.45)); durations.append(100)
+# Full-image opening keyframes — never slice or flatten the chest geometry.
+frames.append(flash(partial,.90)); durations.append(125)
+frames.append(partial); durations.append(230)
+frames.append(ImageEnhance.Brightness(partial).enhance(1.06)); durations.append(190)
+frames.append(flash(burst,.85)); durations.append(130)
+frames.append(burst); durations.append(230)
+frames.append(ImageEnhance.Brightness(burst).enhance(1.05)); durations.append(200)
+frames.append(flash(opened,.55)); durations.append(135)
+frames.append(opened); durations.append(300)
+frames.append(opened); durations.append(430)
 
 anim=ASSETS/'chest-effect-opening-v23.webp'
-frames[0].save(anim,'WEBP',save_all=True,append_images=frames[1:],duration=durations,loop=1,quality=86,method=6,minimize_size=False)
+frames[0].save(anim,'WEBP',save_all=True,append_images=frames[1:],duration=durations,loop=1,quality=88,method=6,minimize_size=False)
 
 test=Image.open(anim)
 if getattr(test,'n_frames',1) < 20:
@@ -104,5 +111,4 @@ if css not in html:
 if js not in html:
     html=html.replace('</body>',js+'\n</body>',1)
 INDEX.write_text(html,encoding='utf-8')
-
 print(f'V23 effect-art chest built: {getattr(test,"n_frames",1)} frames, {anim.stat().st_size} bytes, {sum(durations)}ms, {W}x{H}')
