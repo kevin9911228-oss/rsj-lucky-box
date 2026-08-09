@@ -1,0 +1,98 @@
+/* RESULT POPUP V10 — seamless info overlay, no baked-text flash */
+/* Keep the master artwork visible; only scrub the baked copy under live text. */
+.winInfoPanel{
+  top:60.0%!important;
+  height:20.9%!important;
+  padding:1.12% 3.2% .72%!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  animation:none!important;
+  opacity:1!important;
+  transform:none!important;
+  isolation:isolate!important;
+}
+/* Main soft scrub patch: covers baked congratulation/reward copy without creating a visible rectangle. */
+.winInfoPanel:before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  z-index:0!important;
+  left:12%!important;
+  right:12%!important;
+  top:-1%!important;
+  height:70%!important;
+  border:0!important;
+  border-radius:42% 42% 34% 34% / 24% 24% 30% 30%!important;
+  background:
+    radial-gradient(ellipse at 50% 48%,rgba(4,9,14,1) 0 55%,rgba(4,9,14,.985) 66%,rgba(4,9,14,.82) 77%,rgba(4,9,14,.32) 90%,transparent 100%)!important;
+  box-shadow:none!important;
+  filter:none!important;
+  pointer-events:none!important;
+}
+/* Bottom scrub patch: specifically hides the baked remaining-count/serial lines. */
+.winInfoPanel:after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  z-index:0!important;
+  left:18%!important;
+  right:18%!important;
+  top:57%!important;
+  height:45%!important;
+  border:0!important;
+  border-radius:40%!important;
+  background:
+    radial-gradient(ellipse at 50% 44%,rgba(3,8,13,1) 0 58%,rgba(3,8,13,.985) 70%,rgba(3,8,13,.72) 82%,rgba(3,8,13,.20) 93%,transparent 100%)!important;
+  box-shadow:none!important;
+  pointer-events:none!important;
+}
+.winCongrats,.winRewardLine,.winMeta{position:relative!important;z-index:2!important}
+.winCongrats{
+  gap:1.18cqw!important;
+  font-size:2.17cqw!important;
+  line-height:1.06!important;
+}
+.winCongrats:before,.winCongrats:after{
+  width:2.7cqw!important;
+  height:3.55cqw!important;
+  opacity:.9!important;
+  filter:drop-shadow(0 0 5px #d7a4453f)!important;
+}
+.winCongrats:before{transform:translateX(-.2cqw) rotate(-14deg)!important}
+.winCongrats:after{transform:translateX(.2cqw) scaleX(-1) rotate(-14deg)!important}
+.winRewardLine{margin:.34cqw 0 .56cqw!important}
+.winRewardLine strong{font-size:4.08cqw!important}
+.winRewardLine span{font-size:2.27cqw!important}
+.winMeta{
+  width:80%!important;
+  margin:.02cqw auto 0!important;
+  padding-top:1.48cqw!important;
+  gap:.43cqw!important;
+}
+.winMeta:before{opacity:.74!important}
+.winMetaRow{font-size:1.31cqw!important;line-height:1.22!important}
+.winMetaRow:last-child{
+  font-size:1.10cqw!important;
+  margin-top:.30cqw!important;
+  padding-bottom:.24cqw!important;
+  letter-spacing:.012em!important;
+}
+.winMetaRow:last-child b{font-size:1.10cqw!important;font-weight:540!important}
+/* Remove delayed info reveal inherited from V7 entirely. */
+@keyframes v7InfoIn{from{opacity:1;transform:none}to{opacity:1;transform:none}}
+.resultCardV2 .againRow{top:82.0%!important}
+@media(max-width:560px){
+  .winInfoPanel{top:59.9%!important;height:21.1%!important;padding-top:1.05%!important}
+  .winInfoPanel:before{left:10%!important;right:10%!important;height:72%!important}
+  .winInfoPanel:after{left:14%!important;right:14%!important;top:56%!important;height:47%!important}
+  .winCongrats{font-size:2.31cqw!important;gap:1.12cqw!important}
+  .winCongrats:before,.winCongrats:after{width:2.9cqw!important;height:3.7cqw!important}
+  .winRewardLine strong{font-size:4.34cqw!important}
+  .winRewardLine span{font-size:2.42cqw!important}
+  .winMeta{width:84%!important;padding-top:1.55cqw!important;gap:.44cqw!important}
+  .winMetaRow{font-size:1.44cqw!important}
+  .winMetaRow:last-child,.winMetaRow:last-child b{font-size:1.19cqw!important}
+}
