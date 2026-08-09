@@ -1,0 +1,57 @@
+name: Install celebration V2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/install-celebration-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inject V2 assets into page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          css='<link rel="stylesheet" href="/assets/celebration-v2.css?v=20260809-v2">'
+          js='<script src="/assets/celebration-v2.js?v=20260809-v2"></script>'
+          changed=False
+          if css not in s:
+              if '</head>' not in s:
+                  raise SystemExit('index.html missing </head>')
+              s=s.replace('</head>', css+'\n</head>', 1)
+              changed=True
+          if js not in s:
+              if '</body>' not in s:
+                  raise SystemExit('index.html missing </body>')
+              s=s.replace('</body>', js+'\n</body>', 1)
+              changed=True
+          if changed:
+              p.write_text(s,encoding='utf-8')
+          print('celebration-v2 installed' if changed else 'already installed')
+          PY
+      - name: Validate installation
+        run: |
+          grep -q 'celebration-v2.css?v=20260809-v2' index.html
+          grep -q 'celebration-v2.js?v=20260809-v2' index.html
+      - name: Commit updated page
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Enable celebration V2 on lottery page'
+          git push
