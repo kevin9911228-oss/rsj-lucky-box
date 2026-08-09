@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'assets/result-master-v7.txt'
+      - 'assets/result-master-v7.part*'
       - 'scripts/apply_result_popup_v7.py'
       - '.github/workflows/apply-result-popup-v7.yml'
 
