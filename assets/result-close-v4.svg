@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b5"/><stop offset=".22" stop-color="#d99a25"/><stop offset=".48" stop-color="#fff8ce"/><stop offset=".72" stop-color="#9e5d0b"/><stop offset="1" stop-color="#f2cd66"/></linearGradient>
+  <radialGradient id="bg" cx="35%" cy="28%" r="78%"><stop offset="0" stop-color="#29303c"/><stop offset=".55" stop-color="#11151d"/><stop offset="1" stop-color="#030507"/></radialGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="70" cy="70" r="51" fill="url(#bg)" stroke="#5f3908" stroke-width="8"/>
+<circle cx="70" cy="70" r="54" fill="none" stroke="url(#gold)" stroke-width="3.6" filter="url(#glow)"/>
+<circle cx="70" cy="70" r="46" fill="none" stroke="#e4b858" stroke-opacity=".72" stroke-width="1.4"/>
+<g fill="url(#gold)" stroke="#6a3c08" stroke-width="1">
+  <path d="M70 5l8 12-8 9-8-9z"/><path d="M70 135l8-12-8-9-8 9z"/>
+  <path d="M5 70l12-8 9 8-9 8z"/><path d="M135 70l-12-8-9 8 9 8z"/>
+  <path d="M25 25c14 2 23 9 29 21-10-4-20-2-29 6 4-10 4-19 0-27z"/>
+  <path d="M115 25c-14 2-23 9-29 21 10-4 20-2 29 6-4-10-4-19 0-27z"/>
+  <path d="M25 115c14-2 23-9 29-21-10 4-20 2-29-6 4 10 4 19 0 27z"/>
+  <path d="M115 115c-14-2-23-9-29-21 10 4 20 2 29-6-4 10-4 19 0 27z"/>
+</g>
+<g stroke="url(#gold)" stroke-linecap="round" filter="url(#glow)"><path d="M51 51l38 38" stroke-width="8"/><path d="M89 51L51 89" stroke-width="8"/></g>
+<g stroke="#fff4bd" stroke-linecap="round" opacity=".5"><path d="M53 50l36 36"/><path d="M87 52L52 87"/></g>
+</svg>
