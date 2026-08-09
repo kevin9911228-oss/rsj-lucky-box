@@ -1,0 +1,160 @@
+name: Rebuild chest V13
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-chest-v13.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image tooling
+        run: python -m pip install --quiet pillow
+      - name: Rebuild transparent aligned chest assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageFilter
+          import base64, re, io
+
+          src = Path('assets/chest-user-v10.css').read_text(encoding='utf-8')
+          out = Path('assets')
+
+          def extract(kind):
+              pat = rf'--rsj-user-chest-{kind}\s*:\s*url\(["\']?data:image/webp;base64,([^"\')]+)'
+              m = re.search(pat, src, re.S)
+              if not m:
+                  raise SystemExit(f'cannot find embedded {kind} chest in V10 css')
+              return Image.open(io.BytesIO(base64.b64decode(m.group(1)))).convert('RGBA')
+
+          def remove_black(img):
+              px = img.load()
+              for y in range(img.height):
+                  for x in range(img.width):
+                      r,g,b,a = px[x,y]
+                      hi = max(r,g,b)
+                      if hi <= 24:
+                          px[x,y] = (0,0,0,0)
+                      elif hi < 52:
+                          na = int(a * (hi-24) / 28)
+                          px[x,y] = (r,g,b,max(0,min(255,na)))
+              bbox = img.getbbox()
+              return img.crop(bbox) if bbox else img
+
+          def sharpen_resize(img, target_w):
+              ratio = target_w / img.width
+              img = img.resize((target_w, max(1, round(img.height*ratio))), Image.Resampling.LANCZOS)
+              rgb = img.convert('RGB').filter(ImageFilter.UnsharpMask(radius=1.0, percent=90, threshold=2))
+              return Image.merge('RGBA', (*rgb.split(), img.getchannel('A')))
+
+          closed = sharpen_resize(remove_black(extract('closed')), 820)
+          opened = sharpen_resize(remove_black(extract('open')), 760)
+
+          CW, CH = 1040, 920
+          BASELINE = 835
+
+          def place(img, baseline):
+              canvas = Image.new('RGBA',(CW,CH),(0,0,0,0))
+              x = (CW-img.width)//2
+              y = baseline-img.height
+              canvas.alpha_composite(img,(x,y))
+              return canvas, (x,y,x+img.width,y+img.height)
+
+          closed_canvas, cb = place(closed, BASELINE)
+          open_canvas, ob = place(opened, BASELINE)
+
+          # Split the CLOSED chest at its natural lid/body seam so the lid itself can rotate.
+          seam = cb[1] + round((cb[3]-cb[1]) * 0.455)
+          lid = Image.new('RGBA',(CW,CH),(0,0,0,0))
+          body = Image.new('RGBA',(CW,CH),(0,0,0,0))
+          lid.alpha_composite(closed_canvas.crop((0,0,CW,seam+8)),(0,0))
+          body.alpha_composite(closed_canvas.crop((0,seam-10,CW,CH)),(0,seam-10))
+
+          for name,img in [
+              ('chest-user-closed-v13.webp',closed_canvas),
+              ('chest-user-open-v13.webp',open_canvas),
+              ('chest-user-lid-v13.webp',lid),
+              ('chest-user-body-v13.webp',body),
+          ]:
+              img.save(out/name,'WEBP',quality=92,method=6)
+
+          css = r'''/* RSJ CHEST V13 — transparent, aligned, true slow-opening lid */
+.pool{overflow:hidden!important}
+.crownIcon:before,.crownIcon:after{content:none!important;display:none!important}
+.stage{height:372px!important;overflow:visible!important;position:relative!important}
+.halo{top:128px!important;width:320px!important;height:154px!important;opacity:.82!important}
+.chest{position:absolute!important;left:50%!important;top:46%!important;translate:-50% -50%!important;width:min(88vw,430px)!important;height:auto!important;aspect-ratio:1040/920!important;background:none!important;filter:none!important;overflow:visible!important;animation:royalFloat 3s ease-in-out infinite!important;transform-origin:50% 78%!important;z-index:4!important}
+.chestMain{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:contain!important;content:url('/assets/chest-user-closed-v13.webp?v=20260809-v13')!important;opacity:1!important;mix-blend-mode:normal!important;filter:drop-shadow(0 16px 18px #0009) drop-shadow(0 0 16px #e5a22936)!important;transform:none!important;transition:none!important;z-index:4!important}
+.lid,.base{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;left:0!important;right:auto!important;top:0!important;bottom:auto!important;border:0!important;border-radius:0!important;background-position:center!important;background-repeat:no-repeat!important;background-size:contain!important;box-shadow:none!important;pointer-events:none!important;opacity:0!important}
+.lid{background-image:url('/assets/chest-user-lid-v13.webp?v=20260809-v13')!important;z-index:7!important;transform-origin:50% 45.5%!important;backface-visibility:hidden!important}
+.base{background-image:url('/assets/chest-user-body-v13.webp?v=20260809-v13')!important;z-index:3!important}
+.band,.lock{display:none!important}
+.chest:before{content:''!important;position:absolute!important;inset:0!important;background:url('/assets/chest-user-open-v13.webp?v=20260809-v13') center/contain no-repeat!important;opacity:0!important;z-index:5!important;pointer-events:none!important;filter:drop-shadow(0 14px 18px #0009) drop-shadow(0 0 25px #ffd55b55)!important;transform:none!important;transition:none!important}
+.chest:after{content:''!important;position:absolute!important;left:20%!important;right:20%!important;top:44%!important;height:14%!important;border-radius:50%!important;background:radial-gradient(ellipse,#fffbd9 0,#ffe882d8 18%,#ffc53b72 43%,transparent 76%)!important;filter:blur(7px)!important;opacity:.10!important;transform:scale(.55,.28)!important;z-index:6!important;pointer-events:none!important;transition:opacity .2s ease,transform .35s ease!important}
+.stageText{bottom:1px!important;z-index:12!important;text-shadow:0 2px 8px #000!important}
+.stage.opening .chest{animation:royalTension .38s ease-in-out infinite!important}
+.stage.opening .chestMain{opacity:1!important;animation:none!important}
+.stage.opening .lid,.stage.opening .base{opacity:0!important;animation:none!important}
+.stage.opening .chest:before{opacity:0!important;animation:none!important}
+.stage.opening .chest:after{opacity:.48!important;transform:scale(.9,.45)!important}
+.stage.explode .chest{animation:none!important;filter:none!important}
+.stage.explode .chestMain{animation:rsjClosedHandoffV13 1.08s ease forwards!important}
+.stage.explode .base{opacity:1!important;animation:rsjBodyHandoffV13 1.08s ease forwards!important}
+.stage.explode .lid{opacity:1!important;animation:rsjRealLidOpenV13 1.08s cubic-bezier(.18,.82,.18,1) forwards!important}
+.stage.explode .chest:before{animation:rsjOpenRevealV13 1.08s ease forwards!important}
+.stage.explode .chest:after{animation:rsjSeamGlowV13 1.08s ease-out forwards!important}
+.stage.explode:before{width:350px!important;height:280px!important;background:radial-gradient(ellipse,#fffce8f2 0,#ffe99da8 13%,#ffc53d4c 36%,transparent 72%)!important;animation:royalBurstLight 1.08s ease-out both!important}
+.stage.explode:after{width:270px!important;height:300px!important;background:linear-gradient(90deg,transparent,#ffdf765b,#fffbd9e8,#ffdf765b,transparent)!important;animation:royalBeam 1.08s ease-out both!important}
+@keyframes rsjRealLidOpenV13{
+  0%{transform:translateY(0) perspective(1000px) rotateX(0) scale(1);opacity:1;filter:brightness(1)}
+  18%{transform:translateY(-2px) perspective(1000px) rotateX(-7deg) scale(1.005);filter:brightness(1.05)}
+  48%{transform:translateY(-16px) perspective(1000px) rotateX(-45deg) scale(1.012);filter:brightness(1.12)}
+  78%{transform:translateY(-35px) perspective(1000px) rotateX(-88deg) scaleX(1.015);opacity:1;filter:brightness(1.18)}
+  92%{transform:translateY(-46px) perspective(1000px) rotateX(-108deg) scaleX(1.02);opacity:.72;filter:brightness(1.16)}
+  100%{transform:translateY(-50px) perspective(1000px) rotateX(-114deg) scaleX(1.02);opacity:0}
+}
+@keyframes rsjClosedHandoffV13{0%,48%{opacity:1}58%{opacity:.82}78%{opacity:.25}100%{opacity:0}}
+@keyframes rsjBodyHandoffV13{0%{opacity:1}63%{opacity:1}86%{opacity:.28}100%{opacity:0}}
+@keyframes rsjOpenRevealV13{0%,52%{opacity:0;transform:translateY(5px) scale(.985);filter:brightness(.82)}70%{opacity:.42;transform:translateY(2px) scale(.993);filter:brightness(.96)}88%{opacity:.9;transform:none;filter:brightness(1.05)}100%{opacity:1;transform:none;filter:brightness(1.08)}}
+@keyframes rsjSeamGlowV13{0%{opacity:.16;transform:scale(.55,.28)}26%{opacity:.72;transform:scale(1.05,.55)}60%{opacity:1;transform:scale(1.48,1.15)}100%{opacity:.55;transform:scale(1.72,1.5)}}
+@media(min-width:600px){.stage{height:420px!important}.chest{width:min(72vw,500px)!important;top:47%!important}.halo{top:148px!important;width:370px!important;height:176px!important}.stageText{font-size:20px!important}}
+@media(max-width:420px){.stage{height:342px!important}.chest{width:min(94vw,388px)!important;top:45%!important}.halo{top:116px!important;width:288px!important;height:142px!important}.stageText{bottom:-3px!important}}
+@media(prefers-reduced-motion:reduce){.stage.explode .lid,.stage.explode .base,.stage.explode .chestMain,.stage.explode .chest:before,.stage.explode .chest:after{animation:none!important}}
+'''
+          Path('assets/chest-v13.css').write_text(css,encoding='utf-8')
+
+          p = Path('index.html')
+          html = p.read_text(encoding='utf-8')
+          link = '<link rel="stylesheet" href="/assets/chest-v13.css?v=20260809-v13">'
+          if link not in html:
+              html = html.replace('</head>', link+'\n</head>', 1)
+          p.write_text(html,encoding='utf-8')
+          PY
+      - name: Validate V13
+        run: |
+          test -s assets/chest-user-closed-v13.webp
+          test -s assets/chest-user-open-v13.webp
+          test -s assets/chest-user-lid-v13.webp
+          test -s assets/chest-user-body-v13.webp
+          grep -q 'chest-v13.css?v=20260809-v13' index.html
+          grep -q 'rsjRealLidOpenV13' assets/chest-v13.css
+      - name: Commit live V13
+        run: |
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html assets/chest-v13.css assets/chest-user-closed-v13.webp assets/chest-user-open-v13.webp assets/chest-user-lid-v13.webp assets/chest-user-body-v13.webp
+          if git diff --cached --quiet; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git commit -m 'Rebuild chest with transparent aligned slow-opening V13'
+          git push
