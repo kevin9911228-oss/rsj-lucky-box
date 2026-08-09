@@ -1,14 +1,17 @@
 from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
 from pathlib import Path
-import math
+import math, base64
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'assets'
 INDEX=ROOT/'index.html'
 SPRITE=ASSETS/'effect-keyframes-v23.jpg'
+SPRITE_B64=ASSETS/'effect-keyframes-v23.b64'
 
 if not SPRITE.exists():
-    raise SystemExit('effect-keyframes-v23.jpg missing')
+    if not SPRITE_B64.exists():
+        raise SystemExit('effect-keyframes-v23 source missing')
+    SPRITE.write_bytes(base64.b64decode(SPRITE_B64.read_text(encoding='utf-8').strip()))
 
 src=Image.open(SPRITE).convert('RGB')
 pw=src.width//5
