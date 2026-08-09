@@ -6,7 +6,14 @@ ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'assets'
 INDEX=ROOT/'index.html'
 SPRITE=ASSETS/'effect-keyframes-v23.jpg'
-PARTS=[ASSETS/f'effect-keyframes-v23.part{i}' for i in range(1,6)]
+PARTS=[
+    ASSETS/'effect-keyframes-v23.part1',
+    ASSETS/'effect-keyframes-v23.part2',
+    ASSETS/'effect-keyframes-v23.part3',
+    ASSETS/'effect-keyframes-v23.part4',
+    ASSETS/'effect-keyframes-v23.part5a',
+    ASSETS/'effect-keyframes-v23.part5b',
+]
 
 # Reconstruct the approved mockup keyframe strip from small text chunks.
 # We intentionally overwrite any stale/corrupt sprite left by an older attempt.
