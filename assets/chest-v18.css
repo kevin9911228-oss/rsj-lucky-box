@@ -1,23 +1,21 @@
-/* RSJ CHEST V19 — Scheme A refined: single IMG player, slower readable opening, contained scale.
-   The webpage never splits or rotates bitmap layers; the opening is fully pre-rendered in Animated WebP. */
+/* RSJ CHEST V20 — one IMG player, ghost-free pre-rendered opening. */
 .stage{height:282px!important;overflow:visible!important;position:relative!important;isolation:isolate!important}
-.chest{position:absolute!important;left:50%!important;top:47%!important;translate:-50% -50%!important;width:min(70vw,255px)!important;height:auto!important;aspect-ratio:640/740!important;background:none!important;filter:none!important;overflow:visible!important;animation:rsjChestIdleV19 3s ease-in-out infinite!important;transform-origin:50% 78%!important;z-index:4!important;perspective:none!important;transform-style:flat!important}
-/* Disable every legacy split-lid implementation. */
+.chest{position:absolute!important;left:50%!important;top:47%!important;translate:-50% -50%!important;width:min(76vw,310px)!important;aspect-ratio:1040/920!important;height:auto!important;background:none!important;filter:none!important;overflow:visible!important;animation:rsjChestIdleV20 3s ease-in-out infinite!important;transform-origin:50% 78%!important;z-index:4!important;perspective:none!important;transform-style:flat!important}
+/* Kill every older split-box implementation. */
 .chestMain,.lid,.base,.band,.lock,.rsjChestClosed,.rsjChestOpen17,.rsjChestBase,.rsjChestLid,.rsjChestGlow,.rsjChestCavity{display:none!important;visibility:hidden!important;opacity:0!important;animation:none!important}
 .chest:before,.chest:after{content:none!important;display:none!important}
 .chestVisual18{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;opacity:1!important;visibility:visible!important;filter:drop-shadow(0 14px 16px rgba(0,0,0,.58)) drop-shadow(0 0 16px rgba(229,162,41,.22))!important;user-select:none!important;-webkit-user-drag:none!important;pointer-events:none!important;image-rendering:auto!important;transform:translateZ(0)!important}
-/* A restrained tension cue before the actual bitmap animation starts. */
-.stage.opening .chest,.stage.unlocking .chest{animation:rsjChestTensionV19 .44s ease-in-out infinite!important;filter:none!important;background:none!important}
+.stage.opening .chest,.stage.unlocking .chest{animation:rsjChestTensionV20 .44s ease-in-out infinite!important;background:none!important;filter:none!important}
 .stage.opening .chestVisual18,.stage.unlocking .chestVisual18{filter:brightness(1.055) drop-shadow(0 14px 16px rgba(0,0,0,.58)) drop-shadow(0 0 22px rgba(255,200,69,.34))!important}
-/* Animated WebP owns the opening. CSS must not fake a second lid or burst. */
-.stage.explode .chest{animation:none!important;filter:none!important;background:none!important;transform:none!important}
+/* Animated WebP owns all opening motion; no CSS lid and no stage burst overlays. */
+.stage.explode .chest{animation:none!important;background:none!important;filter:none!important;transform:none!important}
 .stage.explode .chestVisual18{filter:drop-shadow(0 14px 16px rgba(0,0,0,.58)) drop-shadow(0 0 23px rgba(255,211,91,.32))!important}
 .stage.explode:before,.stage.explode:after{content:none!important;display:none!important;animation:none!important}
-.halo{left:50%!important;top:49%!important;translate:-50% -50%!important;width:218px!important;height:112px!important;border-radius:50%!important;z-index:1!important;opacity:.74!important}
-.stageText{bottom:1px!important;z-index:12!important;text-shadow:0 2px 8px #000!important}
-@keyframes rsjChestIdleV19{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.008)}}
-@keyframes rsjChestTensionV19{0%,100%{transform:translateX(0) rotate(0) scale(1.004)}25%{transform:translateX(-1.7px) rotate(-.28deg) scale(1.008)}75%{transform:translateX(1.7px) rotate(.28deg) scale(1.008)}}
-@media(min-width:600px){.stage{height:318px!important}.chest{width:min(42vw,285px)!important;top:47%!important}.halo{width:246px!important;height:124px!important;top:50%!important}.stageText{font-size:18px!important}}
-@media(max-width:599px){.stage{height:274px!important}.chest{width:min(72vw,245px)!important;top:46%!important}.halo{width:210px!important;height:108px!important;top:49%!important}.stageText{font-size:16px!important}}
-@media(max-width:380px){.stage{height:258px!important}.chest{width:min(76vw,228px)!important}.halo{width:196px!important;height:102px!important}}
+.halo{left:50%!important;top:51%!important;translate:-50% -50%!important;width:232px!important;height:116px!important;border-radius:50%!important;z-index:1!important;opacity:.72!important}
+.stageText{bottom:0!important;z-index:12!important;text-shadow:0 2px 8px #000!important}
+@keyframes rsjChestIdleV20{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.008)}}
+@keyframes rsjChestTensionV20{0%,100%{transform:translateX(0) rotate(0) scale(1.004)}25%{transform:translateX(-1.7px) rotate(-.28deg) scale(1.008)}75%{transform:translateX(1.7px) rotate(.28deg) scale(1.008)}}
+@media(min-width:600px){.stage{height:318px!important}.chest{width:min(48vw,335px)!important;top:48%!important}.halo{width:260px!important;height:128px!important;top:52%!important}.stageText{font-size:18px!important}}
+@media(max-width:599px){.stage{height:276px!important}.chest{width:min(78vw,300px)!important;top:47%!important}.halo{width:224px!important;height:112px!important;top:51%!important}.stageText{font-size:16px!important}}
+@media(max-width:380px){.stage{height:260px!important}.chest{width:min(82vw,282px)!important}.halo{width:210px!important;height:106px!important}}
 @media(prefers-reduced-motion:reduce){.chest{animation:none!important}.stage.opening .chest,.stage.unlocking .chest{animation:none!important}}

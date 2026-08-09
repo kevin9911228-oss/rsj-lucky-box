@@ -1,4 +1,4 @@
-name: Apply chest V19
+name: Apply chest V20
 
 on:
   push:
@@ -21,25 +21,25 @@ jobs:
           python-version: '3.12'
       - name: Install Pillow
         run: python -m pip install --quiet pillow
-      - name: Build animation and rewire page
+      - name: Build ghost-free animation and rewire page
         run: python scripts/build_chest_v18.py
-      - name: Validate
+      - name: Validate V20
         run: |
           test -s assets/chest-open-anim-a.webp
-          grep -q 'chest-v18.css?v=20260809-v19' index.html
+          grep -q 'chest-v18.css?v=20260809-v20' index.html
           grep -q 'id="chestVisual"' index.html
-          grep -q 'chest-open-anim-a.webp?v=20260809-v19' index.html
-          grep -q 'chest-user-open-v13.webp?v=20260809-v19' index.html
-          grep -q 'resetChestVisual' index.html
+          grep -q 'chest-open-anim-a.webp?v=20260809-v20' index.html
+          grep -q 'chest-user-open-v13.webp?v=20260809-v20' index.html
           grep -q '宝箱正在缓缓开启' index.html
-      - name: Commit
+          grep -q '箱盖正在打开' index.html
+      - name: Commit generated animation
         run: |
           git config user.name 'rsj-lucky-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add index.html assets/chest-open-anim-a.webp
           if git diff --cached --quiet; then
-            echo 'No changes needed.'
+            echo 'No generated changes needed.'
             exit 0
           fi
-          git commit -m 'Apply refined Scheme A chest V19'
+          git commit -m 'Apply ghost-free single-chest opening V20'
           git push
