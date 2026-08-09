@@ -3,7 +3,7 @@
   const CLOSED='/assets/chest-effect-closed-v23.webp?v=20260809-v23';
   const ANIM='/assets/chest-effect-opening-v23.webp?v=20260809-v23';
   const OPEN='/assets/chest-effect-open-v23.webp?v=20260809-v23';
-  const ANIM_MS=2960;
+  const ANIM_MS=3205;
 
   try{
     const a=new Image(); a.src=ANIM;
