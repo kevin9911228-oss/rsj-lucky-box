@@ -1,38 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200" preserveAspectRatio="none">
 <defs>
   <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#74420a"/><stop offset=".12" stop-color="#fff2ad"/><stop offset=".27" stop-color="#d5941e"/><stop offset=".45" stop-color="#fff7cb"/><stop offset=".68" stop-color="#bb7310"/><stop offset=".84" stop-color="#f3cc64"/><stop offset="1" stop-color="#8d550b"/>
+    <stop offset="0" stop-color="#6e4008"/><stop offset=".12" stop-color="#fff0a0"/><stop offset=".28" stop-color="#d99b2c"/><stop offset=".46" stop-color="#fff7c8"/><stop offset=".67" stop-color="#a6620b"/><stop offset=".84" stop-color="#efc75e"/><stop offset="1" stop-color="#7a4708"/>
   </linearGradient>
-  <radialGradient id="gem"><stop offset="0" stop-color="#f4fdff"/><stop offset=".2" stop-color="#91e2ff"/><stop offset=".48" stop-color="#3b9dff"/><stop offset=".75" stop-color="#1558c2"/><stop offset="1" stop-color="#06183d"/></radialGradient>
-  <filter id="glow"><feGaussianBlur stdDeviation="3.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  <g id="corner" fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M22 182C25 86 86 25 182 22" stroke-width="7"/>
-    <path d="M35 151C48 105 77 74 121 58C102 78 94 101 99 126C82 111 61 105 38 111" stroke-width="4.4"/>
-    <path d="M49 195C63 155 90 126 128 109C115 133 118 156 137 178C110 169 81 175 49 195Z" stroke-width="3.2"/>
-    <path d="M33 110C61 111 81 96 93 67C96 89 108 104 128 113C105 117 91 132 86 157C72 136 54 120 33 110Z" stroke-width="3.2"/>
-    <path d="M74 38C92 50 110 53 128 46C115 61 112 78 120 95C101 85 83 86 65 98C74 77 77 57 74 38Z" stroke-width="3.2"/>
-    <path d="M56 146C77 145 95 137 109 122C106 139 111 153 124 164C103 159 83 164 65 179C68 165 65 154 56 146Z" stroke-width="2.8"/>
-    <path d="M116 34C129 47 146 53 165 52C151 63 144 78 145 97C133 81 118 72 100 69C114 59 119 47 116 34Z" stroke-width="2.7"/>
-    <path d="M31 72C52 68 69 57 82 38" stroke-width="3"/>
-    <path d="M70 170C90 169 108 174 124 187" stroke-width="2.6"/>
-    <path d="M43 56C52 43 64 35 79 31" stroke-width="2.2"/>
+  <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fff6bc"/><stop offset=".34" stop-color="#e3a737"/><stop offset=".62" stop-color="#9d5a09"/><stop offset="1" stop-color="#f4ce67"/>
+  </linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <g id="corner">
+    <path d="M26 112C30 61 61 30 112 26" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M31 91C46 89 58 81 64 69C70 57 66 47 56 44C46 42 38 49 39 58C40 67 50 72 58 68C66 65 69 57 67 50" fill="none" stroke="url(#gold)" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M54 91C65 78 79 72 94 75C81 82 75 92 77 105C68 98 61 94 54 91Z" fill="url(#leaf)"/>
+    <path d="M75 54C84 42 97 37 111 39C99 46 93 56 95 68C87 61 81 57 75 54Z" fill="url(#leaf)"/>
+    <path d="M38 108C47 98 58 94 70 96C59 102 54 111 55 121C49 115 43 111 38 108Z" fill="url(#leaf)"/>
+    <path d="M31 63C37 47 49 36 66 31" fill="none" stroke="#f7d878" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+    <circle cx="39" cy="79" r="3.2" fill="#fff0a2"/>
   </g>
 </defs>
-<rect x="18" y="18" width="964" height="1164" rx="56" fill="none" stroke="url(#gold)" stroke-width="7" filter="url(#glow)"/>
-<rect x="29" y="29" width="942" height="1142" rx="47" fill="none" stroke="#9d6517" stroke-width="2.4"/>
-<rect x="40" y="40" width="920" height="1120" rx="40" fill="none" stroke="#f2d578" stroke-opacity=".52" stroke-width="1.6"/>
-<path d="M82 51H400M600 51H918M82 1149H400M600 1149H918" stroke="url(#gold)" stroke-width="2.4" opacity=".65"/>
+<rect x="18" y="18" width="964" height="1164" rx="55" fill="none" stroke="url(#gold)" stroke-width="5.5" filter="url(#glow)"/>
+<rect x="28" y="28" width="944" height="1144" rx="48" fill="none" stroke="#8d5a17" stroke-width="2"/>
+<rect x="38" y="38" width="924" height="1124" rx="41" fill="none" stroke="#efd076" stroke-opacity=".5" stroke-width="1.3"/>
+<path d="M96 48H904M96 1152H904" stroke="url(#gold)" stroke-width="1.8" opacity=".72"/>
 <use href="#corner"/>
 <use href="#corner" transform="translate(1000 0) scale(-1 1)"/>
 <use href="#corner" transform="translate(0 1200) scale(1 -1)"/>
 <use href="#corner" transform="translate(1000 1200) scale(-1 -1)"/>
-<g filter="url(#glow)">
-  <path d="M500 4l24 34-24 28-24-28z" fill="url(#gold)"/>
-  <path d="M500 17l13 21-13 17-13-17z" fill="url(#gem)" stroke="#fff0a5" stroke-width="2"/>
-  <path d="M500 1196l24-34-24-28-24 28z" fill="url(#gold)"/>
-  <path d="M500 1183l13-21-13-17-13 17z" fill="url(#gem)" stroke="#fff0a5" stroke-width="2"/>
-</g>
-<g fill="url(#gold)" opacity=".9">
-  <path d="M20 600l18-12 13 12-13 12z"/><path d="M980 600l-18-12-13 12 13 12z"/>
+<g filter="url(#glow)" opacity=".9">
+  <path d="M500 1192l15-22-15-18-15 18z" fill="url(#gold)"/>
+  <path d="M500 1184l8-14-8-10-8 10z" fill="#2f86e8" stroke="#fff0a6" stroke-width="1.5"/>
 </g>
 </svg>
