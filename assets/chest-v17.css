@@ -1,0 +1,49 @@
+/* RSJ CHEST V17 — use the real open artwork for the final state. No sliced lid/body layers. */
+/* This intentionally neutralizes V16's split-image pieces because the closed bitmap cannot be
+   perspective-rotated into a believable real lid. The opening is now a masked, eased reveal of
+   the matching open artwork, with the closed chest fading only after the lid starts to rise. */
+.rsjChestBase,.rsjChestLid,.rsjChestGlow,.rsjChestCavity{display:none!important;visibility:hidden!important;opacity:0!important;animation:none!important}
+.chest{background:none!important;filter:none!important;overflow:visible!important;transform-style:flat!important}
+.rsjChestClosed{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:50%!important;bottom:0!important;width:100%!important;height:auto!important;transform:translateX(-50%)!important;object-fit:contain!important;z-index:5!important;filter:drop-shadow(0 16px 18px #0009) drop-shadow(0 0 18px #e5a2293b)!important;will-change:opacity,filter,transform!important}
+.rsjChestOpen17{display:block!important;visibility:visible!important;position:absolute!important;left:50%!important;bottom:-6%!important;width:92%!important;height:auto!important;max-width:none!important;opacity:0!important;transform:translateX(-50%) translateY(48px) scaleX(1.08) scaleY(.66)!important;transform-origin:50% 100%!important;clip-path:inset(0 0 49% 0)!important;object-fit:contain!important;z-index:7!important;filter:brightness(.88) drop-shadow(0 14px 18px #0009)!important;pointer-events:none!important;will-change:opacity,transform,clip-path,filter!important}
+/* Keep the closed chest completely stable during the pre-open tension. */
+.stage.opening .rsjChestClosed,.stage.unlocking .rsjChestClosed{opacity:1!important;animation:none!important;filter:brightness(1.07) drop-shadow(0 16px 18px #0009) drop-shadow(0 0 25px #ffc84566)!important}
+.stage.opening .rsjChestOpen17,.stage.unlocking .rsjChestOpen17{opacity:0!important;animation:none!important}
+/* Opening: first raise/reveal only the upper part of the real open chest, then hand off the body. */
+.stage.explode .rsjChestClosed{animation:rsjClosedFadeV17 .74s ease-out forwards!important}
+.stage.explode .rsjChestOpen17{animation:rsjOpenArtworkV17 1.30s cubic-bezier(.18,.80,.16,1) forwards!important}
+/* A compact seam flash hides the handoff without obscuring the chest or prize cards. */
+.stage.explode .chest:after{content:""!important;display:block!important;position:absolute!important;left:19%!important;right:19%!important;top:43%!important;height:18%!important;border-radius:50%!important;background:radial-gradient(ellipse,#fffde8 0 3%,#fff3b3 8%,#ffd55f 21%,#ffb62f77 43%,transparent 73%)!important;filter:blur(8px)!important;opacity:0!important;transform:scale(.45,.20)!important;z-index:8!important;pointer-events:none!important;animation:rsjSeamFlashV17 1.05s ease-out forwards!important}
+/* Remove the old V16 cavity pseudo if a cached selector tries to restore it. */
+.stage:not(.explode) .chest:after{opacity:0!important}
+@keyframes rsjClosedFadeV17{
+  0%,28%{opacity:1;filter:brightness(1.08) drop-shadow(0 16px 18px #0009) drop-shadow(0 0 25px #ffc84566)}
+  52%{opacity:.72;filter:brightness(1.20) drop-shadow(0 16px 18px #0009) drop-shadow(0 0 30px #ffd65b80)}
+  78%{opacity:.18;filter:brightness(1.25) blur(.2px) drop-shadow(0 10px 14px #0007)}
+  100%{opacity:0;filter:brightness(1.1)}
+}
+@keyframes rsjOpenArtworkV17{
+  0%{opacity:0;clip-path:inset(0 0 52% 0);transform:translateX(-50%) translateY(58px) scaleX(1.08) scaleY(.60);filter:brightness(.82) drop-shadow(0 12px 16px #0008)}
+  18%{opacity:.10;clip-path:inset(0 0 49% 0);transform:translateX(-50%) translateY(48px) scaleX(1.08) scaleY(.67);filter:brightness(.92) drop-shadow(0 12px 16px #0008)}
+  36%{opacity:.38;clip-path:inset(0 0 44% 0);transform:translateX(-50%) translateY(34px) scaleX(1.08) scaleY(.76);filter:brightness(1.02) drop-shadow(0 14px 18px #0009) drop-shadow(0 0 16px #ffc84545)}
+  54%{opacity:.72;clip-path:inset(0 0 34% 0);transform:translateX(-50%) translateY(20px) scaleX(1.08) scaleY(.86);filter:brightness(1.08) drop-shadow(0 14px 18px #0009) drop-shadow(0 0 24px #ffd85f66)}
+  72%{opacity:.96;clip-path:inset(0 0 15% 0);transform:translateX(-50%) translateY(8px) scaleX(1.08) scaleY(.95);filter:brightness(1.10) drop-shadow(0 15px 18px #0009) drop-shadow(0 0 28px #ffdd6970)}
+  88%{opacity:1;clip-path:inset(0 0 2% 0);transform:translateX(-50%) translateY(1px) scaleX(1.08) scaleY(1.01);filter:brightness(1.10) drop-shadow(0 15px 18px #0009) drop-shadow(0 0 25px #ffd96365)}
+  100%{opacity:1;clip-path:inset(0);transform:translateX(-50%) translateY(0) scaleX(1.08) scaleY(1);filter:brightness(1.08) drop-shadow(0 15px 18px #0009) drop-shadow(0 0 22px #ffd96358)}
+}
+@keyframes rsjSeamFlashV17{
+  0%{opacity:0;transform:scale(.42,.18)}
+  22%{opacity:.45;transform:scale(.78,.30)}
+  46%{opacity:.94;transform:scale(1.12,.56)}
+  70%{opacity:.58;transform:scale(1.28,.76)}
+  100%{opacity:.12;transform:scale(1.34,.84)}
+}
+@media(max-width:599px){
+  .rsjChestOpen17{width:91%!important;bottom:-4%!important}
+  .stage.explode .rsjChestOpen17{animation-duration:1.26s!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .stage.explode .rsjChestClosed{animation:none!important;opacity:0!important}
+  .stage.explode .rsjChestOpen17{animation:none!important;opacity:1!important;clip-path:inset(0)!important;transform:translateX(-50%) scaleX(1.08)!important}
+  .stage.explode .chest:after{animation:none!important;opacity:.18!important}
+}
