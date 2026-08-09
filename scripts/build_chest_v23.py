@@ -1,6 +1,6 @@
 from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
 from pathlib import Path
-import base64
+import base64, re
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'assets'
@@ -117,5 +117,9 @@ if css not in html:
     html=html.replace('</head>',pre+'\n'+css+'\n</head>',1)
 if js not in html:
     html=html.replace('</body>',js+'\n</body>',1)
+# First paint must already be the approved V23 closed artwork; do not flash an older chest before JS runs.
+html,n=re.subn(r'(<img\s+id="chestVisual"[^>]*?src=")[^"]+("[^>]*>)',r'\1/assets/chest-effect-closed-v23.webp?v=20260809-v23\2',html,count=1)
+if n!=1:
+    raise SystemExit('Could not update chestVisual initial source')
 INDEX.write_text(html,encoding='utf-8')
 print(f'V23 effect-art chest built: {getattr(test,"n_frames",1)} frames, {anim.stat().st_size} bytes, {sum(durations)}ms, {W}x{H}')
