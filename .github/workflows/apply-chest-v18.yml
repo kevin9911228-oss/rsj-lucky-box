@@ -1,4 +1,4 @@
-name: Apply chest V18
+name: Apply chest V19
 
 on:
   push:
@@ -26,10 +26,12 @@ jobs:
       - name: Validate
         run: |
           test -s assets/chest-open-anim-a.webp
-          grep -q 'chest-v18.css?v=20260809-v18' index.html
+          grep -q 'chest-v18.css?v=20260809-v19' index.html
           grep -q 'id="chestVisual"' index.html
-          grep -q 'chest-open-anim-a.webp?v=20260809-v18' index.html
+          grep -q 'chest-open-anim-a.webp?v=20260809-v19' index.html
+          grep -q 'chest-user-open-v13.webp?v=20260809-v19' index.html
           grep -q 'resetChestVisual' index.html
+          grep -q '宝箱正在缓缓开启' index.html
       - name: Commit
         run: |
           git config user.name 'rsj-lucky-bot'
@@ -39,5 +41,5 @@ jobs:
             echo 'No changes needed.'
             exit 0
           fi
-          git commit -m 'Switch chest to Scheme A Animated WebP player'
+          git commit -m 'Apply refined Scheme A chest V19'
           git push
