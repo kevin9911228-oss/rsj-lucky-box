@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200" preserveAspectRatio="none">
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#74420a"/><stop offset=".12" stop-color="#fff2ad"/><stop offset=".27" stop-color="#d5941e"/><stop offset=".45" stop-color="#fff7cb"/><stop offset=".68" stop-color="#bb7310"/><stop offset=".84" stop-color="#f3cc64"/><stop offset="1" stop-color="#8d550b"/>
+  </linearGradient>
+  <radialGradient id="gem"><stop offset="0" stop-color="#f4fdff"/><stop offset=".2" stop-color="#91e2ff"/><stop offset=".48" stop-color="#3b9dff"/><stop offset=".75" stop-color="#1558c2"/><stop offset="1" stop-color="#06183d"/></radialGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="3.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <g id="corner" fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 182C25 86 86 25 182 22" stroke-width="7"/>
+    <path d="M35 151C48 105 77 74 121 58C102 78 94 101 99 126C82 111 61 105 38 111" stroke-width="4.4"/>
+    <path d="M49 195C63 155 90 126 128 109C115 133 118 156 137 178C110 169 81 175 49 195Z" stroke-width="3.2"/>
+    <path d="M33 110C61 111 81 96 93 67C96 89 108 104 128 113C105 117 91 132 86 157C72 136 54 120 33 110Z" stroke-width="3.2"/>
+    <path d="M74 38C92 50 110 53 128 46C115 61 112 78 120 95C101 85 83 86 65 98C74 77 77 57 74 38Z" stroke-width="3.2"/>
+    <path d="M56 146C77 145 95 137 109 122C106 139 111 153 124 164C103 159 83 164 65 179C68 165 65 154 56 146Z" stroke-width="2.8"/>
+    <path d="M116 34C129 47 146 53 165 52C151 63 144 78 145 97C133 81 118 72 100 69C114 59 119 47 116 34Z" stroke-width="2.7"/>
+    <path d="M31 72C52 68 69 57 82 38" stroke-width="3"/>
+    <path d="M70 170C90 169 108 174 124 187" stroke-width="2.6"/>
+    <path d="M43 56C52 43 64 35 79 31" stroke-width="2.2"/>
+  </g>
+</defs>
+<rect x="18" y="18" width="964" height="1164" rx="56" fill="none" stroke="url(#gold)" stroke-width="7" filter="url(#glow)"/>
+<rect x="29" y="29" width="942" height="1142" rx="47" fill="none" stroke="#9d6517" stroke-width="2.4"/>
+<rect x="40" y="40" width="920" height="1120" rx="40" fill="none" stroke="#f2d578" stroke-opacity=".52" stroke-width="1.6"/>
+<path d="M82 51H400M600 51H918M82 1149H400M600 1149H918" stroke="url(#gold)" stroke-width="2.4" opacity=".65"/>
+<use href="#corner"/>
+<use href="#corner" transform="translate(1000 0) scale(-1 1)"/>
+<use href="#corner" transform="translate(0 1200) scale(1 -1)"/>
+<use href="#corner" transform="translate(1000 1200) scale(-1 -1)"/>
+<g filter="url(#glow)">
+  <path d="M500 4l24 34-24 28-24-28z" fill="url(#gold)"/>
+  <path d="M500 17l13 21-13 17-13-17z" fill="url(#gem)" stroke="#fff0a5" stroke-width="2"/>
+  <path d="M500 1196l24-34-24-28-24 28z" fill="url(#gold)"/>
+  <path d="M500 1183l13-21-13-17-13 17z" fill="url(#gem)" stroke="#fff0a5" stroke-width="2"/>
+</g>
+<g fill="url(#gold)" opacity=".9">
+  <path d="M20 600l18-12 13 12-13 12z"/><path d="M980 600l-18-12-13 12 13 12z"/>
+</g>
+</svg>
