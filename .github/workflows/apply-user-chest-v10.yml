@@ -1,0 +1,52 @@
+name: Apply user chest V10
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-user-chest-v10.yml'
+      - 'assets/chest-user-v10.css'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install selected chest and slow-open timing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          link='<link rel="stylesheet" href="/assets/chest-user-v10.css?v=20260809-v10">'
+          if link not in s:
+              if '</head>' not in s:
+                  raise SystemExit('missing </head>')
+              s=s.replace('</head>', link+'\n</head>', 1)
+          old='if(navigator.vibrate)navigator.vibrate([40,35,70]);await wait(760)}'
+          new='if(navigator.vibrate)navigator.vibrate([40,35,70]);await wait(1140)}'
+          if old in s:
+              s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate selected chest
+        run: |
+          grep -q 'chest-user-v10.css?v=20260809-v10' index.html
+          grep -q 'await wait(1140)' index.html
+      - name: Commit live page
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Use selected chest with slow lid opening'
+          git push
