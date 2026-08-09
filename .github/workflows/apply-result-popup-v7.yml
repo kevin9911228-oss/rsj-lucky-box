@@ -1,0 +1,40 @@
+name: Apply result popup V7 exact master
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/result-master-v7.txt'
+      - 'scripts/apply_result_popup_v7.py'
+      - '.github/workflows/apply-result-popup-v7.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Decode approved master and apply V7 layout
+        run: python scripts/apply_result_popup_v7.py
+      - name: Validate V7 assets
+        run: |
+          test -s assets/result-master-v7.webp
+          grep -q "RESULT POPUP V7" assets/result-popup-v3.css
+          grep -q "aspect-ratio:4/3" assets/result-popup-v3.css
+          grep -q "result-master-v7.webp" assets/result-popup-v3.css
+      - name: Commit V7 live assets
+        run: |
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add assets/result-master-v7.webp assets/result-popup-v3.css
+          if git diff --cached --quiet; then
+            echo 'No generated changes needed.'
+            exit 0
+          fi
+          git commit -m 'Apply exact approved result master V7'
+          git push
