@@ -3,11 +3,13 @@ import base64
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'assets'
-master_b64=(ASSETS/'result-master-v7.txt').read_text(encoding='utf-8').strip()
+master_b64=''.join((ASSETS/f'result-master-v7.part{i}').read_text(encoding='utf-8').strip() for i in range(1,6))
 master_b64 += '=' * (-len(master_b64) % 4)
 raw=base64.b64decode(master_b64)
 if raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
     raise SystemExit('V7 master data is not a WebP image')
+if len(raw) < 65000:
+    raise SystemExit(f'V7 master image is unexpectedly small: {len(raw)} bytes')
 (ASSETS/'result-master-v7.webp').write_bytes(raw)
 
 css=r'''/* RESULT POPUP V7 — exact approved full-art master + dynamic overlays */
