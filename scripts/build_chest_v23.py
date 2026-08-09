@@ -11,7 +11,9 @@ SPRITE_B64=ASSETS/'effect-keyframes-v23.b64'
 if not SPRITE.exists():
     if not SPRITE_B64.exists():
         raise SystemExit('effect-keyframes-v23 source missing')
-    SPRITE.write_bytes(base64.b64decode(SPRITE_B64.read_text(encoding='utf-8').strip()))
+    s=SPRITE_B64.read_text(encoding='utf-8').strip()
+    s += '=' * (-len(s) % 4)
+    SPRITE.write_bytes(base64.b64decode(s))
 
 src=Image.open(SPRITE).convert('RGB')
 pw=src.width//5
