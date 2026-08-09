@@ -196,6 +196,7 @@
 .stage.opening .lock,.stage.unlocking .lock,.stage.explode .lock{display:block!important}
 
 </style>
+<link rel="stylesheet" href="/assets/celebration-v2.css?v=20260809-v2">
 </head>
 <body>
 <div class="app">
@@ -262,5 +263,6 @@ async function drawAgain(){if(drawing||!session||session.credits<=0)return;close
 async function tempDraw(){if(!session){openLoginModal('lucky');return}const luck=$('luckyCode').value.trim();if(!luck){showNotice('请输入幸运码后再开启专享惊喜。','幸运码','🎟️');return}if(getPending()){await recoverPendingDraw(false,3);return}initAudio();playStartSound();const id=newRequestId();savePending('lucky',id,luck);$('tempDrawBtn').disabled=true;$('tempDrawBtn').textContent='正在开奖…';const d=await rpc('member_session_lucky_draw_safe',{p_token:session.token,p_request_id:id,p_lucky_code:luck});$('tempDrawBtn').disabled=false;$('tempDrawBtn').textContent='使用幸运码抽奖';if(!d.ok){if(d.network_error){await recoverPendingDraw(false,3);return}clearPending();if(String(d.message||'').includes('登录状态'))logoutMember();else showNotice(d.message||'幸运码暂时无法使用','幸运码提示','🎟️');return}clearPending();switchTab('home');$('stage').classList.add('opening');clearCards();await openChestSequence();await runCardSequence(d.reward);await settleReward(d.reward);openResult(d,'temp');loadSummary()}
 renderSession();restoreSession();
 </script>
+<script src="/assets/celebration-v2.js?v=20260809-v2"></script>
 </body>
 </html>
