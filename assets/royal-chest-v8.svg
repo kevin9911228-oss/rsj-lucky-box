@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" role="img" aria-label="燃生纪鎏金秘藏宝箱">
+<defs>
+  <linearGradient id="bgRed" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7c0b16"/><stop offset=".28" stop-color="#3b0710"/><stop offset=".65" stop-color="#6d0e16"/><stop offset="1" stop-color="#220208"/></linearGradient>
+  <linearGradient id="bgRed2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b21a21"/><stop offset=".18" stop-color="#5c0812"/><stop offset=".52" stop-color="#270209"/><stop offset=".8" stop-color="#8b1018"/><stop offset="1" stop-color="#30030a"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff8c9"/><stop offset=".08" stop-color="#ffe66f"/><stop offset=".2" stop-color="#d79a1c"/><stop offset=".34" stop-color="#fff1a0"/><stop offset=".47" stop-color="#a95506"/><stop offset=".62" stop-color="#f8c945"/><stop offset=".78" stop-color="#7e3503"/><stop offset=".9" stop-color="#f4bc31"/><stop offset="1" stop-color="#4b1b01"/></linearGradient>
+  <linearGradient id="goldBright" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffbdc"/><stop offset=".25" stop-color="#ffe47a"/><stop offset=".55" stop-color="#e19b17"/><stop offset=".78" stop-color="#8d4105"/><stop offset="1" stop-color="#4a1c01"/></linearGradient>
+  <radialGradient id="ruby"><stop stop-color="#fff5d7"/><stop offset=".12" stop-color="#ff8b5c"/><stop offset=".33" stop-color="#e11c26"/><stop offset=".62" stop-color="#8b0611"/><stop offset="1" stop-color="#280006"/></radialGradient>
+  <radialGradient id="amber"><stop stop-color="#fffde1"/><stop offset=".18" stop-color="#ffe36e"/><stop offset=".48" stop-color="#ffb726"/><stop offset=".78" stop-color="#c46308"/><stop offset="1" stop-color="#5b2502"/></radialGradient>
+  <radialGradient id="aura"><stop stop-color="#fff5aa" stop-opacity=".9"/><stop offset=".16" stop-color="#ffd14c" stop-opacity=".52"/><stop offset=".48" stop-color="#f29112" stop-opacity=".16"/><stop offset="1" stop-color="#f29112" stop-opacity="0"/></radialGradient>
+  <pattern id="damask" width="84" height="84" patternUnits="userSpaceOnUse"><path d="M42 8C55 22 68 29 76 42c-8 13-21 20-34 34C29 62 16 55 8 42c8-13 21-20 34-34Z" fill="none" stroke="#f7c64f" stroke-opacity=".13" stroke-width="2"/><circle cx="42" cy="42" r="5" fill="#ffd45b" fill-opacity=".08"/></pattern>
+  <filter id="shadow" x="-25%" y="-25%" width="150%" height="180%"><feGaussianBlur in="SourceAlpha" stdDeviation="14" result="b"/><feOffset dy="18" result="o"/><feComponentTransfer><feFuncA type="linear" slope=".72"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<ellipse cx="480" cy="510" rx="365" ry="100" fill="url(#aura)" opacity=".66"/>
+<ellipse cx="480" cy="531" rx="318" ry="32" fill="#000" opacity=".42"/>
+<g filter="url(#shadow)">
+  <!-- feet -->
+  <path d="M128 458h92l-15 66h-87zM740 458h92l10 66h-87z" fill="url(#gold)" stroke="#ffe797" stroke-width="4"/>
+  <!-- body -->
+  <rect x="126" y="264" width="708" height="222" rx="36" fill="url(#bgRed2)" stroke="url(#gold)" stroke-width="18"/>
+  <rect x="149" y="287" width="662" height="176" rx="22" fill="url(#damask)" opacity=".92"/>
+  <!-- lid -->
+  <path d="M133 272C145 143 239 76 372 70h216c133 6 227 73 239 202Z" fill="url(#bgRed)" stroke="url(#gold)" stroke-width="18"/>
+  <path d="M166 247C190 152 274 107 382 102h196c108 5 192 50 216 145" fill="none" stroke="#fff2a2" stroke-width="6" opacity=".55"/>
+  <path d="M185 210c49-61 121-83 210-85h170c88 2 161 24 210 85" fill="none" stroke="#ffdf66" stroke-width="16" opacity=".16"/>
+  <!-- ornate bands -->
+  <g fill="url(#gold)" stroke="#6f2b02" stroke-width="3">
+    <path d="M222 98h45l17 370h-50z"/>
+    <path d="M458 75h44v396h-48z"/>
+    <path d="M694 98h45l-12 370h-50z"/>
+    <path d="M132 259h696v38H132z"/>
+    <path d="M144 382h672v34H144z"/>
+  </g>
+  <g fill="none" stroke="#ffe891" stroke-width="3" opacity=".72"><path d="M239 115h18l15 335h-22z"/><path d="M471 93h18v354h-22z"/><path d="M710 114h17l-10 336h-22z"/></g>
+  <!-- filigree -->
+  <g fill="none" stroke="url(#goldBright)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M294 178c28-39 82-49 116-15 22 22 5 56-24 52-22-3-28-30-9-41 18-11 42 1 47 22"/>
+    <path d="M666 178c-28-39-82-49-116-15-22 22-5 56 24 52 22-3 28-30 9-41-18-11-42 1-47 22"/>
+    <path d="M205 342c31-39 80-39 105-7 20 25 1 55-29 48-21-5-22-32-2-42 19-9 44 5 44 29 0 27-25 48-58 45-28-2-50-18-60-42"/>
+    <path d="M755 342c-31-39-80-39-105-7-20 25-1 55 29 48 21-5 22-32 2-42-19-9-44 5-44 29 0 27 25 48 58 45 28-2 50-18 60-42"/>
+  </g>
+  <!-- corner ornaments -->
+  <g fill="url(#gold)" stroke="#5d2502" stroke-width="3"><path d="M139 294h78v62h-38v95h-40z"/><path d="M821 294h-78v62h38v95h40z"/><path d="M139 422h78v48h-78z"/><path d="M821 422h-78v48h78z"/></g>
+  <!-- gems -->
+  <g fill="url(#ruby)" stroke="#ffe17b" stroke-width="5" filter="url(#glow)">
+    <path d="M310 137l19-22 20 22-20 26z"/><path d="M650 137l-19-22-20 22 20 26z"/>
+    <rect x="161" y="315" width="28" height="28" rx="7"/><rect x="771" y="315" width="28" height="28" rx="7"/>
+    <rect x="161" y="431" width="28" height="28" rx="7"/><rect x="771" y="431" width="28" height="28" rx="7"/>
+  </g>
+  <!-- seam highlight -->
+  <path d="M134 270h692" stroke="#fff4b1" stroke-width="5" opacity=".9"/>
+  <path d="M156 302h648" stroke="#ffbf2d" stroke-width="10" opacity=".25"/>
+  <!-- center lock frame -->
+  <g transform="translate(480 300)">
+    <path d="M0-89c50 0 86 29 86 75 0 61-30 122-86 157-56-35-86-96-86-157 0-46 36-75 86-75Z" fill="url(#gold)" stroke="#fff0a0" stroke-width="7"/>
+    <path d="M0-68c37 0 64 22 64 57 0 47-22 93-64 122-42-29-64-75-64-122 0-35 27-57 64-57Z" fill="#4b1108" stroke="#8c3e05" stroke-width="5"/>
+    <path d="M0-50c24 0 43 19 43 43 0 25-19 45-43 45S-43 18-43-7c0-24 19-43 43-43Z" fill="url(#ruby)" stroke="#ffe47f" stroke-width="6" filter="url(#glow)"/>
+    <path d="M0 34c13 0 23 10 23 23 0 9-5 17-13 21v26h-20V78c-8-4-13-12-13-21 0-13 10-23 23-23Z" fill="#120104" stroke="#f4bd39" stroke-width="4"/>
+    <ellipse cx="-13" cy="-21" rx="8" ry="12" fill="#fff9df" opacity=".62"/>
+  </g>
+  <!-- top crest -->
+  <g transform="translate(480 117)"><path d="M-63 12l24 22L0-20l39 54 24-22-11 58H-52z" fill="url(#goldBright)" stroke="#fff1a0" stroke-width="4"/><circle cx="-38" cy="34" r="8" fill="url(#ruby)"/><circle cx="0" cy="17" r="9" fill="url(#ruby)"/><circle cx="38" cy="34" r="8" fill="url(#ruby)"/></g>
+  <!-- light strokes -->
+  <path d="M186 327c95-33 216-29 286-18" fill="none" stroke="#fff" stroke-opacity=".11" stroke-width="14" stroke-linecap="round"/>
+  <path d="M232 142c100-44 227-35 301-26" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="15" stroke-linecap="round"/>
+</g>
+<!-- restrained sparkles, kept around chest only -->
+<g fill="#fff5b6" filter="url(#glow)"><path d="M142 236l5 11 11 5-11 5-5 11-5-11-11-5 11-5Z"/><path d="M828 235l4 9 9 4-9 4-4 9-4-9-9-4 9-4Z"/><path d="M755 111l4 8 8 4-8 4-4 8-4-8-8-4 8-4Z"/></g>
+</svg>
