@@ -1,4 +1,4 @@
-/* RSJ CELEBRATION V2 HOTFIX — remove emoji/system glyph dependency */
+/* RSJ CELEBRATION VECTOR HOTFIX — no emoji/system glyph dependency */
 .resultCard.rsj-v2-win .resultIcon{height:86px!important;display:grid!important;place-items:center!important;font-size:0!important;line-height:0!important}
 .resultCard.rsj-v2-win .resultIcon .rsj-result-svg{width:82px;height:82px;display:block;overflow:visible;filter:drop-shadow(0 0 14px #ffc84a88)}
 .resultCard.rsj-v2-jackpot .resultIcon{height:98px!important}
@@ -10,6 +10,10 @@
 .rsj-falling-coin.rsj-coin-shape{height:calc(var(--fs,22px)*.72);border-radius:50%;background:radial-gradient(circle at 35% 28%,#fffbd6 0 18%,#ffe46d 23%,#f0b425 58%,#a95d06 100%);border:1px solid #fff1a0;box-shadow:inset 0 0 0 2px #c67b0b,0 0 8px #ffc33e99}
 .rsj-falling-coin.rsj-coin-shape:after{content:"";position:absolute;inset:24%;border:1px solid #a45b08;border-radius:50%;box-shadow:inset 0 0 5px #fff6b580}
 .rsj-falling-coin.rsj-star-shape{background:linear-gradient(180deg,#fffbd9,#ffd957 55%,#d98a10);clip-path:polygon(50% 0,61% 34%,98% 34%,68% 55%,79% 91%,50% 69%,21% 91%,32% 55%,2% 34%,39% 34%);filter:drop-shadow(0 0 8px #ffd047)}
+.rsj-legacy-vector-coin{font-size:0!important;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fffbd6 0 18%,#ffe46d 23%,#efb021 58%,#9c5204 100%);border:1px solid #fff2a4;box-shadow:inset 0 0 0 2px #c57b0d,0 0 9px #ffc438a8}
+.rsj-legacy-vector-coin:after{content:"";position:absolute;inset:23%;border:1px solid #9e5706;border-radius:50%}
+.rsj-legacy-vector-coin.rsj-legacy-star{border:0;border-radius:0;background:linear-gradient(180deg,#fffde6,#ffdc5c 55%,#d88a0e);clip-path:polygon(50% 0,61% 34%,98% 34%,68% 55%,79% 91%,50% 69%,21% 91%,32% 55%,2% 34%,39% 34%);filter:drop-shadow(0 0 8px #ffd24d)}
+.rsj-legacy-vector-coin.rsj-legacy-star:after{display:none}
 .resultCard.rsj-v2-win .congrats{font-family:system-ui,-apple-system,"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif!important}
 .resultCard.rsj-v2-win .rewardName,.resultCard.rsj-v2-win .money,.resultCard.rsj-v2-win .meta,.resultCard.rsj-v2-win .resultInner:before{font-family:system-ui,-apple-system,"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif!important}
 @media(min-width:600px){.resultCard.rsj-v2-win .resultIcon{height:108px!important}.resultCard.rsj-v2-win .resultIcon .rsj-result-svg{width:102px;height:102px}.resultCard.rsj-v2-jackpot .resultIcon .rsj-result-svg{width:112px;height:112px}.rsj-jackpot-crown,.rsj-jackpot-crown .rsj-crown-svg{width:122px!important;height:78px!important}}
