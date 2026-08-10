@@ -18,7 +18,7 @@ jobs:
           p=Path('index.html')
           s=p.read_text()
           s=re.sub(r'\s*<script src="/assets/social-message-v7\.js\?v=[^"]+"></script>', '', s)
-          s=s.replace('</body>','\n<script src="/assets/social-message-v7.js?v=20260810-v7"></script>\n</body>')
+          s=s.replace('</body>','\n<script src="/assets/social-message-v7.js?v=20260810-v7-1"></script>\n</body>')
           p.write_text(s)
           PY
       - name: Commit
@@ -27,5 +27,5 @@ jobs:
           git config user.email actions@users.noreply.github.com
           git add index.html
           git diff --cached --quiet && exit 0
-          git commit -m "Load social message board V7"
+          git commit -m "Load social message board V7.1"
           git push
