@@ -1,0 +1,25 @@
+name: Bump result V11.8 cache
+on:
+  push:
+    paths:
+      - 'assets/result-popup-v11-4.css'
+      - '.github/workflows/bump-result-v11-8.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Bump cache key
+        run: python -c "from pathlib import Path; p=Path('index.html'); s=p.read_text(); s=s.replace('/assets/result-popup-v11-4.css?v=20260810-v11-7','/assets/result-popup-v11-4.css?v=20260810-v11-8'); p.write_text(s)"
+      - name: Remove workflow and commit
+        run: |
+          rm .github/workflows/bump-result-v11-8.yml
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html .github/workflows/bump-result-v11-8.yml
+          git commit -m 'Load result popup V11.8 blended info panel'
+          git push
