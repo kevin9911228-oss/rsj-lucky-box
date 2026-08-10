@@ -1,0 +1,39 @@
+name: Install Social Energy V1
+on:
+  push:
+    paths:
+      - '.github/workflows/install-social-energy-v1.yml'
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inject social assets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          css='<link rel="stylesheet" href="/assets/social-energy-v1.css?v=20260810-v1">'
+          js='<script src="/assets/social-energy-v1.js?v=20260810-v1"></script>'
+          if css not in s:
+              s=s.replace('</head>',css+'\n</head>')
+          if js not in s:
+              s=s.replace('</body>',js+'\n</body>')
+          p.write_text(s)
+          a=Path('admin.html')
+          t=a.read_text()
+          admin='<script src="/assets/social-admin-v1.js?v=20260810-v1"></script>'
+          if admin not in t:
+              t=t.replace('</body>',admin+'\n</body>')
+          a.write_text(t)
+          PY
+      - name: Commit installed social energy V1
+        run: |
+          git config user.name "rsj-lucky-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html admin.html
+          git diff --cached --quiet || git commit -m "Load social energy space V1"
+          git push
