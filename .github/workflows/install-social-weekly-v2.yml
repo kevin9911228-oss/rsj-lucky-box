@@ -1,4 +1,4 @@
-name: Install Social Economy V5
+name: Install Social Economy V6
 on:
   push:
     branches: [main]
@@ -10,7 +10,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Normalize social economy UI assets
+      - name: Normalize social economy V6 assets
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -19,23 +19,26 @@ jobs:
           p=Path('index.html')
           s=p.read_text()
           s=re.sub(r'\s*<script src="/assets/social-weekly-v2\.js\?v=[^"]+"></script>', '', s)
-          s=s.replace('</body>','\n<script src="/assets/social-weekly-v2.js?v=20260810-v5"></script>\n</body>')
+          s=s.replace('</body>','\n<script src="/assets/social-weekly-v2.js?v=20260810-v6"></script>\n</body>')
           p.write_text(s)
 
           p=Path('admin.html')
           s=p.read_text()
           s=re.sub(r'\s*<script src="/assets/social-admin-weekly-v2\.js\?v=[^"]+"></script>', '', s)
-          s=s.replace('</body>','\n<script src="/assets/social-admin-weekly-v2.js?v=20260810-v5"></script>\n</body>')
+          s=s.replace('</body>','\n<script src="/assets/social-admin-weekly-v2.js?v=20260810-v6"></script>\n</body>')
           p.write_text(s)
 
           p=Path('assets/social-energy-v1.js')
           s=p.read_text()
-          s=s.replace('偷一点燃能','摘取 0.1 燃能')
-          s=s.replace('toast(`从 ${d.friend_name} 那里收取 +${d.added} 燃能`)','toast(`从 ${d.friend_name} 那里摘取 ${d.added} 燃能积分`)')
-          s=s.replace('toast(`浇灌成功，你获得 +${d.helper_points} 积分`)','toast(`浇灌成功，帮TA加速 ${d.accelerated_minutes||30} 分钟`)')
-          s=s.replace('toast(`签到成功 +${d.reward} 积分`)','toast(`签到成功 +${d.reward} 活跃值`)')
-          s=s.replace('toast(`分享任务 +${d.reward} 积分`)','toast(`分享任务 +${d.reward} 活跃值`)')
-          s=s.replace("<span>+${t.reward} 积分 · ${t.done?'已完成':'待完成'}</span>","<span>+${t.reward} 活跃 · ${t.done?'已完成':'待完成'}</span>")
+          s=s.replace('收燃能 · 逛好友 · 攒积分 · 换惊喜','做任务 · 逛好友 · 攒积分 · 换惊喜')
+          s=s.replace('谁来过、谁收了燃能、谁帮你浇灌','谁来过、谁摘了燃能、谁帮你浇灌')
+          s=s.replace("<b>${b.collected?'0':b.available} 点</b>","<b>${b.collected?'0':b.available} 分</b>")
+          s=re.sub(r"function renderHome\(\)\{.*?\}\nfunction renderOrbs", """function renderHome(){if(!socialData)return;S('socialPoints').textContent=Number(socialData.points||0).toFixed(1);S('socialToday').textContent=Number(socialData.week_earned||0).toFixed(1);S('socialFriendCount').innerHTML=Number(socialData.friend_count||0)+'<small> 人</small>';const badge=S('requestBadge');badge.textContent=socialData.pending_requests||0;badge.classList.toggle('hide',!socialData.pending_requests);renderOrbs();renderCheckin();renderTasks();renderFeed();renderVisitors();S('redeemCost').textContent=Number(socialData.points_per_credit||100).toFixed(1);S('redeemLimit').textContent=`本周已兑换 ${socialData.redeemed_this_week||0} 次 · 当前 ${Number(socialData.points||0).toFixed(1)} 分`;S('redeemBtn').disabled=Number(socialData.points||0)<Number(socialData.points_per_credit||100);S('redeemBtn').textContent=S('redeemBtn').disabled?`还差 ${Math.max(Number(socialData.points_per_credit||100)-Number(socialData.points||0),0).toFixed(1)} 分`:'兑换1次盲盒机会'}
+function renderOrbs""", s, count=1, flags=re.S)
+          s=re.sub(r"function renderCheckin\(\)\{.*?\}\nasync function doCheckin", """function renderCheckin(){const rewards=[1,1,1,2,2,2,4],st=Number(socialData.streak_day||0);S('checkinRow').innerHTML=rewards.map((r,i)=>`<div class=\"checkDay ${socialData.checked_in&&i+1<=st?'done':''} ${i+1===st?'current':''}\"><b>${i+1}天</b><span>+${r}活跃</span></div>`).join('');S('checkinBtn').disabled=!!socialData.checked_in;S('checkinBtn').textContent=socialData.checked_in?`已签到 · 第${st}天`:'立即签到'}
+async function doCheckin""", s, count=1, flags=re.S)
+          s=re.sub(r"function renderTasks\(\)\{.*?\}\nfunction eventIcon", """function renderTasks(){const tasks=socialData.tasks||[];S('taskGrid').innerHTML=tasks.map(t=>`<div class=\"taskItem ${t.done?'done':''}\"><div class=\"taskCheck\">${t.done?'✓':'·'}</div><div class=\"taskInfo\"><b>${safe(t.title)}</b><span>+${Number(t.reward||0).toFixed(1)} 积分 · ${t.done?'已完成':Number(t.progress||0)+'/'+Number(t.target||1)}</span></div></div>`).join('')}
+function eventIcon""", s, count=1, flags=re.S)
           p.write_text(s)
           PY
       - name: Commit
@@ -44,5 +47,5 @@ jobs:
           git config user.email actions@users.noreply.github.com
           git add index.html admin.html assets/social-energy-v1.js
           git diff --cached --quiet && exit 0
-          git commit -m "Load QQ-farm social economy V5"
+          git commit -m "Load task-first social economy V6"
           git push
