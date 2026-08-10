@@ -1,0 +1,211 @@
+name: Apply result popup V11.4
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-result-popup-v11-4.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply V11.4
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          css_path = Path('assets/result-popup-v11.css')
+          css = css_path.read_text()
+          marker = '/* RESULT POPUP V11.4 — seamless rear curtain + accent-only spreading FX */'
+          block = r'''
+
+/* RESULT POPUP V11.4 — seamless rear curtain + accent-only spreading FX */
+/* Extend the scrub curtain upward BEHIND the prize card, while keeping live text at the same visual baseline. */
+.winInfoPanel{
+  left:13.4%!important;
+  top:57.9%!important;
+  width:73.2%!important;
+  height:22.35%!important;
+  padding:4.45% 5.0% .34%!important;
+  background:#060a11!important;
+  box-shadow:none!important;
+  border:0!important;
+  z-index:5!important;
+  overflow:hidden!important;
+}
+
+/* Neutralize the baked right-side yellow flood inside the ornate frame without touching the gold frame itself. */
+.resultCardV2 .resultInner:before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:4.2% 4.8% 5.3% 4.8%!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  border-radius:1.4%!important;
+  background:
+    radial-gradient(ellipse at 79% 45%,
+      rgba(6,10,17,.97) 0%,
+      rgba(6,10,17,.88) 28%,
+      rgba(6,10,17,.60) 47%,
+      rgba(6,10,17,.24) 62%,
+      transparent 74%)!important;
+}
+
+/* Remove the broad gold halo. Keep the effect layer transparent and card-centered. */
+.winCardHalo{
+  inset:-7.8%!important;
+  border-radius:18%!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:none!important;
+  opacity:1!important;
+  animation:none!important;
+  overflow:visible!important;
+}
+
+/* Accent-colored expanding wave — no yellow/gold flood. */
+.winCardHalo:before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:86%!important;
+  height:86%!important;
+  border-radius:20%!important;
+  border:.11cqw solid color-mix(in srgb,var(--winAccent) 82%,#ffffff)!important;
+  background:transparent!important;
+  box-shadow:
+    0 0 .55cqw color-mix(in srgb,var(--winAccent) 68%,transparent),
+    0 0 1.25cqw color-mix(in srgb,var(--winAccent) 40%,transparent)!important;
+  opacity:0!important;
+  transform:translate(-50%,-50%) scale(.76)!important;
+  pointer-events:none!important;
+  animation:v114AccentWave 2.2s cubic-bezier(.18,.66,.22,1) infinite!important;
+}
+
+/* Continuous particles inherit the prize accent color. */
+.winCardHalo:after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-19%!important;
+  border-radius:26%!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(circle at 8% 22%,color-mix(in srgb,var(--winAccent) 76%,#fff) 0 1.35px,transparent 2.5px),
+    radial-gradient(circle at 25% 7%,#fff 0 1.1px,transparent 2.2px),
+    radial-gradient(circle at 48% 3%,color-mix(in srgb,var(--winAccent) 86%,#fff) 0 1.3px,transparent 2.45px),
+    radial-gradient(circle at 73% 9%,#fff 0 1.15px,transparent 2.25px),
+    radial-gradient(circle at 91% 24%,color-mix(in srgb,var(--winAccent) 78%,#fff) 0 1.45px,transparent 2.55px),
+    radial-gradient(circle at 98% 51%,#fff 0 1.15px,transparent 2.25px),
+    radial-gradient(circle at 88% 77%,color-mix(in srgb,var(--winAccent) 84%,#fff) 0 1.3px,transparent 2.45px),
+    radial-gradient(circle at 69% 94%,#fff 0 1.15px,transparent 2.25px),
+    radial-gradient(circle at 43% 98%,color-mix(in srgb,var(--winAccent) 80%,#fff) 0 1.35px,transparent 2.5px),
+    radial-gradient(circle at 18% 89%,#fff 0 1.1px,transparent 2.2px),
+    radial-gradient(circle at 4% 67%,color-mix(in srgb,var(--winAccent) 84%,#fff) 0 1.3px,transparent 2.45px),
+    radial-gradient(circle at 2% 42%,#fff 0 1.05px,transparent 2.15px),
+    radial-gradient(circle at 19% 42%,color-mix(in srgb,var(--winAccent) 72%,#fff) 0 1.05px,transparent 2.15px),
+    radial-gradient(circle at 81% 44%,#fff 0 1.0px,transparent 2.1px),
+    radial-gradient(circle at 64% 75%,color-mix(in srgb,var(--winAccent) 76%,#fff) 0 1.05px,transparent 2.15px),
+    radial-gradient(circle at 35% 73%,#fff 0 1.0px,transparent 2.1px)!important;
+  filter:drop-shadow(0 0 .34cqw color-mix(in srgb,var(--winAccent) 74%,transparent))!important;
+  mix-blend-mode:screen!important;
+  transform-origin:center!important;
+  animation:v114AccentParticles 3.8s linear infinite!important;
+}
+
+/* Keep the ceremonial orbit, but tint it with the prize accent instead of gold. */
+.winCardStage:after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-10.5%!important;
+  z-index:1!important;
+  border-radius:23%!important;
+  pointer-events:none!important;
+  background:
+    repeating-radial-gradient(ellipse at center,
+      transparent 0 39%,
+      color-mix(in srgb,var(--winAccent) 28%,transparent) 40% 40.35%,
+      transparent 41% 49%,
+      rgba(255,255,255,.10) 50% 50.22%,
+      transparent 51% 100%)!important;
+  filter:drop-shadow(0 0 .28cqw color-mix(in srgb,var(--winAccent) 42%,transparent))!important;
+  opacity:.58!important;
+  animation:v114AccentOrbit 7.6s linear infinite!important;
+}
+
+/* Reduce the old wide gold rim glow to a thin accent edge only. */
+.winCardStage:before{
+  box-shadow:
+    0 0 .28cqw rgba(255,255,255,.35),
+    0 0 .85cqw color-mix(in srgb,var(--winAccent) 54%,transparent)!important;
+  animation:v114EdgePulse 1.8s ease-in-out infinite alternate!important;
+}
+.winPrizeVisual{
+  box-shadow:
+    0 18px 36px #000b,
+    0 0 1.1cqw color-mix(in srgb,var(--winAccent) 56%,transparent)!important;
+  filter:
+    saturate(1.07)
+    contrast(1.035)
+    brightness(1.035)
+    drop-shadow(0 0 .72cqw color-mix(in srgb,var(--winAccent) 58%,transparent))!important;
+}
+
+@keyframes v114AccentWave{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.76)}
+  16%{opacity:.88}
+  72%{opacity:.26}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.58)}
+}
+@keyframes v114AccentParticles{
+  0%{opacity:.12;transform:scale(.76) rotate(0deg)}
+  24%{opacity:.88}
+  72%{opacity:.52}
+  100%{opacity:.06;transform:scale(1.20) rotate(22deg)}
+}
+@keyframes v114AccentOrbit{
+  from{transform:rotate(0deg) scale(.99);opacity:.36}
+  50%{opacity:.62}
+  to{transform:rotate(360deg) scale(1.01);opacity:.36}
+}
+@keyframes v114EdgePulse{
+  from{opacity:.80;filter:brightness(.98);transform:scale(.996)}
+  to{opacity:1;filter:brightness(1.08);transform:scale(1.004)}
+}
+
+@media(max-width:560px){
+  .winInfoPanel{
+    left:13.4%!important;
+    top:57.8%!important;
+    width:73.2%!important;
+    height:22.45%!important;
+    padding:4.42% 5.0% .32%!important;
+  }
+  .winCardHalo{inset:-7.0%!important}
+  .winCardHalo:after{inset:-16.5%!important}
+  .winCardStage:after{inset:-9.5%!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .winCardHalo:before,.winCardHalo:after,.winCardStage:after,.winCardStage:before{animation:none!important}
+}
+'''
+          if marker not in css:
+              css_path.write_text(css + block)
+          idx = Path('index.html')
+          html = idx.read_text()
+          html = html.replace('/assets/result-popup-v11.css?v=20260810-v11"', '/assets/result-popup-v11.css?v=20260810-v11-4"')
+          idx.write_text(html)
+          PY
+          rm .github/workflows/apply-result-popup-v11-4.yml
+          git config user.name 'rsj-lucky-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add assets/result-popup-v11.css index.html .github/workflows/apply-result-popup-v11-4.yml
+          git commit -m 'Apply seamless rear curtain and accent-only spreading FX V11.4'
+          git push
