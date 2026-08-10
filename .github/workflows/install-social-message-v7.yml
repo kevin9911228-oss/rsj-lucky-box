@@ -21,11 +21,12 @@ jobs:
           s=s.replace('</body>','\n<script src="/assets/social-message-v7.js?v=20260810-v7-2"></script>\n</body>')
           p.write_text(s)
           PY
-      - name: Commit
+      - name: Commit and push
         run: |
           git config user.name rsj-lucky-bot
           git config user.email actions@users.noreply.github.com
           git add index.html
           git diff --cached --quiet && exit 0
           git commit -m "Load minimal friend space V7.2"
-          git push
+          git pull --rebase origin main
+          git push origin HEAD:main
