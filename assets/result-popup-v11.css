@@ -1,4 +1,4 @@
-/* RESULT POPUP V11.1 — inset opaque panel, preserve ornate master border */
+/* RESULT POPUP V11.2 — inset info panel + luminous prize-card edge */
 .winInfoPanel{
   left:14.0%!important;
   top:61.35%!important;
@@ -103,6 +103,70 @@
 .winMetaRow:last-child:before,.winMetaRow:last-child:after{display:none!important;content:none!important}
 .resultCardV2 .againRow{top:82.2%!important}
 @keyframes v7InfoIn{from{opacity:1;transform:none}to{opacity:1;transform:none}}
+
+/* PRIZE CARD EDGE FIX — crop baked black margin and replace it with live gold light */
+.winCardStage{
+  overflow:visible!important;
+  isolation:isolate!important;
+}
+.winCardStage:before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-2.15%!important;
+  z-index:0!important;
+  border-radius:3.6%!important;
+  background:
+    linear-gradient(135deg,#fff5bc 0%,#e9b63c 18%,#7a4308 40%,#f6d56e 58%,#9b5d0a 78%,#fff1a2 100%)!important;
+  box-shadow:
+    0 0 .55cqw rgba(255,239,170,.96),
+    0 0 1.35cqw color-mix(in srgb,var(--winAccent) 78%,#ffd35a),
+    0 0 3.3cqw color-mix(in srgb,var(--winAccent) 50%,transparent),
+    0 0 6.4cqw rgba(239,177,49,.34)!important;
+  opacity:.98!important;
+  animation:v112CardRim 1.7s ease-in-out infinite alternate!important;
+}
+.winCardHalo{
+  inset:-18%!important;
+  border-radius:24%!important;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(255,249,213,.84) 0%,
+      color-mix(in srgb,var(--winAccent) 64%,rgba(255,213,88,.76)) 18%,
+      color-mix(in srgb,var(--winAccent) 35%,transparent) 43%,
+      transparent 72%)!important;
+  filter:blur(12px)!important;
+  opacity:.88!important;
+  animation:v112CardAura 1.55s ease-in-out infinite alternate!important;
+}
+.winPrizeVisual{
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  border-radius:3.0%!important;
+  clip-path:inset(1.45% 1.45% 1.45% 1.45% round 2.4%)!important;
+  box-shadow:
+    0 0 .55cqw rgba(255,244,184,.88),
+    0 0 1.4cqw color-mix(in srgb,var(--winAccent) 78%,#ffd45a),
+    0 0 2.7cqw color-mix(in srgb,var(--winAccent) 42%,transparent),
+    0 18px 36px #000b!important;
+  filter:
+    saturate(1.07)
+    contrast(1.035)
+    brightness(1.035)
+    drop-shadow(0 0 .48cqw rgba(255,232,143,.92))
+    drop-shadow(0 0 1.2cqw color-mix(in srgb,var(--winAccent) 72%,#ffd35a))!important;
+}
+@keyframes v112CardRim{
+  from{opacity:.76;filter:brightness(.96);transform:scale(.992)}
+  to{opacity:1;filter:brightness(1.18);transform:scale(1.008)}
+}
+@keyframes v112CardAura{
+  from{opacity:.55;transform:scale(.96)}
+  to{opacity:.94;transform:scale(1.055)}
+}
+
 @media(max-width:560px){
   .winInfoPanel{left:13.4%!important;top:61.2%!important;width:73.2%!important;height:19.1%!important;padding:.78% 5.0% .52%!important}
   .winCongrats{font-size:2.31cqw!important;gap:1.02cqw!important}
@@ -112,4 +176,6 @@
   .winMeta{width:90%!important;padding-top:1.55cqw!important;gap:.42cqw!important}
   .winMetaRow{font-size:1.43cqw!important}
   .winMetaRow:last-child,.winMetaRow:last-child b{font-size:1.18cqw!important}
+  .winCardStage:before{inset:-2.35%!important}
+  .winPrizeVisual{clip-path:inset(1.55% 1.55% 1.55% 1.55% round 2.6%)!important}
 }
