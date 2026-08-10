@@ -200,3 +200,37 @@
 @media(prefers-reduced-motion:reduce){
   .winCardHalo:before,.winCardHalo:after{animation:none!important}
 }
+
+/* RESULT POPUP V11.10 — give the serial row enough vertical room without touching the approved composition. */
+.winInfoPanel{
+  height:19.55%!important;
+  padding-bottom:.18%!important;
+}
+.winMeta{
+  gap:.28cqw!important;
+}
+.winMetaRow:last-child{
+  margin-top:.08cqw!important;
+  padding-bottom:0!important;
+  line-height:1.08!important;
+}
+.resultCardV2 .againRow{
+  top:83.15%!important;
+}
+@media(max-width:560px){
+  .winInfoPanel{
+    height:19.70%!important;
+    padding-bottom:.14%!important;
+  }
+  .winMeta{
+    gap:.24cqw!important;
+  }
+  .winMetaRow:last-child{
+    margin-top:.04cqw!important;
+    padding-bottom:0!important;
+    line-height:1.05!important;
+  }
+  .resultCardV2 .againRow{
+    top:83.20%!important;
+  }
+}
