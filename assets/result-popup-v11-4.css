@@ -234,3 +234,17 @@
     top:83.20%!important;
   }
 }
+
+/* RESULT POPUP V11.11 — enlarge the live prize card so it fully covers the baked card in the master artwork. */
+.winCardStage{
+  left:32.75%!important;
+  top:2.90%!important;
+  width:32.55%!important;
+}
+@media(max-width:560px){
+  .winCardStage{
+    left:32.65%!important;
+    top:2.75%!important;
+    width:32.75%!important;
+  }
+}
