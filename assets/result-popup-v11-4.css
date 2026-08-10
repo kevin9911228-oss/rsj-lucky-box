@@ -1,6 +1,6 @@
-/* RESULT POPUP V11.8 — blend info panel into master; remove black fog completely */
+/* RESULT POPUP V11.9 — no dark FX backing; local accent FX behind card only */
 
-/* Information area keeps the lower placement, but now uses the same blue-black family as the master artwork instead of a flat black slab. */
+/* Keep the information area stable and fully readable. */
 .winInfoPanel{
   left:13.4%!important;
   top:62.10%!important;
@@ -20,13 +20,11 @@
   box-shadow:none!important;
   filter:none!important;
   mix-blend-mode:normal!important;
-  z-index:5!important;
+  z-index:15!important;
   overflow:hidden!important;
   opacity:1!important;
   transform:none!important;
 }
-
-/* Current result copy must stay fully bright; do not let any older opacity/filter rule dim it on mobile. */
 .winInfoPanel .winCongrats,
 .winInfoPanel .winRewardLine,
 .winInfoPanel .winMeta,
@@ -38,17 +36,18 @@
   mix-blend-mode:normal!important;
 }
 
-/* No cover over the mother artwork. */
+/* No artwork-covering pseudo layer anywhere in the result content. */
 .resultCardV2 .resultInner:before,
 .resultCardV2 .resultInner:after{
   display:none!important;
   content:none!important;
   background:none!important;
   box-shadow:none!important;
+  filter:none!important;
   opacity:0!important;
 }
 
-/* Hide only legacy live result nodes; current winInfoPanel remains visible. */
+/* Hide only the legacy result copy. */
 .resultCardV2 .resultIcon,
 .resultCardV2 .congrats,
 .resultCardV2 .money,
@@ -59,14 +58,40 @@
   visibility:hidden!important;
 }
 
-/* Remove all black popup fog. */
+/* No black fog/drop shadow on the popup itself. */
 .resultCard.resultCardV2,
 .resultCard.resultCardV2.jackpotWin{
   box-shadow:none!important;
   filter:none!important;
 }
 
-/* No broad gold/yellow halo. */
+/* The stage itself must never provide a dark backing. */
+.winCardStage{
+  background:transparent!important;
+  filter:none!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  z-index:8!important;
+}
+.winCardStage:before{
+  display:none!important;
+  content:none!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:none!important;
+  opacity:0!important;
+  animation:none!important;
+}
+.winCardStage:after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+  opacity:0!important;
+}
+
+/* Halo container is 100% transparent and lives behind the card. */
 .winCardHalo{
   inset:-4.5%!important;
   border-radius:15%!important;
@@ -76,10 +101,12 @@
   opacity:1!important;
   animation:none!important;
   overflow:visible!important;
-  z-index:0!important;
+  z-index:-1!important;
+  pointer-events:none!important;
+  mix-blend-mode:normal!important;
 }
 
-/* Small prize-accent wave, close to the card only. */
+/* Only a small prize-colored wave remains. No gold fill and no dark fill. */
 .winCardHalo:before{
   content:""!important;
   display:block!important;
@@ -92,13 +119,14 @@
   border:.085cqw solid color-mix(in srgb,var(--winAccent) 74%,transparent)!important;
   background:transparent!important;
   box-shadow:0 0 .42cqw color-mix(in srgb,var(--winAccent) 42%,transparent)!important;
+  filter:none!important;
   opacity:0!important;
   transform:translate(-50%,-50%) scale(.94)!important;
   pointer-events:none!important;
-  animation:v118LocalWave 2.15s ease-out infinite!important;
+  animation:v119LocalWave 2.15s ease-out infinite!important;
 }
 
-/* Sparse local particles only. */
+/* Sparse local particles, also behind the card. */
 .winCardHalo:after{
   content:""!important;
   display:block!important;
@@ -119,48 +147,29 @@
   filter:none!important;
   mix-blend-mode:screen!important;
   transform-origin:center!important;
-  animation:v118LocalParticles 3.4s linear infinite!important;
+  animation:v119LocalParticles 3.4s linear infinite!important;
 }
 
-/* Remove the old large orbital/ring effect completely. */
-.winCardStage:after{
-  display:none!important;
-  content:none!important;
-  background:none!important;
-  box-shadow:none!important;
-}
-
-/* Thin accent edge only — no black backing shadow. */
-.winCardStage:before{
-  background:#071522!important;
-  box-shadow:0 0 .42cqw color-mix(in srgb,var(--winAccent) 38%,transparent)!important;
-  opacity:1!important;
-  animation:v118EdgePulse 1.9s ease-in-out infinite alternate!important;
-}
-
-/* Remove black drop shadow from the prize card; retain only the local accent glow. */
+/* Prize card itself has no black shadow; only a restrained prize-color edge glow. */
 .winPrizeVisual{
   box-shadow:0 0 .52cqw color-mix(in srgb,var(--winAccent) 42%,transparent)!important;
   filter:saturate(1.07) contrast(1.035) brightness(1.035)!important;
+  opacity:1!important;
 }
 
-.resultCardV2 .againRow{top:82.25%!important}
+.resultCardV2 .againRow{top:82.25%!important;z-index:45!important}
 
-@keyframes v118LocalWave{
+@keyframes v119LocalWave{
   0%{opacity:0;transform:translate(-50%,-50%) scale(.94)}
   18%{opacity:.62}
   72%{opacity:.16}
   100%{opacity:0;transform:translate(-50%,-50%) scale(1.10)}
 }
-@keyframes v118LocalParticles{
+@keyframes v119LocalParticles{
   0%{opacity:.10;transform:scale(.96) rotate(0deg)}
   30%{opacity:.62}
   72%{opacity:.34}
   100%{opacity:.05;transform:scale(1.06) rotate(14deg)}
-}
-@keyframes v118EdgePulse{
-  from{filter:brightness(.99);transform:scale(.999)}
-  to{filter:brightness(1.04);transform:scale(1.001)}
 }
 
 @media(max-width:560px){
@@ -170,16 +179,16 @@
     width:73.2%!important;
     height:18.75%!important;
     padding:.68% 5.0% .30%!important;
-    background-color:#07111b!important;
-    background-image:
-      radial-gradient(circle at 12% 23%,rgba(255,235,170,.10) 0 1px,transparent 1.8px),
-      radial-gradient(circle at 68% 31%,rgba(255,225,155,.07) 0 1px,transparent 1.8px),
-      linear-gradient(180deg,#08131e 0%,#07111b 52%,#050d16 100%)!important;
+  }
+  .resultCard.resultCardV2,
+  .resultCard.resultCardV2.jackpotWin,
+  .winCardStage,
+  .winPrizeVisual{
+    filter:none!important;
   }
   .resultCard.resultCardV2,
   .resultCard.resultCardV2.jackpotWin{
     box-shadow:none!important;
-    filter:none!important;
   }
   .winPrizeVisual{
     box-shadow:0 0 .42cqw color-mix(in srgb,var(--winAccent) 36%,transparent)!important;
@@ -189,5 +198,5 @@
 }
 
 @media(prefers-reduced-motion:reduce){
-  .winCardHalo:before,.winCardHalo:after,.winCardStage:before{animation:none!important}
+  .winCardHalo:before,.winCardHalo:after{animation:none!important}
 }
