@@ -1,11 +1,11 @@
-/* RESULT POPUP V11 — opaque sampled panel, no baked-copy bleed */
+/* RESULT POPUP V11.1 — inset opaque panel, preserve ornate master border */
 .winInfoPanel{
-  left:9.2%!important;
-  top:60.6%!important;
-  width:81.6%!important;
-  height:21.0%!important;
+  left:14.0%!important;
+  top:61.35%!important;
+  width:72.0%!important;
+  height:18.9%!important;
   margin:0!important;
-  padding:1.10% 9.5% .72%!important;
+  padding:.82% 5.4% .52%!important;
   border:0!important;
   border-radius:0!important;
   background:
@@ -56,7 +56,7 @@
 .winRewardLine span{font-size:2.27cqw!important;line-height:1!important}
 .winMeta{
   position:relative!important;
-  width:82%!important;
+  width:88%!important;
   margin:.02cqw auto 0!important;
   padding-top:1.48cqw!important;
   border:0!important;
@@ -91,8 +91,8 @@
 .winMetaRow:first-child:before,.winMetaRow:first-child:after{
   content:""!important;
   display:block!important;
-  flex:0 1 7.2cqw!important;
-  max-width:7.2cqw!important;
+  flex:0 1 5.8cqw!important;
+  max-width:5.8cqw!important;
   height:1px!important;
   background:linear-gradient(90deg,transparent,#8b6122 28%,#dcb35f 72%,transparent)!important;
   opacity:.64!important;
@@ -104,12 +104,12 @@
 .resultCardV2 .againRow{top:82.2%!important}
 @keyframes v7InfoIn{from{opacity:1;transform:none}to{opacity:1;transform:none}}
 @media(max-width:560px){
-  .winInfoPanel{left:8.6%!important;top:60.4%!important;width:82.8%!important;height:21.3%!important;padding:1.02% 9.0% .72%!important}
+  .winInfoPanel{left:13.4%!important;top:61.2%!important;width:73.2%!important;height:19.1%!important;padding:.78% 5.0% .52%!important}
   .winCongrats{font-size:2.31cqw!important;gap:1.02cqw!important}
   .winCongrats:before,.winCongrats:after{width:2.84cqw!important;height:3.66cqw!important}
   .winRewardLine strong{font-size:4.34cqw!important}
   .winRewardLine span{font-size:2.42cqw!important}
-  .winMeta{width:84%!important;padding-top:1.55cqw!important;gap:.42cqw!important}
+  .winMeta{width:90%!important;padding-top:1.55cqw!important;gap:.42cqw!important}
   .winMetaRow{font-size:1.43cqw!important}
   .winMetaRow:last-child,.winMetaRow:last-child b{font-size:1.18cqw!important}
 }
