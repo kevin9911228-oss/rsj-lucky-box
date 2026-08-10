@@ -1,6 +1,6 @@
-/* RESULT POPUP V11.6 — remove black cover; remove broad yellow glow */
+/* RESULT POPUP V11.7 — remove black fog while preserving structure */
 
-/* Keep the information card in its lower position, but do not add any extra background cover elsewhere. */
+/* Keep the information card exactly where V11.6 placed it. */
 .winInfoPanel{
   left:13.4%!important;
   top:62.10%!important;
@@ -18,7 +18,7 @@
   transform:none!important;
 }
 
-/* Remove the right-side black cover completely. */
+/* No black cover over the master artwork. */
 .resultCardV2 .resultInner:before{
   display:none!important;
   content:none!important;
@@ -26,7 +26,7 @@
   opacity:0!important;
 }
 
-/* Hide only legacy live result nodes; current winInfoPanel content remains visible. */
+/* Hide only legacy live result nodes; current winInfoPanel remains visible. */
 .resultCardV2 .resultIcon,
 .resultCardV2 .congrats,
 .resultCardV2 .money,
@@ -37,7 +37,13 @@
   visibility:hidden!important;
 }
 
-/* Remove the broad gold/yellow halo layer. */
+/* CRITICAL: the old 110px solid-black popup shadow becomes a giant black fog on a scaled phone popup. */
+.resultCard.resultCardV2,
+.resultCard.resultCardV2.jackpotWin{
+  box-shadow:0 10px 30px rgba(0,0,0,.30)!important;
+}
+
+/* No broad gold/yellow halo. */
 .winCardHalo{
   inset:-4.5%!important;
   border-radius:15%!important;
@@ -50,7 +56,7 @@
   z-index:0!important;
 }
 
-/* Keep only a small prize-accent wave close to the card. */
+/* Small prize-accent wave, close to the card only. */
 .winCardHalo:before{
   content:""!important;
   display:block!important;
@@ -66,10 +72,10 @@
   opacity:0!important;
   transform:translate(-50%,-50%) scale(.94)!important;
   pointer-events:none!important;
-  animation:v116LocalWave 2.15s ease-out infinite!important;
+  animation:v117LocalWave 2.15s ease-out infinite!important;
 }
 
-/* Sparse local particles only; no yellow flood, no wide orbit. */
+/* Sparse local particles only. */
 .winCardHalo:after{
   content:""!important;
   display:block!important;
@@ -90,7 +96,7 @@
   filter:none!important;
   mix-blend-mode:screen!important;
   transform-origin:center!important;
-  animation:v116LocalParticles 3.4s linear infinite!important;
+  animation:v117LocalParticles 3.4s linear infinite!important;
 }
 
 /* Remove the old large orbital/ring effect completely. */
@@ -101,33 +107,37 @@
   box-shadow:none!important;
 }
 
-/* Remove gold/yellow card backlight; retain only a thin accent edge. */
+/* Keep only a thin accent edge behind the prize card. */
 .winCardStage:before{
   background:#06101c!important;
   box-shadow:0 0 .42cqw color-mix(in srgb,var(--winAccent) 38%,transparent)!important;
   opacity:1!important;
-  animation:v116EdgePulse 1.9s ease-in-out infinite alternate!important;
+  animation:v117EdgePulse 1.9s ease-in-out infinite alternate!important;
 }
+
+/* CRITICAL: reduce the card's old 36px black drop shadow. */
 .winPrizeVisual{
-  box-shadow:0 18px 36px #000b,0 0 .52cqw color-mix(in srgb,var(--winAccent) 42%,transparent)!important;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.24),
+    0 0 .52cqw color-mix(in srgb,var(--winAccent) 42%,transparent)!important;
   filter:saturate(1.07) contrast(1.035) brightness(1.035)!important;
 }
 
 .resultCardV2 .againRow{top:82.25%!important}
 
-@keyframes v116LocalWave{
+@keyframes v117LocalWave{
   0%{opacity:0;transform:translate(-50%,-50%) scale(.94)}
   18%{opacity:.62}
   72%{opacity:.16}
   100%{opacity:0;transform:translate(-50%,-50%) scale(1.10)}
 }
-@keyframes v116LocalParticles{
+@keyframes v117LocalParticles{
   0%{opacity:.10;transform:scale(.96) rotate(0deg)}
   30%{opacity:.62}
   72%{opacity:.34}
   100%{opacity:.05;transform:scale(1.06) rotate(14deg)}
 }
-@keyframes v116EdgePulse{
+@keyframes v117EdgePulse{
   from{filter:brightness(.99);transform:scale(.999)}
   to{filter:brightness(1.04);transform:scale(1.001)}
 }
@@ -139,6 +149,17 @@
     width:73.2%!important;
     height:18.75%!important;
     padding:.68% 5.0% .30%!important;
+  }
+
+  /* Mobile gets an even lighter shadow because fixed px blur otherwise dominates the scaled popup. */
+  .resultCard.resultCardV2,
+  .resultCard.resultCardV2.jackpotWin{
+    box-shadow:0 4px 14px rgba(0,0,0,.16)!important;
+  }
+  .winPrizeVisual{
+    box-shadow:
+      0 3px 8px rgba(0,0,0,.14),
+      0 0 .42cqw color-mix(in srgb,var(--winAccent) 36%,transparent)!important;
   }
   .winCardHalo{inset:-4%!important}
   .winCardHalo:after{inset:-5%!important}
