@@ -10,22 +10,23 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Inject weekly social UI
+      - name: Normalize weekly social UI assets
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
+
           p=Path('index.html')
           s=p.read_text()
-          tag='<script src="/assets/social-weekly-v2.js?v=20260810-v2"></script>'
-          if tag not in s:
-              s=s.replace('</body>',tag+'\n</body>')
-              p.write_text(s)
+          s=re.sub(r'\s*<script src="/assets/social-weekly-v2\.js\?v=[^"]+"></script>', '', s)
+          s=s.replace('</body>','\n<script src="/assets/social-weekly-v2.js?v=20260810-v2-2"></script>\n</body>')
+          p.write_text(s)
+
           p=Path('admin.html')
           s=p.read_text()
-          tag='<script src="/assets/social-admin-weekly-v2.js?v=20260810-v2"></script>'
-          if tag not in s:
-              s=s.replace('</body>',tag+'\n</body>')
-              p.write_text(s)
+          s=re.sub(r'\s*<script src="/assets/social-admin-weekly-v2\.js\?v=[^"]+"></script>', '', s)
+          s=s.replace('</body>','\n<script src="/assets/social-admin-weekly-v2.js?v=20260810-v2"></script>\n</body>')
+          p.write_text(s)
           PY
       - name: Commit
         run: |
@@ -33,5 +34,5 @@ jobs:
           git config user.email actions@users.noreply.github.com
           git add index.html admin.html
           git diff --cached --quiet && exit 0
-          git commit -m "Load weekly 100-point social economy"
+          git commit -m "Normalize social weekly asset loading"
           git push
