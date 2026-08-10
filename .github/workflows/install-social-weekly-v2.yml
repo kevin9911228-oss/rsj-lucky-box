@@ -1,4 +1,4 @@
-name: Install Social Economy V4
+name: Install Social Economy V5
 on:
   push:
     branches: [main]
@@ -19,20 +19,30 @@ jobs:
           p=Path('index.html')
           s=p.read_text()
           s=re.sub(r'\s*<script src="/assets/social-weekly-v2\.js\?v=[^"]+"></script>', '', s)
-          s=s.replace('</body>','\n<script src="/assets/social-weekly-v2.js?v=20260810-v4"></script>\n</body>')
+          s=s.replace('</body>','\n<script src="/assets/social-weekly-v2.js?v=20260810-v5"></script>\n</body>')
           p.write_text(s)
 
           p=Path('admin.html')
           s=p.read_text()
           s=re.sub(r'\s*<script src="/assets/social-admin-weekly-v2\.js\?v=[^"]+"></script>', '', s)
-          s=s.replace('</body>','\n<script src="/assets/social-admin-weekly-v2.js?v=20260810-v4"></script>\n</body>')
+          s=s.replace('</body>','\n<script src="/assets/social-admin-weekly-v2.js?v=20260810-v5"></script>\n</body>')
+          p.write_text(s)
+
+          p=Path('assets/social-energy-v1.js')
+          s=p.read_text()
+          s=s.replace('偷一点燃能','摘取 0.1 燃能')
+          s=s.replace('toast(`从 ${d.friend_name} 那里收取 +${d.added} 燃能`)','toast(`从 ${d.friend_name} 那里摘取 ${d.added} 燃能积分`)')
+          s=s.replace('toast(`浇灌成功，你获得 +${d.helper_points} 积分`)','toast(`浇灌成功，帮TA加速 ${d.accelerated_minutes||30} 分钟`)')
+          s=s.replace('toast(`签到成功 +${d.reward} 积分`)','toast(`签到成功 +${d.reward} 活跃值`)')
+          s=s.replace('toast(`分享任务 +${d.reward} 积分`)','toast(`分享任务 +${d.reward} 活跃值`)')
+          s=s.replace("<span>+${t.reward} 积分 · ${t.done?'已完成':'待完成'}</span>","<span>+${t.reward} 活跃 · ${t.done?'已完成':'待完成'}</span>")
           p.write_text(s)
           PY
       - name: Commit
         run: |
           git config user.name rsj-lucky-bot
           git config user.email actions@users.noreply.github.com
-          git add index.html admin.html
+          git add index.html admin.html assets/social-energy-v1.js
           git diff --cached --quiet && exit 0
-          git commit -m "Load social economy V4"
+          git commit -m "Load QQ-farm social economy V5"
           git push
