@@ -1,6 +1,6 @@
-/* RESULT POPUP V11.5 — lower seamless info curtain + no broad yellow flood */
+/* RESULT POPUP V11.6 — remove black cover; remove broad yellow glow */
 
-/* 1) 信息卡整体往下拉：覆盖母图残留旧文字，但不碰外层金框和按钮。 */
+/* Keep the information card in its lower position, but do not add any extra background cover elsewhere. */
 .winInfoPanel{
   left:13.4%!important;
   top:62.10%!important;
@@ -18,7 +18,15 @@
   transform:none!important;
 }
 
-/* 旧版结果文字容器直接隐藏；母图里烘焙的旧字由上面的同色信息幕覆盖。 */
+/* Remove the right-side black cover completely. */
+.resultCardV2 .resultInner:before{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+  opacity:0!important;
+}
+
+/* Hide only legacy live result nodes; current winInfoPanel content remains visible. */
 .resultCardV2 .resultIcon,
 .resultCardV2 .congrats,
 .resultCardV2 .money,
@@ -29,36 +37,10 @@
   visibility:hidden!important;
 }
 
-/* 2) 彻底压掉母图右侧整片黄色光晕：在金色外框内部重铺同色深黑星空。 */
-.resultCardV2 .resultInner:before{
-  content:""!important;
-  display:block!important;
-  position:absolute!important;
-  left:52.0%!important;
-  right:5.15%!important;
-  top:5.7%!important;
-  bottom:5.8%!important;
-  z-index:1!important;
-  pointer-events:none!important;
-  border-radius:0!important;
-  background-color:#060a11!important;
-  background-image:
-    radial-gradient(circle at 18% 18%,rgba(255,236,177,.34) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 42% 30%,rgba(255,244,205,.22) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 70% 16%,rgba(255,226,147,.28) 0 1px,transparent 1.9px),
-    radial-gradient(circle at 84% 43%,rgba(255,245,210,.20) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 58% 58%,rgba(255,228,157,.22) 0 1px,transparent 1.9px),
-    radial-gradient(circle at 27% 70%,rgba(255,242,200,.18) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 77% 79%,rgba(255,231,169,.16) 0 1px,transparent 1.8px),
-    linear-gradient(90deg,#060a11 0%,#05090f 58%,#04080e 100%)!important;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.72) 9%,#000 19%,#000 100%)!important;
-  mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.72) 9%,#000 19%,#000 100%)!important;
-}
-
-/* 3) 取消所有大面积金色光团，只留下卡牌本身的局部动态扩散光。 */
+/* Remove the broad gold/yellow halo layer. */
 .winCardHalo{
-  inset:-5.5%!important;
-  border-radius:16%!important;
+  inset:-4.5%!important;
+  border-radius:15%!important;
   background:transparent!important;
   box-shadow:none!important;
   filter:none!important;
@@ -68,98 +50,86 @@
   z-index:0!important;
 }
 
-/* 局部扩散光波：只围绕卡牌四周循环，不进入信息区和按钮区。 */
+/* Keep only a small prize-accent wave close to the card. */
 .winCardHalo:before{
   content:""!important;
   display:block!important;
   position:absolute!important;
   left:50%!important;
   top:50%!important;
-  width:94%!important;
-  height:94%!important;
-  border-radius:14%!important;
-  border:.10cqw solid color-mix(in srgb,var(--winAccent) 78%,#ffffff)!important;
+  width:96%!important;
+  height:96%!important;
+  border-radius:13%!important;
+  border:.085cqw solid color-mix(in srgb,var(--winAccent) 74%,transparent)!important;
   background:transparent!important;
-  box-shadow:
-    0 0 .34cqw color-mix(in srgb,var(--winAccent) 58%,transparent),
-    0 0 .72cqw color-mix(in srgb,var(--winAccent) 30%,transparent)!important;
+  box-shadow:0 0 .42cqw color-mix(in srgb,var(--winAccent) 42%,transparent)!important;
   opacity:0!important;
-  transform:translate(-50%,-50%) scale(.88)!important;
+  transform:translate(-50%,-50%) scale(.94)!important;
   pointer-events:none!important;
-  animation:v115LocalWave 2.0s ease-out infinite!important;
+  animation:v116LocalWave 2.15s ease-out infinite!important;
 }
 
-/* 局部粒子：限制在卡牌附近，持续闪烁/外扩。 */
+/* Sparse local particles only; no yellow flood, no wide orbit. */
 .winCardHalo:after{
   content:""!important;
   display:block!important;
   position:absolute!important;
-  inset:-9%!important;
-  border-radius:18%!important;
+  inset:-6%!important;
+  border-radius:16%!important;
   pointer-events:none!important;
   background:
-    radial-gradient(circle at 8% 22%,color-mix(in srgb,var(--winAccent) 78%,#fff) 0 1.25px,transparent 2.35px),
-    radial-gradient(circle at 24% 6%,#fff 0 1.0px,transparent 2.0px),
-    radial-gradient(circle at 49% 3%,color-mix(in srgb,var(--winAccent) 86%,#fff) 0 1.2px,transparent 2.25px),
-    radial-gradient(circle at 73% 8%,#fff 0 1.0px,transparent 2.0px),
-    radial-gradient(circle at 91% 25%,color-mix(in srgb,var(--winAccent) 82%,#fff) 0 1.25px,transparent 2.35px),
-    radial-gradient(circle at 96% 51%,#fff 0 1.0px,transparent 2.0px),
-    radial-gradient(circle at 88% 78%,color-mix(in srgb,var(--winAccent) 82%,#fff) 0 1.15px,transparent 2.2px),
-    radial-gradient(circle at 68% 95%,#fff 0 1.0px,transparent 2.0px),
-    radial-gradient(circle at 43% 97%,color-mix(in srgb,var(--winAccent) 80%,#fff) 0 1.2px,transparent 2.25px),
-    radial-gradient(circle at 18% 88%,#fff 0 1.0px,transparent 2.0px),
-    radial-gradient(circle at 4% 66%,color-mix(in srgb,var(--winAccent) 82%,#fff) 0 1.15px,transparent 2.2px),
-    radial-gradient(circle at 3% 43%,#fff 0 1.0px,transparent 2.0px)!important;
-  filter:drop-shadow(0 0 .24cqw color-mix(in srgb,var(--winAccent) 65%,transparent))!important;
+    radial-gradient(circle at 8% 22%,color-mix(in srgb,var(--winAccent) 72%,transparent) 0 1.1px,transparent 2.2px),
+    radial-gradient(circle at 25% 7%,rgba(255,255,255,.72) 0 1px,transparent 2px),
+    radial-gradient(circle at 50% 3%,color-mix(in srgb,var(--winAccent) 76%,transparent) 0 1.1px,transparent 2.2px),
+    radial-gradient(circle at 75% 8%,rgba(255,255,255,.68) 0 1px,transparent 2px),
+    radial-gradient(circle at 92% 27%,color-mix(in srgb,var(--winAccent) 72%,transparent) 0 1.1px,transparent 2.2px),
+    radial-gradient(circle at 95% 72%,rgba(255,255,255,.64) 0 1px,transparent 2px),
+    radial-gradient(circle at 70% 95%,color-mix(in srgb,var(--winAccent) 70%,transparent) 0 1.1px,transparent 2.2px),
+    radial-gradient(circle at 22% 91%,rgba(255,255,255,.62) 0 1px,transparent 2px),
+    radial-gradient(circle at 4% 62%,color-mix(in srgb,var(--winAccent) 70%,transparent) 0 1.1px,transparent 2.2px)!important;
+  filter:none!important;
   mix-blend-mode:screen!important;
   transform-origin:center!important;
-  animation:v115LocalParticles 3.2s linear infinite!important;
+  animation:v116LocalParticles 3.4s linear infinite!important;
 }
 
-/* 取消旧的环形大轨迹，避免视觉又跑到整张母图上。 */
+/* Remove the old large orbital/ring effect completely. */
 .winCardStage:after{
   display:none!important;
   content:none!important;
+  background:none!important;
+  box-shadow:none!important;
 }
 
-/* 去掉旧的金色厚背光，只留奖品色薄边。 */
+/* Remove gold/yellow card backlight; retain only a thin accent edge. */
 .winCardStage:before{
-  background:color-mix(in srgb,var(--winAccent) 10%,#06101c)!important;
-  box-shadow:
-    0 0 .18cqw rgba(255,255,255,.18),
-    0 0 .55cqw color-mix(in srgb,var(--winAccent) 48%,transparent)!important;
+  background:#06101c!important;
+  box-shadow:0 0 .42cqw color-mix(in srgb,var(--winAccent) 38%,transparent)!important;
   opacity:1!important;
-  animation:v115EdgePulse 1.8s ease-in-out infinite alternate!important;
+  animation:v116EdgePulse 1.9s ease-in-out infinite alternate!important;
 }
 .winPrizeVisual{
-  box-shadow:
-    0 18px 36px #000b,
-    0 0 .68cqw color-mix(in srgb,var(--winAccent) 50%,transparent)!important;
-  filter:
-    saturate(1.07)
-    contrast(1.035)
-    brightness(1.035)
-    drop-shadow(0 0 .44cqw color-mix(in srgb,var(--winAccent) 48%,transparent))!important;
+  box-shadow:0 18px 36px #000b,0 0 .52cqw color-mix(in srgb,var(--winAccent) 42%,transparent)!important;
+  filter:saturate(1.07) contrast(1.035) brightness(1.035)!important;
 }
 
-/* 按钮保持母图原位置，不让信息幕压到按钮或外框。 */
 .resultCardV2 .againRow{top:82.25%!important}
 
-@keyframes v115LocalWave{
-  0%{opacity:0;transform:translate(-50%,-50%) scale(.88)}
-  18%{opacity:.78}
-  70%{opacity:.22}
-  100%{opacity:0;transform:translate(-50%,-50%) scale(1.16)}
+@keyframes v116LocalWave{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.94)}
+  18%{opacity:.62}
+  72%{opacity:.16}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.10)}
 }
-@keyframes v115LocalParticles{
-  0%{opacity:.16;transform:scale(.92) rotate(0deg)}
-  28%{opacity:.82}
-  72%{opacity:.48}
-  100%{opacity:.08;transform:scale(1.08) rotate(18deg)}
+@keyframes v116LocalParticles{
+  0%{opacity:.10;transform:scale(.96) rotate(0deg)}
+  30%{opacity:.62}
+  72%{opacity:.34}
+  100%{opacity:.05;transform:scale(1.06) rotate(14deg)}
 }
-@keyframes v115EdgePulse{
-  from{filter:brightness(.98);transform:scale(.998)}
-  to{filter:brightness(1.06);transform:scale(1.002)}
+@keyframes v116EdgePulse{
+  from{filter:brightness(.99);transform:scale(.999)}
+  to{filter:brightness(1.04);transform:scale(1.001)}
 }
 
 @media(max-width:560px){
@@ -170,8 +140,8 @@
     height:18.75%!important;
     padding:.68% 5.0% .30%!important;
   }
-  .winCardHalo{inset:-5.0%!important}
-  .winCardHalo:after{inset:-8%!important}
+  .winCardHalo{inset:-4%!important}
+  .winCardHalo:after{inset:-5%!important}
 }
 
 @media(prefers-reduced-motion:reduce){
