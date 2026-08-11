@@ -1,0 +1,13 @@
+name: Test Security Gateway
+on:
+  push:
+    paths:
+      - '.github/workflows/test-security-gateway.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe gateway IP capture
+        run: |
+          set -e
+          curl -fsS 'https://iovzxyzjekaikvnkrenz.supabase.co/functions/v1/security-gateway'
