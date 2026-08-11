@@ -1,0 +1,44 @@
+name: Install Security Gateway V1
+on:
+  push:
+    paths:
+      - '.github/workflows/install-security-gateway-v1.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Install security gateway client
+        shell: bash
+        run: |
+          set -e
+          git config user.name 'rsj-security-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="/assets/security-gateway-v1.js?v=20260811-v1"></script>'
+          if tag not in s:
+              s=s.replace('</body>',tag+'\n</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
+            git add index.html
+            if git diff --cached --quiet; then
+              echo 'Already installed'
+              exit 0
+            fi
+            git commit -m 'Route register and lucky draws through security gateway'
+            if git push origin HEAD:main; then exit 0; fi
+            echo "Push conflict, retry $n"
+            sleep 2
+          done
+          exit 1
