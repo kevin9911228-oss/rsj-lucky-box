@@ -1,0 +1,43 @@
+name: Apply Register Copy Clean
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-register-copy-clean.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Clean register account placeholder
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('全球联动账号（4-30位字母/数字）', '全球联动账号')
+          s = s.replace('social-message-v7.js?v=20260811-v7-5', 'social-message-v7.js?v=20260811-v7-7')
+          s = s.replace('social-message-v7.js?v=20260811-v7-6', 'social-message-v7.js?v=20260811-v7-7')
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit change
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then
+            echo 'No changes needed'
+            exit 0
+          fi
+          git commit -m 'Simplify self-register account hint'
+          git pull --rebase origin main
+          git push origin HEAD:main
