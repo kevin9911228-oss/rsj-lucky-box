@@ -10,7 +10,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Load V7 compact friend space
+      - name: Load V7 paginated friend space
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -18,7 +18,7 @@ jobs:
           p=Path('index.html')
           s=p.read_text()
           s=re.sub(r'\s*<script src="/assets/social-message-v7\.js\?v=[^"]+"></script>', '', s)
-          s=s.replace('</body>','\n<script src="/assets/social-message-v7.js?v=20260811-v7-4"></script>\n</body>')
+          s=s.replace('</body>','\n<script src="/assets/social-message-v7.js?v=20260811-v7-5"></script>\n</body>')
           p.write_text(s)
           PY
       - name: Commit and push
@@ -27,6 +27,6 @@ jobs:
           git config user.email actions@users.noreply.github.com
           git add index.html
           git diff --cached --quiet && exit 0
-          git commit -m "Load compact friend space V7.4"
+          git commit -m "Load paginated friend space V7.5"
           git pull --rebase origin main
           git push origin HEAD:main
