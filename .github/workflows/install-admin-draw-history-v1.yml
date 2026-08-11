@@ -1,0 +1,32 @@
+name: Install Admin Draw History V1
+on:
+  push:
+    branches: [main]
+jobs:
+  install:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load full searched draw history
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('admin.html')
+          s=p.read_text()
+          s=re.sub(r'\s*<script src="/assets/admin-draw-history-v1\.js\?v=[^"]+"></script>', '', s)
+          s=s.replace('</body>','\n<script src="/assets/admin-draw-history-v1.js?v=20260811-v1"></script>\n</body>')
+          p.write_text(s)
+          PY
+      - name: Commit and push
+        run: |
+          git config user.name rsj-lucky-bot
+          git config user.email actions@users.noreply.github.com
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Load full searched winning history in admin"
+          git pull --rebase origin main
+          git push origin HEAD:main
