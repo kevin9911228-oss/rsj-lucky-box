@@ -28,9 +28,9 @@ async function createMember(quick){const code=$(quick?'qCode':'cCode').value.tri
 function lines(v){return v.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)}async function batchCreate(){const items=lines($('batchCreateText').value).map(line=>{const [member_code,display_name,member_pin,credits='0']=line.split(',').map(x=>x.trim());return{member_code,display_name,member_pin,credits:Number(credits||0)}});if(!items.length)return toast('请先填写批量数据');const d=await rpc('manager_batch_create_members',{...creds(),p_items:items});if(!d.ok)return toast(d.message);toast('完成：成功 '+d.success_count+'，失败 '+d.fail_count);hideModal('batchCreateModal');await loadMembers()}async function batchCredits(){const items=lines($('batchCreditText').value).map(line=>{const [member_code,delta,reason='']=line.split(',').map(x=>x.trim());return{member_code,delta:Number(delta||0),reason}});if(!items.length)return toast('请先填写批量数据');const d=await rpc('manager_batch_add_credits',{...creds(),p_items:items});if(!d.ok)return toast(d.message);toast('完成：成功 '+d.success_count+'，失败 '+d.fail_count);hideModal('batchCreditModal');await loadMembers()}async function changePassword(){const old=$('oldPin').value,n1=$('newPin').value,n2=$('newPin2').value;if(n1!==n2)return toast('两次新密码不一致');const d=await rpc('manager_change_password',{p_username:auth.username,p_old_pin:old,p_new_pin:n1});if(!d.ok)return toast(d.message);auth.pin=n1;$('oldPin').value='';$('newPin').value='';$('newPin2').value='';toast('管理密码修改成功')}$('adminUser').value=sessionStorage.getItem('rsj_admin_user')||'';
 </script><script src="/assets/gift-admin-v2.js?v=20260810-v2"></script>
 <script src="/assets/social-admin-v1.js?v=20260810-v1"></script>
-
-<script src="/assets/admin-draw-history-v1.js?v=20260811-v1"></script>
 <script src="/assets/security-admin-v1.js?v=20260811-v1"></script>
 
 <script src="/assets/social-admin-weekly-v2.js?v=20260810-v6"></script>
+
+<script src="/assets/admin-draw-history-v1.js?v=20260811-v1"></script>
 </body></html>
