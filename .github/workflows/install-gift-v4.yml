@@ -1,0 +1,62 @@
+name: Install Gift V4
+on:
+  push:
+    paths:
+      - 'assets/gift-zone-v4.js'
+      - 'assets/gift-admin-v3.js'
+      - '.github/workflows/install-gift-v4.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Attach Gift V4 and admin V3
+        run: |
+          set -e
+          git config user.name 'rsj-gift-v4-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            python - <<'PY'
+          from pathlib import Path
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="/assets/gift-zone-v4.js?v=20260814-v4"></script>'
+          if tag not in s:
+              anchor='<script src="/assets/gift-zone-v3.js?v=20260810-v3"></script>'
+              if anchor in s:
+                  s=s.replace(anchor,anchor+'\n'+tag)
+              else:
+                  s=s.replace('</body>',tag+'\n</body>')
+              p.write_text(s,encoding='utf-8')
+
+          p=Path('admin.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="/assets/gift-admin-v3.js?v=20260814-v3"></script>'
+          if tag not in s:
+              anchor='<script src="/assets/gift-admin-v2.js?v=20260810-v2"></script>'
+              if anchor in s:
+                  s=s.replace(anchor,anchor+'\n'+tag)
+              else:
+                  s=s.replace('</body>',tag+'\n</body>')
+              p.write_text(s,encoding='utf-8')
+          PY
+            if git diff --quiet -- index.html admin.html; then
+              echo 'Gift V4 already installed.'
+              exit 0
+            fi
+            git add index.html admin.html
+            git commit -m 'Enable mixed random gift wheel V4'
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Failed to install Gift V4 after retries.' >&2
+          exit 1
