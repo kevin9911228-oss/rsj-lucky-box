@@ -28,9 +28,8 @@ jobs:
           from pathlib import Path
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          css='<link rel="stylesheet" href="/assets/result-popup-v12.css?v=20260815-v12">'
-          js='<script src="/assets/result-lucky-v12.js?v=20260815-v12"></script>'
-          # de-duplicate any previous V12 tags
+          css='<link rel="stylesheet" href="/assets/result-popup-v12.css?v=20260815-v12-1">'
+          js='<script src="/assets/result-lucky-v12.js?v=20260815-v12-1"></script>'
           lines=[ln for ln in s.splitlines() if 'result-popup-v12.css' not in ln and 'result-lucky-v12.js' not in ln]
           s='\n'.join(lines)
           if '</head>' in s:
@@ -44,7 +43,7 @@ jobs:
               exit 0
             fi
             git add index.html
-            git commit -m 'Fix lucky box label and result serial visibility'
+            git commit -m 'Refresh lucky box result V12 cache'
             if git push origin HEAD:main; then
               exit 0
             fi
