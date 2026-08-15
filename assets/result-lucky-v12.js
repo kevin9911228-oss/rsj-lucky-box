@@ -22,6 +22,8 @@
     if(input && input.placeholder!=='输入礼盒码') input.placeholder='输入礼盒码';
     const btn=id('tempDrawBtn');
     if(btn && !btn.disabled && btn.textContent!=='开启幸运礼盒') btn.textContent='开启幸运礼盒';
+    const guest=panel.querySelector('#luckyGuest button');
+    if(guest && guest.textContent!=='登录后开启幸运礼盒') guest.textContent='登录后开启幸运礼盒';
   }
 
   function patchResult(type){
@@ -29,11 +31,11 @@
     if(!card) return;
     const rows=[...card.querySelectorAll('.winMetaRow')];
     const luckyRow=rows.find(row=>row.querySelector('span')?.textContent.trim()==='幸运码');
-    const isLucky=type==='temp' || !!luckyRow;
+    const isLucky=type==='temp' || !!luckyRow || card.classList.contains('rsjLuckyResult');
     card.classList.toggle('rsjLuckyResult',isLucky);
 
     if(isLucky){
-      const row=luckyRow || rows[0];
+      const row=luckyRow || rows.find(r=>r.classList.contains('rsjLuckyGiftRow')) || rows[0];
       if(row){
         row.classList.add('rsjLuckyGiftRow');
         const label=row.querySelector('span');
@@ -53,6 +55,12 @@
     });
   }
 
+  function patchHistory(){
+    document.querySelectorAll('#historyList .record .type.tempType').forEach(node=>{
+      if(node.textContent!=='幸运礼盒') node.textContent='幸运礼盒';
+    });
+  }
+
   function patchNotice(){
     if(typeof window.showNotice!=='function' || window.showNotice.__rsjLuckyV12) return;
     const base=window.showNotice;
@@ -68,6 +76,18 @@
     window.showNotice=wrapped;
   }
 
+  function patchOpenLogin(){
+    if(typeof window.openLoginModal!=='function' || window.openLoginModal.__rsjLuckyV12) return;
+    const base=window.openLoginModal;
+    const wrapped=function(ret='home',message=''){
+      if(ret==='lucky' && !message) message='登录后开启幸运礼盒';
+      message=String(message||'').replace(/幸运码/g,'幸运礼盒');
+      return base.call(this,ret,message);
+    };
+    wrapped.__rsjLuckyV12=true;
+    window.openLoginModal=wrapped;
+  }
+
   function patchOpenResult(){
     if(typeof window.openResult!=='function' || window.openResult.__rsjLuckyV12) return;
     const base=window.openResult;
@@ -81,23 +101,51 @@
     window.openResult=wrapped;
   }
 
+  function patchLoadHistory(){
+    if(typeof window.loadHistory!=='function' || window.loadHistory.__rsjLuckyV12) return;
+    const base=window.loadHistory;
+    const wrapped=async function(){
+      const out=await base.apply(this,arguments);
+      patchHistory();
+      return out;
+    };
+    wrapped.__rsjLuckyV12=true;
+    window.loadHistory=wrapped;
+  }
+
   function observe(){
     const modal=id('resultModal');
-    if(!modal) return;
-    const mo=new MutationObserver(()=>{
-      const rows=[...modal.querySelectorAll('.winMetaRow')];
-      if(rows.some(r=>r.querySelector('span')?.textContent.trim()==='幸运码')) patchResult('temp');
-      else if(rows.length) patchResult('normal');
-    });
-    mo.observe(modal,{subtree:true,childList:true,characterData:true});
+    if(modal){
+      const mo=new MutationObserver(()=>{
+        const rows=[...modal.querySelectorAll('.winMetaRow')];
+        if(rows.some(r=>r.querySelector('span')?.textContent.trim()==='幸运码')) patchResult('temp');
+        else if(rows.length) patchResult(modal.querySelector('.rsjLuckyGiftRow')?'temp':'normal');
+      });
+      mo.observe(modal,{subtree:true,childList:true,characterData:true});
+    }
+    const history=id('historyList');
+    if(history){
+      const hm=new MutationObserver(patchHistory);
+      hm.observe(history,{subtree:true,childList:true,characterData:true});
+    }
   }
 
   function init(){
     patchLuckyPanel();
     patchNotice();
+    patchOpenLogin();
     patchOpenResult();
+    patchLoadHistory();
+    patchHistory();
     observe();
-    setInterval(()=>{patchLuckyPanel();patchNotice();patchOpenResult()},1200);
+    setInterval(()=>{
+      patchLuckyPanel();
+      patchNotice();
+      patchOpenLogin();
+      patchOpenResult();
+      patchLoadHistory();
+      patchHistory();
+    },1200);
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
