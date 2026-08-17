@@ -1,0 +1,52 @@
+name: Install Gift Tier V5
+on:
+  push:
+    paths:
+      - 'assets/gift-zone-v5.js'
+      - 'assets/gift-admin-v5.js'
+      - '.github/workflows/install-gift-tier-v5.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Attach Gift V5
+        run: |
+          set -e
+          git config user.name 'rsj-gift-v5-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          lines=[ln for ln in s.splitlines() if 'gift-zone-v5.js' not in ln]
+          s='\n'.join(lines)
+          tag='<script src="/assets/gift-zone-v5.js?v=20260817-v5"></script>'
+          s=s.replace('</body>',tag+'\n</body>',1)
+          p.write_text(s+'\n',encoding='utf-8')
+
+          a=Path('admin.html')
+          t=a.read_text(encoding='utf-8')
+          lines=[ln for ln in t.splitlines() if 'gift-admin-v5.js' not in ln]
+          t='\n'.join(lines)
+          tag2='<script src="/assets/gift-admin-v5.js?v=20260817-v5"></script>'
+          t=t.replace('</body>',tag2+'\n</body>',1)
+          a.write_text(t+'\n',encoding='utf-8')
+          PY
+            if git diff --quiet -- index.html admin.html; then
+              echo 'Gift V5 already installed.'
+              exit 0
+            fi
+            git add index.html admin.html
+            git commit -m 'Load four-tier gift wheel and admin V5'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
