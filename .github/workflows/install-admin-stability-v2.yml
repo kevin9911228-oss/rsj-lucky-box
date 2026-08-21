@@ -1,0 +1,40 @@
+name: Install Admin Stability V2
+on:
+  push:
+    paths:
+      - 'assets/admin-stability-v2.js'
+      - '.github/workflows/install-admin-stability-v2.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Attach admin stability V2
+        run: |
+          set -e
+          git config user.name 'rsj-admin-stability-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            python - <<'PY'
+          from pathlib import Path
+          p=Path('admin.html')
+          s=p.read_text(encoding='utf-8')
+          lines=[ln for ln in s.splitlines() if 'admin-stability-v2.js' not in ln]
+          s='\n'.join(lines)
+          tag='<script src="/assets/admin-stability-v2.js?v=20260821-v2"></script>'
+          s=s.replace('</body>',tag+'\n</body>',1)
+          p.write_text(s+'\n',encoding='utf-8')
+          PY
+            if git diff --quiet -- admin.html; then exit 0; fi
+            git add admin.html
+            git commit -m 'Load admin stability V2'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
