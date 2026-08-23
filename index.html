@@ -3,17 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#100805">
+<meta name="theme-color" content="#07111f">
 <title>陈健幸运抽奖</title>
 <style>
-:root{--gold:#f4c85a;--gold2:#ffea9a;--red:#9e251b;--ink:#fff4d2;--muted:#c7ad7d;--line:#60401f}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#0a0605;color:var(--ink);font-family:system-ui,-apple-system,"Microsoft YaHei","PingFang SC",sans-serif}body{min-height:100vh;background:radial-gradient(circle at 50% -8%,#8f3b1d66,transparent 30%),radial-gradient(circle at 10% 20%,#5c341133,transparent 28%),linear-gradient(180deg,#160c08,#0a0605 55%,#050302)}.app{width:min(100%,760px);margin:auto;padding:18px 12px 90px}.hero{text-align:center;padding:10px 8px 18px}.eyebrow{font-size:10px;letter-spacing:7px;color:#b99350}.hero h1{margin:7px 0 4px;font-size:36px;line-height:1.05;background:linear-gradient(#fff9d8,#ffd66c 55%,#c88718);-webkit-background-clip:text;color:transparent;text-shadow:0 0 26px #ffc44b26}.hero p{margin:0;color:#b89f73;font-size:12px;letter-spacing:2px}.card{border:1px solid #5a3d20;border-radius:22px;background:linear-gradient(180deg,#19100ce8,#0e0908ed);box-shadow:0 20px 50px #0008,inset 0 1px #ffe8a014}.drawBox{position:relative;padding:14px;overflow:hidden}.drawBox:before{content:"";position:absolute;inset:-30%;background:repeating-conic-gradient(from 0deg,#ffdc6810 0 4deg,transparent 4deg 18deg);animation:spinbg 20s linear infinite}.drawBox>*{position:relative;z-index:1}.titleRow{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}.titleRow h2{margin:0;font-size:20px;color:#ffe28b}.titleRow span{font-size:10px;color:#a58e68}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.prize{height:112px;border:1px solid #654321;border-radius:16px;background:radial-gradient(circle at 50% 0,#9c3c203a,transparent 48%),linear-gradient(180deg,#1c120e,#100a08);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:inset 0 0 0 1px #ffd56c09;transition:.16s}.prize.active{transform:scale(1.04);border-color:#ffe08c;box-shadow:0 0 0 2px #ffea9a66 inset,0 0 28px #ffc64066;background:radial-gradient(circle at 50% 20%,#d1912b73,transparent 52%),linear-gradient(180deg,#31200f,#15100a)}.icon{font-size:30px;line-height:1}.prize b{margin-top:6px;font-size:15px;color:#ffe19a}.prize small{margin-top:3px;font-size:9px;color:#9f8a69}.center{background:radial-gradient(circle at 50% 15%,#edca6a,#b97919 58%,#70420a);border-color:#ffe59c;color:#271503;cursor:pointer;box-shadow:0 0 30px #ffc9403a,inset 0 2px #fff0b4}.center .icon{font-size:25px}.center b{font-size:19px;color:#321a03}.center small{color:#57330e}.center:active{transform:scale(.96)}.center.disabled{opacity:.6;pointer-events:none}.result{margin-top:12px;padding:13px;border:1px solid #604622;border-radius:15px;background:#0e0a08;text-align:center;min-height:72px;display:flex;align-items:center;justify-content:center}.result strong{display:block;font-size:23px;color:#ffe184}.result span{display:block;margin-top:4px;font-size:10px;color:#a99470}.tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mini{padding:14px}.mini h3{margin:0 0 9px;font-size:15px;color:#f1d18a}.stat{font-size:28px;font-weight:1000;color:#ffd762}.stat small{font-size:11px;color:#a58e68;font-weight:500}.records{margin-top:12px;padding:14px}.records h3{margin:0 0 10px;font-size:16px;color:#f0d396}.record{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #302216;font-size:11px}.record:last-child{border-bottom:0}.record b{color:#ffdb78}.empty{padding:16px 0;text-align:center;color:#806f58;font-size:11px}.foot{text-align:center;margin-top:18px;font-size:9px;color:#695a49;letter-spacing:1px}@keyframes spinbg{to{transform:rotate(360deg)}}@media(max-width:520px){.app{padding-left:8px;padding-right:8px}.hero h1{font-size:31px}.prize{height:100px}.tools{grid-template-columns:1fr 1fr}.prize b{font-size:14px}}
+:root{
+  --navy:#07111f;--navy2:#0c1c33;--glass:#0c1728cc;--glass2:#101e34e8;
+  --cyan:#59e3ff;--violet:#a97bff;--gold:#f6c95b;--gold2:#fff1ad;
+  --red:#b52d31;--red2:#6f1018;--ink:#f7fbff;--muted:#93a7bd;--line:#29405a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);background:var(--navy)}
+body{min-height:100vh;overflow-x:hidden;background:
+  radial-gradient(circle at 18% 8%,#4036a958 0,transparent 28%),
+  radial-gradient(circle at 82% 12%,#0eaccf3d 0,transparent 25%),
+  radial-gradient(circle at 50% 88%,#b52d3126 0,transparent 30%),
+  linear-gradient(180deg,#07111f 0%,#091426 43%,#050b14 100%)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:
+  linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000 0%,transparent 82%)}
+body:after{content:"";position:fixed;left:-15vw;right:-15vw;top:-22vh;height:52vh;pointer-events:none;background:conic-gradient(from 205deg at 50% 100%,transparent 0 17%,#59e3ff1c 17% 19%,transparent 19% 31%,#a97bff1b 31% 33%,transparent 33% 47%,#f6c95b12 47% 49%,transparent 49% 100%);filter:blur(2px);animation:skySweep 14s ease-in-out infinite alternate}
+.app{width:min(100%,820px);margin:auto;padding:22px 14px 96px;position:relative;z-index:1}
+.hero{position:relative;text-align:center;padding:18px 8px 22px}
+.logoMark{width:54px;height:54px;margin:0 auto 10px;border-radius:18px;display:grid;place-items:center;font-weight:1000;font-size:22px;letter-spacing:-1px;color:#06111d;background:linear-gradient(145deg,#fff7c9,#f6c95b 58%,#c77d17);box-shadow:0 0 0 1px #fff2a06b inset,0 12px 34px #f6c95b2e}
+.eyebrow{font-size:10px;letter-spacing:7px;color:#7fdff1;text-transform:uppercase}
+.hero h1{margin:8px 0 5px;font-size:38px;line-height:1.05;color:#fff;text-shadow:0 0 30px #6fd9ff38;font-weight:1000}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#fff3ba,#f5c54c,#fff3ba);-webkit-background-clip:text;color:transparent}
+.hero p{margin:0;color:#90a5bb;font-size:12px;letter-spacing:2px}
+.card{border:1px solid #2d4662;border-radius:24px;background:linear-gradient(180deg,#102139d9,#0a1525e8);box-shadow:0 24px 58px #0007,inset 0 1px #b8eaff12;backdrop-filter:blur(16px)}
+.drawBox{position:relative;padding:16px;overflow:hidden}
+.drawBox:before{content:"";position:absolute;width:430px;height:430px;left:50%;top:-270px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,#55e1ff18 0,#7e63ff10 32%,transparent 70%);box-shadow:0 0 80px #55e1ff18}
+.drawBox:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:24px;background:linear-gradient(135deg,#ffffff0d,transparent 28%,transparent 72%,#59e3ff0c)}
+.drawBox>*{position:relative;z-index:1}
+.titleRow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:13px;padding:2px 2px 0}
+.titleRow h2{margin:0;font-size:20px;color:#f4f8ff}.titleRow h2 span{color:var(--gold)}
+.titleRow>span{font-size:10px;color:#8197ad}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:10px;border:1px solid #263c56;border-radius:20px;background:linear-gradient(145deg,#081321,#0b192b);box-shadow:inset 0 0 42px #0007}
+.prize{position:relative;height:114px;border:1px solid #5c3338;border-radius:17px;background:
+  radial-gradient(circle at 50% 0,#e44c4c31,transparent 48%),linear-gradient(180deg,#261016,#100b10 72%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:inset 0 0 0 1px #ffd76c08,0 8px 18px #0005;transition:transform .16s ease,filter .16s ease,border-color .16s ease,box-shadow .16s ease;overflow:hidden}
+.prize:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 20%,#ffffff0d 46%,transparent 68%);transform:translateX(-120%)}
+.prize.active{transform:translateY(-2px) scale(1.045);border-color:#ffe087;filter:brightness(1.16);box-shadow:0 0 0 2px #ffdf7666 inset,0 0 26px #f6c95b72,0 12px 24px #0007;background:radial-gradient(circle at 50% 10%,#f5b83f5e,transparent 50%),linear-gradient(180deg,#4a171a,#170c10)}
+.prize.active:before{animation:sweep .45s ease both}
+.icon{font-size:31px;line-height:1;filter:drop-shadow(0 3px 5px #0006)}
+.prize b{margin-top:7px;font-size:15px;color:#ffe5a1}.prize small{margin-top:3px;font-size:9px;color:#b89d8a}
+.center{background:linear-gradient(145deg,#f8df84,#dfa92a 48%,#9c5f09);border-color:#fff1ac;color:#2b1602;cursor:pointer;box-shadow:0 0 28px #f6c95b36,inset 0 2px #fff9cf;isolation:isolate}
+.center:before{content:"";position:absolute;inset:-45%;border-radius:50%;background:conic-gradient(transparent 0 20%,#ffffff46 20% 25%,transparent 25% 52%,#fff6b22d 52% 57%,transparent 57%);animation:centerGlow 5s linear infinite;z-index:-1}
+.center .icon{font-size:25px}.center b{font-size:19px;color:#301900}.center small{color:#5a370d}.center:active{transform:scale(.96)}.center.disabled{opacity:.62;pointer-events:none}
+.result{margin-top:13px;min-height:86px;padding:14px 18px;border:1px solid #314a67;border-radius:17px;background:linear-gradient(90deg,#0a1625,#0d1b2e,#0a1625);text-align:center;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 26px #50d8ff0b}
+.result strong{display:block;font-size:23px;color:#fff4b4;text-shadow:0 0 18px #f6c95b30}.result span{display:block;margin-top:5px;font-size:10px;color:#8fa4b9}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mini{padding:15px 16px;position:relative;overflow:hidden}.mini:after{content:"";position:absolute;width:96px;height:96px;right:-36px;top:-36px;border-radius:50%;background:#58ddff0c}.mini:nth-child(2):after{background:#aa7bff10}
+.mini h3{margin:0 0 10px;font-size:13px;color:#9fb5ca;font-weight:700}.stat{font-size:30px;font-weight:1000;color:#f9fbff;letter-spacing:-1px}.stat small{font-size:11px;color:#7f93a8;font-weight:500;margin-left:2px}
+.records{margin-top:12px;padding:15px 16px}.records h3{margin:0 0 10px;font-size:16px;color:#eaf3ff}.record{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #23384e;font-size:11px;color:#9db0c3}.record:last-child{border-bottom:0}.record b{color:#ffe08a}.empty{padding:18px 0;text-align:center;color:#6f849a;font-size:11px}
+.foot{text-align:center;margin-top:19px;font-size:9px;color:#62768a;letter-spacing:1px}
+@keyframes skySweep{to{transform:translateX(5vw) rotate(2deg)}}
+@keyframes sweep{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
+@keyframes centerGlow{to{transform:rotate(360deg)}}
+@media(max-width:560px){.app{padding:14px 8px 84px}.hero{padding-top:12px}.hero h1{font-size:31px}.logoMark{width:48px;height:48px;border-radius:15px}.drawBox{padding:10px}.grid{gap:7px;padding:7px}.prize{height:99px;border-radius:14px}.prize b{font-size:13px}.prize small{font-size:8px}.icon{font-size:27px}.center b{font-size:17px}.titleRow{padding:3px 3px 0}.titleRow h2{font-size:18px}.titleRow>span{font-size:9px}.tools{gap:8px}}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="hero"><div class="eyebrow">CHEN JIAN · LUCKY</div><h1>陈健幸运抽奖</h1><p>好运正在发生 · 每一次都有惊喜</p></header>
+  <header class="hero">
+    <div class="logoMark">CJ</div>
+    <div class="eyebrow">CHEN JIAN · LUCKY DRAW</div>
+    <h1>陈健<em>幸运抽奖</em></h1>
+    <p>好运正在发生 · 每一次都有惊喜</p>
+  </header>
+
   <section class="card drawBox">
-    <div class="titleRow"><h2>幸运奖池</h2><span>首版演示 · 奖项可后台配置</span></div>
+    <div class="titleRow"><h2>幸运<span>奖池</span></h2><span>九宫格幸运抽奖</span></div>
     <div class="grid" id="grid">
       <div class="prize" data-prize="神秘大奖"><div class="icon">👑</div><b>神秘大奖</b><small>惊喜揭晓</small></div>
       <div class="prize" data-prize="一等奖"><div class="icon">🎁</div><b>一等奖</b><small>幸运降临</small></div>
@@ -25,14 +81,37 @@
       <div class="prize" data-prize="欢乐奖"><div class="icon">🎉</div><b>欢乐奖</b><small>快乐加倍</small></div>
       <div class="prize" data-prize="纪念奖"><div class="icon">🏅</div><b>纪念奖</b><small>好运留念</small></div>
     </div>
-    <div class="result" id="result"><div><strong>准备好了吗？</strong><span>点击“立即抽奖”体验第一版效果</span></div></div>
+    <div class="result" id="result"><div><strong>准备好了吗？</strong><span>点击“立即抽奖”，开启今天的幸运时刻</span></div></div>
   </section>
-  <div class="tools"><section class="card mini"><h3>今日抽奖</h3><div class="stat" id="drawCount">0 <small>次</small></div></section><section class="card mini"><h3>今日中奖</h3><div class="stat" id="winCount">0 <small>次</small></div></section></div>
+
+  <div class="tools">
+    <section class="card mini"><h3>今日抽奖次数</h3><div class="stat" id="drawCount">0 <small>次</small></div></section>
+    <section class="card mini"><h3>今日中奖次数</h3><div class="stat" id="winCount">0 <small>次</small></div></section>
+  </div>
+
   <section class="card records"><h3>最近中奖记录</h3><div id="records" class="empty">暂无记录，等待第一份好运</div></section>
   <div class="foot">© 2026 陈健幸运抽奖 · chenjianCJ.com</div>
 </div>
 <script>
-const cells=[...document.querySelectorAll('.prize[data-prize]')],btn=document.getElementById('drawBtn'),result=document.getElementById('result'),records=document.getElementById('records');let draws=0,wins=0,running=false,history=[];function renderRecords(){records.className='';records.innerHTML=history.length?history.slice(0,5).map((x,i)=>`<div class="record"><span>${new Date(x.t).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})} · 幸运用户${String(i+1).padStart(2,'0')}</span><b>${x.p}</b></div>`).join(''):'<div class="empty">暂无记录，等待第一份好运</div>'}btn.addEventListener('click',async()=>{if(running)return;running=true;btn.classList.add('disabled');draws++;document.getElementById('drawCount').innerHTML=draws+' <small>次</small>';let target=Math.floor(Math.random()*cells.length),steps=28+Math.floor(Math.random()*10),pos=0;for(let i=0;i<steps;i++){cells.forEach(x=>x.classList.remove('active'));cells[pos%cells.length].classList.add('active');pos++;await new Promise(r=>setTimeout(r,55+Math.min(i*4,110)))}cells.forEach(x=>x.classList.remove('active'));cells[target].classList.add('active');wins++;document.getElementById('winCount').innerHTML=wins+' <small>次</small>';let p=cells[target].dataset.prize;result.innerHTML=`<div><strong>🎊 恭喜抽中：${p}</strong><span>正式版可接入账号、次数、奖品库存和后台控制</span></div>`;history.unshift({p,t:Date.now()});renderRecords();btn.classList.remove('disabled');running=false})
+const cells=[...document.querySelectorAll('.prize[data-prize]')],btn=document.getElementById('drawBtn'),result=document.getElementById('result'),records=document.getElementById('records');
+let draws=0,wins=0,running=false,history=[];
+function renderRecords(){records.className='';records.innerHTML=history.length?history.slice(0,5).map((x,i)=>`<div class="record"><span>${new Date(x.t).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})} · 幸运用户${String(i+1).padStart(2,'0')}</span><b>${x.p}</b></div>`).join(''):'<div class="empty">暂无记录，等待第一份好运</div>'}
+btn.addEventListener('click',async()=>{
+  if(running)return;
+  running=true;btn.classList.add('disabled');draws++;
+  document.getElementById('drawCount').innerHTML=draws+' <small>次</small>';
+  const target=Math.floor(Math.random()*cells.length),steps=28+Math.floor(Math.random()*10);let pos=0;
+  for(let i=0;i<steps;i++){
+    cells.forEach(x=>x.classList.remove('active'));
+    cells[pos%cells.length].classList.add('active');pos++;
+    await new Promise(r=>setTimeout(r,55+Math.min(i*4,110)));
+  }
+  cells.forEach(x=>x.classList.remove('active'));cells[target].classList.add('active');
+  wins++;document.getElementById('winCount').innerHTML=wins+' <small>次</small>';
+  const p=cells[target].dataset.prize;
+  result.innerHTML=`<div><strong>🎊 恭喜抽中：${p}</strong><span>幸运已锁定，愿今天的好运继续发生</span></div>`;
+  history.unshift({p,t:Date.now()});renderRecords();btn.classList.remove('disabled');running=false;
+});
 </script>
 </body>
 </html>
