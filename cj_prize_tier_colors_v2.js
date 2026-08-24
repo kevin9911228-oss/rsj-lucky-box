@@ -1,49 +1,25 @@
-/* cj-prize-tier-colors-v3-strong */
+/* cj-prize-tier-colors-v4-stable */
 (()=>{
   if(location.pathname.startsWith('/admin')) return;
 
   const TIER={
-    '88现金':'normal',
-    '188现金':'normal',
-    '588现金':'big',
-    '888现金':'luxury',
-    '金条5克':'super',
-    '电视机':'super',
-    '冰箱':'super',
-    '空调':'super'
+    '88现金':'normal','188现金':'normal','588现金':'big','888现金':'luxury',
+    '金条5克':'super','电视机':'super','冰箱':'super','空调':'super'
   };
-
   const COLORS={
     normal:{name:'#FFD45A',serial:'#D8A63E',shadow:'0 0 7px rgba(255,212,90,.34)'},
     big:{name:'#FF8A1F',serial:'#E56A17',shadow:'0 0 10px rgba(255,138,31,.70)'},
     luxury:{name:'#D98CFF',serial:'#B96FE3',shadow:'0 0 12px rgba(217,140,255,.82)'},
     super:{name:'#DDF7FF',serial:'#88D9FF',shadow:'0 0 12px rgba(109,219,255,.90)'}
   };
-
-  const style=document.createElement('style');
-  style.textContent=`
-    #cjpcRecords .cjpc-record .cjpc-prize.cjtxt-normal{color:#FFD45A!important;text-shadow:0 0 7px rgba(255,212,90,.34)!important}
-    #cjpcRecords .cjpc-record .cjpc-meta.cjtxt-normal{color:#D8A63E!important}
-
-    #cjpcRecords .cjpc-record .cjpc-prize.cjtxt-big{color:#FF8A1F!important;text-shadow:0 0 10px rgba(255,138,31,.70)!important}
-    #cjpcRecords .cjpc-record .cjpc-meta.cjtxt-big{color:#E56A17!important}
-
-    #cjpcRecords .cjpc-record .cjpc-prize.cjtxt-luxury{color:#D98CFF!important;text-shadow:0 0 12px rgba(217,140,255,.82)!important}
-    #cjpcRecords .cjpc-record .cjpc-meta.cjtxt-luxury{color:#B96FE3!important}
-
-    #cjpcRecords .cjpc-record .cjpc-prize.cjtxt-super{color:#DDF7FF!important;text-shadow:0 0 12px rgba(109,219,255,.90)!important}
-    #cjpcRecords .cjpc-record .cjpc-meta.cjtxt-super{color:#88D9FF!important}
-  `;
-  document.head.appendChild(style);
-
   const all=['cjtxt-normal','cjtxt-big','cjtxt-luxury','cjtxt-super'];
 
-  function applyTextColor(row){
+  function apply(row){
     const nameEl=row.querySelector('.cjpc-prize');
     if(!nameEl) return;
     const tier=TIER[nameEl.textContent.trim()]||'normal';
-    const meta=row.querySelector('.cjpc-meta');
     const c=COLORS[tier];
+    const meta=row.querySelector('.cjpc-meta');
 
     nameEl.classList.remove(...all);
     nameEl.classList.add('cjtxt-'+tier);
@@ -54,21 +30,31 @@
       meta.classList.remove(...all);
       meta.classList.add('cjtxt-'+tier);
       meta.style.setProperty('color',c.serial,'important');
+      meta.style.setProperty('text-shadow','none','important');
     }
   }
 
   function patch(){
-    document.querySelectorAll('#cjpcRecords .cjpc-record').forEach(applyTextColor);
+    document.querySelectorAll('#cjpcRecords .cjpc-record').forEach(apply);
   }
 
-  function watch(){
-    const host=document.getElementById('cjpcRecords');
-    if(!host) return setTimeout(watch,120);
-    const observer=new MutationObserver(()=>requestAnimationFrame(patch));
-    observer.observe(host,{childList:true,subtree:true,characterData:true});
+  function start(){
+    const stable=document.getElementById('profilePage')||document.body;
+    let scheduled=false;
+    const schedule=()=>{
+      if(scheduled) return;
+      scheduled=true;
+      requestAnimationFrame(()=>{scheduled=false;patch();});
+    };
+    new MutationObserver(schedule).observe(stable,{childList:true,subtree:true});
     patch();
+    document.querySelectorAll('.nav button[data-p="profile"]').forEach(btn=>btn.addEventListener('click',()=>{
+      setTimeout(patch,80);
+      setTimeout(patch,350);
+      setTimeout(patch,900);
+    }));
   }
 
-  watch();
-  document.querySelectorAll('.nav button[data-p="profile"]').forEach(b=>b.addEventListener('click',()=>setTimeout(patch,80)));
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
 })();
