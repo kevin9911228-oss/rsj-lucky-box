@@ -1,4 +1,4 @@
-/* GIFT ADMIN V6 — current five-prize inventory; designated strategy for 苹果18 / 888 */
+/* GIFT ADMIN V6.1 — five-prize inventory; fixed quotas 2/10/20; designated strategy for 苹果18 / 888 */
 (()=>{
   'use strict';
   if(window.__RSJ_GIFT_ADMIN_V5__) return;
@@ -19,7 +19,7 @@
     page.innerHTML=`
       <div class="section card">
         <h3>礼品码系统</h3>
-        <div class="notice giftV5Notice"><b>本期奖池：</b>特等奖 苹果18 × 3 · 一等奖 888 × 5 · 二等奖 588 × 10 · 三等奖 388 · 四等奖 188。<b>奖项策略支持指定“苹果18”和“888”的中奖账号</b>，其他奖项按活动规则随机产生。</div>
+        <div class="notice giftV5Notice"><b>本期奖池：</b>特等奖 苹果18 × 2 · 一等奖 888 × 10 · 二等奖 588 × 20 · 三等奖 388 / 四等奖 188 为随机奖项。<b>奖项策略支持指定“苹果18”和“888”的中奖账号</b>，588及其他奖项按活动规则随机产生。</div>
         <div class="toolbar"><button class="btn gold" onclick="showGiftCreateV5()">创建礼品码活动</button><button class="btn blue" onclick="loadGiftCodesV5()">刷新</button></div>
         <div class="tableWrap"><table class="table giftCampaignTable"><thead><tr><th>礼品码</th><th>使用情况</th><th>特等奖 · 苹果18</th><th>一等奖 · 888</th><th>二等奖 · 588</th><th>三等奖 · 388</th><th>四等奖 · 188</th><th>状态</th><th>操作</th></tr></thead><tbody id="giftCodeRows"></tbody></table></div>
       </div>
@@ -33,8 +33,8 @@
   }
 
   function buildModals(){
-    if(!el('giftCreateModalV5')){const d=document.createElement('div');d.id='giftCreateModalV5';d.className='overlay';d.onclick=e=>{if(e.target===d)hideModalV5('giftCreateModalV5')};d.innerHTML=`<div class="modal"><button class="close" onclick="hideModalV5('giftCreateModalV5')">×</button><h3>创建礼品码活动</h3><div class="notice">奖池：苹果18 3名 / 888 5名 / 588 10名 / 388 / 188。创建后可在“奖项策略”中指定苹果18与888的中奖账号。</div><div class="form"><input id="g5Code" class="field" placeholder="礼品码，例如 GIFT2026"><input id="g5Max" class="field" type="number" min="18" value="100" placeholder="总参与名额"><input id="g5Note" class="field" placeholder="备注（选填）"><button class="btn gold" onclick="createGiftCampaignV5()">创建活动</button></div></div>`;document.body.appendChild(d)}
-    if(!el('giftStrategyModalV5')){const d=document.createElement('div');d.id='giftStrategyModalV5';d.className='overlay';d.onclick=e=>{if(e.target===d)hideModalV5('giftStrategyModalV5')};d.innerHTML=`<div class="modal"><button class="close" onclick="hideModalV5('giftStrategyModalV5')">×</button><h3>奖项策略</h3><div class="notice giftStrategyNotice"><b>可指定大奖：</b>苹果18 / 888。选择奖项后，一行填写一个需要指定中奖的全球联动账号。</div><input id="g5StrategyCode" type="hidden"><div class="form"><select id="g5PrizeKey" class="field" onchange="loadGiftPrizeStrategyV5()"><option value="gold_bracelet">特等奖 · 苹果18</option><option value="iphone17">一等奖 · 888</option></select><div id="g5StrategyInfo" class="notice"></div><textarea id="g5StrategyMembers" class="area" placeholder="一行一个需要指定该奖项的全球联动账号"></textarea><div class="muted">这里只填写尚未开奖的指定账号；没有指定的剩余名额会随机产生。</div><button class="btn gold" onclick="saveGiftPrizeStrategyV5()">保存本奖项策略</button></div><div id="g5StrategyCurrent" class="msg hide"></div></div>`;document.body.appendChild(d)}
+    if(!el('giftCreateModalV5')){const d=document.createElement('div');d.id='giftCreateModalV5';d.className='overlay';d.onclick=e=>{if(e.target===d)hideModalV5('giftCreateModalV5')};d.innerHTML=`<div class="modal"><button class="close" onclick="hideModalV5('giftCreateModalV5')">×</button><h3>创建礼品码活动</h3><div class="notice">固定大奖：苹果18 2名 / 888 10名 / 588 20名；388 与 188 从剩余参与名额中随机产生。创建后可在“奖项策略”中指定苹果18与888的中奖账号。</div><div class="form"><input id="g5Code" class="field" placeholder="礼品码，例如 GIFT2026"><input id="g5Max" class="field" type="number" min="32" value="100" placeholder="总参与名额（至少32）"><input id="g5Note" class="field" placeholder="备注（选填）"><button class="btn gold" onclick="createGiftCampaignV5()">创建活动</button></div></div>`;document.body.appendChild(d)}
+    if(!el('giftStrategyModalV5')){const d=document.createElement('div');d.id='giftStrategyModalV5';d.className='overlay';d.onclick=e=>{if(e.target===d)hideModalV5('giftStrategyModalV5')};d.innerHTML=`<div class="modal"><button class="close" onclick="hideModalV5('giftStrategyModalV5')">×</button><h3>奖项策略</h3><div class="notice giftStrategyNotice"><b>可指定大奖：</b>苹果18 / 888。选择奖项后，一行填写一个需要指定中奖的全球联动账号。</div><input id="g5StrategyCode" type="hidden"><div class="form"><select id="g5PrizeKey" class="field" onchange="loadGiftPrizeStrategyV5()"><option value="gold_bracelet">特等奖 · 苹果18（2名）</option><option value="iphone17">一等奖 · 888（10名）</option></select><div id="g5StrategyInfo" class="notice"></div><textarea id="g5StrategyMembers" class="area" placeholder="一行一个需要指定该奖项的全球联动账号"></textarea><div class="muted">这里只填写尚未开奖的指定账号；没有指定的剩余名额会随机产生。</div><button class="btn gold" onclick="saveGiftPrizeStrategyV5()">保存本奖项策略</button></div><div id="g5StrategyCurrent" class="msg hide"></div></div>`;document.body.appendChild(d)}
   }
 
   function addStyle(){if(el('giftAdminV5Style'))return;const s=document.createElement('style');s.id='giftAdminV5Style';s.textContent=`
@@ -46,7 +46,7 @@
 
   window.loadGiftCodesV5=async function(){build();if(typeof auth==='undefined'||!auth)return;const d=await rpc('manager_gift_codes',creds());if(!d?.ok)return typeof authFail==='function'?authFail(d):null;codes=Array.isArray(d.codes)?d.codes:[];renderCodes()};
   window.showGiftCreateV5=()=>{el('g5Code').value='';el('g5Max').value='100';el('g5Note').value='';showModalV5('giftCreateModalV5')};
-  window.createGiftCampaignV5=async function(){const code=el('g5Code').value.trim(),max=Number(el('g5Max').value||0),note=el('g5Note').value.trim()||null;if(!code)return toast('请输入礼品码');if(max<18)return toast('总参与名额不能少于18');const d=await rpc('manager_create_gift_code_v3',{...creds(),p_code:code,p_max_uses:max,p_gold_bracelet_quota:3,p_iphone17_quota:5,p_coach_bag_quota:10,p_note:note});if(!d?.ok)return toast(d?.message||'创建失败');toast('礼品码活动创建成功');hideModalV5('giftCreateModalV5');await loadGiftCodesV5()};
+  window.createGiftCampaignV5=async function(){const code=el('g5Code').value.trim(),max=Number(el('g5Max').value||0),note=el('g5Note').value.trim()||null;if(!code)return toast('请输入礼品码');if(max<32)return toast('总参与名额不能少于32');const d=await rpc('manager_create_gift_code_v3',{...creds(),p_code:code,p_max_uses:max,p_gold_bracelet_quota:2,p_iphone17_quota:10,p_coach_bag_quota:20,p_note:note});if(!d?.ok)return toast(d?.message||'创建失败');toast('礼品码活动创建成功');hideModalV5('giftCreateModalV5');await loadGiftCodesV5()};
   window.setGiftActiveV5=async(code,active)=>{const d=await rpc('manager_set_gift_code_active',{...creds(),p_code:code,p_active:active});if(!d?.ok)return toast(d?.message||'操作失败');await loadGiftCodesV5()};
 
   window.openGiftStrategyV5=function(code,key='gold_bracelet'){el('g5StrategyCode').value=code;el('g5PrizeKey').value=(key==='iphone17'?'iphone17':'gold_bracelet');showModalV5('giftStrategyModalV5');loadGiftPrizeStrategyV5()};
