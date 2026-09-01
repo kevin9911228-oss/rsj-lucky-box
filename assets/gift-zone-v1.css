@@ -42,3 +42,41 @@
 @keyframes giftPreSpin{to{transform:rotate(360deg)}}
 @media(max-width:420px){.giftZoneCard{padding-left:10px;padding-right:10px}.giftForm{grid-template-columns:1fr}.giftSpinBtn{width:100%}.giftLegend{gap:3px}.giftLegendItem{font-size:7px;padding-left:1px;padding-right:1px}.giftZoneTitle{font-size:23px}.giftWheelShell{width:min(91vw,350px)}}
 @media(prefers-reduced-motion:reduce){.giftZoneCard:before,.giftWheel.isChecking{animation:none!important}.giftWheel{transition-duration:.01ms!important}}
+
+/* GIFT COLOR LUX V6 — brighter champagne-gold typography without over-flashing */
+html body #giftPanel .giftZoneKicker{color:#ead7a8!important;text-shadow:0 0 10px #d9a63a28!important}
+html body #giftPanel .giftZoneTitle{background:linear-gradient(180deg,#fffef3 0%,#fff1bd 26%,#ffd86a 62%,#b87712 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 14px #ffe18235,0 0 30px #d69c2830!important;filter:brightness(1.08)}
+html body #giftPanel .giftTitleStar{color:#ffe184!important;-webkit-text-fill-color:#ffe184!important;text-shadow:0 0 9px #fff1ae80,0 0 18px #d9a02f75!important}
+html body #giftPanel .giftZoneSub{color:#ead8ad!important;text-shadow:0 1px 8px #000!important;font-weight:650!important}
+html body #giftPanel .giftCampaignBanner strong{color:#e2c886!important;text-shadow:0 0 9px #d49a2f30!important}
+html body #giftPanel .giftCampaignBanner b{background:linear-gradient(180deg,#fffef4 0%,#fff0b4 32%,#ffd35a 68%,#b97613 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 18px #ffd45d38!important;filter:brightness(1.08)}
+html body #giftPanel .giftCampaignBanner b span{color:#ffe48b!important;-webkit-text-fill-color:#ffe48b!important;text-shadow:0 0 8px #ffcb4d62!important;font-weight:1000!important}
+html body #giftPanel .giftBannerTiers i{color:#f1dfb7!important;border-color:#8b6b36!important;background:linear-gradient(180deg,#15130f,#090c11)!important;text-shadow:0 1px 6px #000!important;box-shadow:inset 0 1px 0 #fff1ba22,0 0 10px #c88d2320!important}
+html body #giftPanel .giftPrizeLabel em{color:#ffe6a0!important;border-color:#f0cf775e!important;background:linear-gradient(180deg,#20180d,#0b0d12cc)!important;text-shadow:0 0 7px #e5aa3a55!important;box-shadow:inset 0 1px 0 #fff5c824!important}
+html body #giftPanel .giftPrizeLabel strong{background:linear-gradient(180deg,#ffffff 0%,#fff2be 28%,#ffd96a 65%,#b77612 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 12px #ffe08455!important;filter:brightness(1.12) saturate(1.08)}
+html body #giftPanel .giftPrizeLabel.prize0 strong{background:linear-gradient(180deg,#ffffff 0%,#fff6d8 25%,#ffe17d 61%,#c78920 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 12px #fff0af70,0 0 22px #e4ad3d55!important}
+html body #giftPanel .giftPrizeLabel.prize1 strong{background:linear-gradient(180deg,#fffef4,#ffeaa1 38%,#ffc947 72%,#aa670e)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 14px #ffd45f75!important}
+html body #giftPanel .giftPrizeLabel.prize2 strong{background:linear-gradient(180deg,#fffaf0,#f7dc9a 40%,#d5a048 72%,#9b641c)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 10px #e4bd7360!important}
+html body #giftPanel .giftPrizeLabel.prize3 strong{background:linear-gradient(180deg,#ffffff,#e8f4ff 35%,#9dccff 68%,#4f84c5)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 11px #8dc9ff72!important}
+html body #giftPanel .giftPrizeLabel.prize4 strong{background:linear-gradient(180deg,#fffdf8,#ffe4bf 37%,#f2ab61 70%,#a95231)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 11px #ffbd7c65!important}
+html body #giftPanel .giftHub span{color:#6a3b07!important;text-shadow:0 1px 0 #fff1a88f!important}
+html body #giftPanel .giftHub b{color:#2b1601!important;text-shadow:0 1px 0 #fff4c5a8,0 0 8px #fff0a170!important}
+html body #giftPanel .giftHub small{color:#704407!important;text-shadow:0 1px 0 #ffe7a06e!important}
+html body #giftPanel .giftLegendTierV5 .giftLegendItem{color:#f1dfb8!important;background:linear-gradient(180deg,#151a21,#090c11)!important;border-color:#75613c!important}
+html body #giftPanel .giftLegendTierV5 em{color:#e8c978!important;background:linear-gradient(180deg,#241b0e,#0c0e12)!important;border:1px solid #7b61372e!important;text-shadow:0 0 6px #dba7393d!important}
+html body #giftPanel .giftLegendTierV5 strong{color:#ffe9ad!important;text-shadow:0 0 8px #d8a23e4f!important;font-weight:1000!important}
+html body #giftPanel .giftLegendTierV5 .special em{color:#fff0b2!important;background:#33230dcc!important}
+html body #giftPanel .giftLegendTierV5 .special strong{background:linear-gradient(180deg,#ffffff,#fff2bb 35%,#ffd96c 70%,#bd7e18)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 12px #ffe1845e!important;filter:brightness(1.08)}
+html body #giftPanel .giftIdentity{color:#e8d4a6!important;border-color:#806536!important;background:linear-gradient(180deg,#10141a,#080b10)!important}
+html body #giftPanel .giftIdentity b{color:#fff0b2!important;text-shadow:0 0 8px #d7a1334b!important}
+html body #giftPanel .giftForm input{color:#fff6df!important;caret-color:#ffd967!important;border-color:#695536!important;background:#070a0f!important}
+html body #giftPanel .giftForm input::placeholder{color:#cdb785!important;opacity:1!important}
+html body #giftPanel .giftSpinBtn{color:#321b02!important;text-shadow:0 1px 0 #fff8cf9c!important;font-weight:1000!important}
+html body #giftPanel .giftRule{color:#cdb98c!important;border-color:#4d402c!important;background:linear-gradient(180deg,#0a0d12,#06090d)!important}
+html body #giftPanel .giftRule strong{color:#f1d791!important;text-shadow:0 0 7px #d7a33b3d!important}
+html body #giftResultModal .giftResultTitle{color:#ead5a6!important;text-shadow:0 1px 8px #000!important;font-weight:800!important}
+html body #giftResultModal .giftResultPrize{background:linear-gradient(180deg,#ffffff 0%,#fff1bd 31%,#ffd55c 68%,#b87512 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 18px #ffd45d45!important;filter:brightness(1.08)}
+html body #giftResultModal .giftResultMeta{color:#dfcba0!important;border-color:#9a763b70!important;background:#090c10b8!important}
+html body #giftResultModal .giftAdultNote{color:#d6c092!important}
+html body #giftResultModal .giftResultClose{color:#2f1901!important;text-shadow:0 1px 0 #fff2b583!important}
+@media(max-width:420px){html body #giftPanel .giftZoneSub{font-size:9.5px!important}html body #giftPanel .giftBannerTiers i{color:#eed9ab!important}html body #giftPanel .giftLegendTierV5 strong{font-size:11px!important}}
