@@ -18,7 +18,8 @@ function convert(html) {
   return html
     .replaceAll(A_REF, B_REF)
     .replaceAll('https://chenjiancj.com', 'https://chenjiancjb.com')
-    .replaceAll('https://www.chenjiancj.com', 'https://www.chenjiancjb.com');
+    .replaceAll('https://www.chenjiancj.com', 'https://www.chenjiancjb.com')
+    .replaceAll("const prefer=['cash188','cash288','cash588','cash88','cash888'];", "const prefer=['cash188','cash588','cash88','cash888'];");
 }
 
 (async () => {
