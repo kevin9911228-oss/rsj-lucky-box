@@ -19,7 +19,8 @@ function convert(html) {
   return html
     .replaceAll(A_REF, SITE_REF)
     .replaceAll('https://chenjiancj.com', 'https://chenjiancjc.com')
-    .replaceAll('https://www.chenjiancj.com', SITE_HOST);
+    .replaceAll('https://www.chenjiancj.com', SITE_HOST)
+    .replaceAll("const prefer=['cash188','cash288','cash588','cash88','cash888'];", "const prefer=['cash188','cash588','cash88','cash888'];");
 }
 
 (async () => {
