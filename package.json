@@ -1,0 +1,8 @@
+{
+  "name": "chenjiancj-b-site",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node build-b-site.js"
+  }
+}
