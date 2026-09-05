@@ -147,3 +147,24 @@
     state('后台页面出现数据异常：'+msg,'err');
   });
 })();
+
+/* ADMIN SAME-ORIGIN RPC V1 — avoid client-side Supabase connectivity failures */
+(()=>{
+  'use strict';
+  if(window.__RSJ_ADMIN_SAME_ORIGIN_RPC_V1__) return;
+  window.__RSJ_ADMIN_SAME_ORIGIN_RPC_V1__=true;
+  const baseFetch=window.fetch.bind(window);
+  window.fetch=function(input,init){
+    const url=typeof input==='string'?input:(input&&input.url)||'';
+    const m=String(url).match(/\/rest\/v1\/rpc\/([A-Za-z0-9_]+)(?:\?|$)/);
+    if(!m) return baseFetch(input,init);
+    const headers={'Content-Type':'application/json'};
+    return baseFetch('/api/rpc?name='+encodeURIComponent(m[1]),{
+      method:'POST',
+      headers,
+      body:init&&init.body?init.body:'{}',
+      signal:init&&init.signal,
+      cache:'no-store'
+    });
+  };
+})();
