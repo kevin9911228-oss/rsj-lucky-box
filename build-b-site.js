@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SOURCE = 'https://www.chenjiancj.com';
+const SOURCE = 'https://chenjiancj-com.vercel.app';
 const A_REF = 'iovzxyzjekaikvnkrenz';
 const SITE_REF = 'xxqnyaltibwxlsbvgxke';
 const SITE_HOST = 'https://www.chenjiancjd.com';
