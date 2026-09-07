@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SOURCE = 'https://www.chenjiancj.com';
+const SOURCE = 'https://chenjiancj-com.vercel.app';
 const A_REF = 'iovzxyzjekaikvnkrenz';
 const B_REF = 'ubgmpviwfaoxpyxjipya';
 const ADMIN_PATH = '7o4aly75t1lij3m7z1v51l';
