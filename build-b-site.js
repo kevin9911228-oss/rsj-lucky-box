@@ -5,6 +5,7 @@ const SOURCE = 'https://www.chenjiancj.com';
 const A_REF = 'iovzxyzjekaikvnkrenz';
 const SITE_REF = 'xxqnyaltibwxlsbvgxke';
 const SITE_HOST = 'https://www.chenjiancjd.com';
+const ADMIN_PATH = '46itczntnkt4389ohanio9';
 
 async function get(url) {
   const r = await fetch(url, {
@@ -31,9 +32,9 @@ function convert(html) {
 
   const out = path.join(process.cwd(), 'dist');
   fs.rmSync(out, { recursive: true, force: true });
-  fs.mkdirSync(path.join(out, 'admin'), { recursive: true });
+  fs.mkdirSync(path.join(out, ADMIN_PATH), { recursive: true });
   fs.writeFileSync(path.join(out, 'index.html'), convert(front));
-  fs.writeFileSync(path.join(out, 'admin', 'index.html'), convert(admin));
+  fs.writeFileSync(path.join(out, ADMIN_PATH, 'index.html'), convert(admin));
 
   const marker = {
     site: 'D',
@@ -42,5 +43,5 @@ function convert(html) {
     built_at: new Date().toISOString()
   };
   fs.writeFileSync(path.join(out, 'site-info.json'), JSON.stringify(marker, null, 2));
-  console.log('D site built:', marker);
+  console.log('D site built with private admin route:', marker);
 })();
