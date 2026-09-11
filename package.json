@@ -3,6 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "node build-b-site.js"
+    "build": "node build-multisite.js"
   }
 }
